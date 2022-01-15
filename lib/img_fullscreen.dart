@@ -1,29 +1,66 @@
 import 'package:flutter/material.dart';
 
 class ImgFullScreen extends StatelessWidget {
-  const ImgFullScreen({ Key? key }) : super(key: key);
+
+  final String? imgLink;
+
+  const ImgFullScreen({ Key? key, required this.imgLink }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.black87,
         // appBar: AppBar(
         //   title: Text(widget.title),
         // ),
-        body: Hero(
-          tag: 'fullscreenImg',
-          child: InteractiveViewer(
-            child: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage(
-                    'https://image.winudf.com/v2/image1/Y29tLkNyZWF0ZUlELkxldml3YWxscGFwZXJJRF9zY3JlZW5fMF8xNjI1NjkyNjI2XzA3MQ/screen-0.jpg?fakeurl=1&type=.jpg',
+        body: Stack(
+          children: [
+            Hero(
+              tag: 'fullscreenImg',
+              child: InteractiveViewer(
+                child: Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: NetworkImage(
+                        '$imgLink',
+                      ),
+                      fit: BoxFit.contain
+                    )
                   ),
-                  fit: BoxFit.cover
-                )
+                ),
               ),
             ),
-          ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.arrow_back_ios_new_rounded,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    }, 
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.share_rounded,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      
+                    }, 
+                  ),
+                ),
+              ],
+            )
+          ],
         ), 
       ),
     );

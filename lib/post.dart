@@ -1,4 +1,5 @@
 import 'package:anime_fanarts/comment_section.dart';
+import 'package:anime_fanarts/img_fullscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -161,21 +162,29 @@ class _PostState extends State<Post> {
                   ),
                 ),
               if(widget.postImg!.isNotEmpty)
-                ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    minWidth: 70,
-                    minHeight: 70,
-                    maxWidth: double.infinity,
-                    maxHeight: 390,
-                  ),
-                  child: Container(
-                    child: CachedNetworkImage(
-                      imageUrl: widget.postImg!,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) => imagePlaceholder(),
+                GestureDetector(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(
+                      minWidth: 70,
+                      minHeight: 70,
+                      maxWidth: double.infinity,
+                      maxHeight: 390,
+                    ),
+                    child: Container(
+                      child: CachedNetworkImage(
+                        imageUrl: widget.postImg!,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => imagePlaceholder(),
+                      ),
                     ),
                   ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ImgFullScreen(imgLink: widget.postImg,)),
+                    );
+                  },
                 ),
               Padding(
                 padding: const EdgeInsets.symmetric(
