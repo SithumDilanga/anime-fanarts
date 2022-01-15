@@ -86,11 +86,14 @@ class MyApp extends StatelessWidget {
               ]
             ),
           ),
-          body: TabBarView(
-            children: [
-              Explore(),
-              Profile()
-            ]
+          body: Padding(
+            padding: const EdgeInsets.only(top: 4.0),
+            child: TabBarView(
+              children: [
+                Explore(),
+                Profile()
+              ]
+            ),
           ),
         ),
       ),

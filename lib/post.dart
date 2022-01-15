@@ -1,3 +1,4 @@
+import 'package:anime_fanarts/comment_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -44,6 +45,9 @@ class _PostState extends State<Post> {
     print('userName ' + userName);
 
       return Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: 4.0,
+        ),
         child: Card(
           elevation: 2,
           shape: RoundedRectangleBorder(
@@ -214,9 +218,13 @@ class _PostState extends State<Post> {
                             width: 1
                           )
                         ),
-                        onPressed: () async {
+                        onPressed: () {
     
-    
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => CommentSecion()),
+                          );
+
                         },
                       ),
                       Row(
