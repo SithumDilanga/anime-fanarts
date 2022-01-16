@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:anime_fanarts/add_new_art.dart';
 import 'package:anime_fanarts/post.dart';
 import 'package:anime_fanarts/utils/loading_animation.dart';
 import 'package:flutter/material.dart';
@@ -530,7 +531,10 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                           ),
                         ),
                         onPressed: () {
-
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const AddNewArt()),
+                          );
                         }, 
                       )
                     ],
