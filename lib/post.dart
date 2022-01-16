@@ -58,6 +58,7 @@ class _PostState extends State<Post> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -132,6 +133,15 @@ class _PostState extends State<Post> {
                       ],
                     ),
                   ),
+                  IconButton(
+                    icon: Icon(
+                      Icons.close_rounded,
+                      color: Colors.amber[600],
+                    ),
+                    onPressed: () {
+
+                    }, 
+                  )
                 ],
               ),
               if(widget.desc!.isNotEmpty)

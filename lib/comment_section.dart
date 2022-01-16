@@ -35,7 +35,7 @@ class _CommentSecionState extends State<CommentSecion> {
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios_new_rounded,
-            color: Colors.amber,
+            color: Colors.amber[600],
           ),
           onPressed: () {
             Navigator.pop(context);
@@ -44,7 +44,7 @@ class _CommentSecionState extends State<CommentSecion> {
         title: Text(
           'Comments',
           style: TextStyle(
-            color: Colors.amber
+            color: Colors.amber[600]
           ),
         ),
       ),
@@ -106,7 +106,7 @@ class _CommentSecionState extends State<CommentSecion> {
                             icon: Icon(
                               Icons.send_rounded,
                               size: 28,
-                              color: Colors.amber,
+                              color: Colors.amber[600],
                             ),
                             onPressed: () {
       

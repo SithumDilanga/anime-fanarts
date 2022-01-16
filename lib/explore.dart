@@ -18,7 +18,7 @@ class _ExploreState extends State<Explore> {
           id: '123',
           name: 'Levi Ackerman',
           profilePic: 'https://cdna.artstation.com/p/assets/images/images/031/257/402/large/yukisho-art-vector-6.jpg?1603101769&dl=10',
-          desc: 'hello!',
+          desc: 'marin kitagawa from my dress up darling',
           postImg: 'https://images.alphacoders.com/120/thumb-1920-1203420.png',
           userId: 'user123',
           date: '15 jan 2022',

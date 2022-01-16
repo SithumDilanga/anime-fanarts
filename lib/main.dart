@@ -1,7 +1,7 @@
 import 'package:anime_fanarts/explore.dart';
 import 'package:anime_fanarts/img_fullscreen.dart';
 import 'package:anime_fanarts/post.dart';
-import 'package:anime_fanarts/profile.dart';
+import 'package:anime_fanarts/profile/profile.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -28,21 +28,21 @@ class MyApp extends StatelessWidget {
             title: Text(
               'Anime fanarts',
               style: TextStyle(
-                color: Colors.amber
+                color: Colors.amber[600]
               ),
             ),
             bottom: TabBar(
-              indicatorColor: Colors.amber,
+              indicatorColor: Colors.amber[600],
               indicator: UnderlineTabIndicator(
                 borderSide: BorderSide(
                   width: 2.0,
-                  color: Colors.amber
+                  color: Colors.amber[600]!
                 ),
                 insets: EdgeInsets.symmetric(
                   horizontal: 16.0
                 )
               ),
-              labelColor: Colors.amber,
+              labelColor: Colors.amber[600],
               unselectedLabelColor: Colors.black54,
               tabs: [
                 Tab(
