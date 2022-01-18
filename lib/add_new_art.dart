@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddNewArt extends StatefulWidget {
   const AddNewArt({ Key? key }) : super(key: key);
@@ -14,6 +17,23 @@ class _AddNewArtState extends State<AddNewArt> {
 
   final tagTextController = TextEditingController();
 
+  final picker = ImagePicker();
+  var _postImage;
+
+  Future _pickFanartImage() async {
+    
+    PickedFile? pickedFile = await picker.getImage(
+      source: ImageSource.gallery,
+      imageQuality: 50
+    );
+
+    setState(() {
+      _postImage = File(pickedFile!.path);
+      // _postImage = compressedFile;
+    });
+
+  }
+
   
   @override
   Widget build(BuildContext context) {
@@ -26,11 +46,17 @@ class _AddNewArtState extends State<AddNewArt> {
         ),
       ),
       body: SingleChildScrollView(
+        padding: EdgeInsets.only(bottom: 16.0),
         child: Column(
           children: [
-            Image.asset(
-              'assets/images/placeholder-image.png'
-            ),
+            if(_postImage != null)
+              Image.file(
+                _postImage
+              ),
+            if(_postImage == null)
+              Image.asset(
+                'assets/images/placeholder-image.png'
+              ),
             SizedBox(height: 4.0,),
             Padding(
               padding: const EdgeInsets.symmetric(
@@ -72,10 +98,7 @@ class _AddNewArtState extends State<AddNewArt> {
                       )
                     ),
                     onPressed: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) => const AddNewArt()),
-                      // );
+                      _pickFanartImage();
                     }, 
                   ),
                   SizedBox(height: 8.0,),
@@ -89,6 +112,8 @@ class _AddNewArtState extends State<AddNewArt> {
                   ),
                   TextFormField(
                     cursorColor: Colors.amber[700],
+                    maxLines: null,
+                    keyboardType: TextInputType.multiline,
                     decoration: InputDecoration(
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: (Colors.amber[700])!)
@@ -149,11 +174,24 @@ class _AddNewArtState extends State<AddNewArt> {
                               
                               if(tagList.length < 5) {
 
-                                setState(() {
-                                  tagList.add(tagTextController.text);
-                                });
+                                if(tagTextController.text.isEmpty) {
 
-                                tagTextController.clear();
+                                  Fluttertoast.showToast(
+                                    msg: "No tag to add!",
+                                    toastLength: Toast.LENGTH_LONG,
+                                    gravity: ToastGravity.BOTTOM,
+                                    fontSize: 16.0
+                                  );
+
+                                } else {
+
+                                  setState(() {
+                                    tagList.add(tagTextController.text);
+                                  });
+
+                                  tagTextController.clear();
+
+                                }
 
                               } else {
                                 Fluttertoast.showToast(

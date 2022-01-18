@@ -8,7 +8,7 @@ class Explore extends StatefulWidget {
   _ExploreState createState() => _ExploreState();
 }
 
-class _ExploreState extends State<Explore> {
+class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin<Explore>{
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -28,4 +28,7 @@ class _ExploreState extends State<Explore> {
       },
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -315,7 +315,9 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                                 width: double.infinity,
                                 fit: BoxFit.cover,
                               ) : Image.file(
-                                _coverImage
+                                _coverImage,
+                                width: double.infinity,
+                                fit: BoxFit.cover
                               ),
                             ),
                           ),
