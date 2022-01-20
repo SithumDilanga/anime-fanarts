@@ -1,5 +1,7 @@
 import 'package:anime_fanarts/comment_section.dart';
 import 'package:anime_fanarts/img_fullscreen.dart';
+import 'package:anime_fanarts/report/select_reason.dart';
+import 'package:anime_fanarts/utils/route_trans_anim.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -76,12 +78,9 @@ class _PostState extends State<Post> {
                           GestureDetector(
                             child: CircleAvatar(
                               radius: 20,
-                              backgroundImage: AssetImage(
-                                'assets/images/Gritie4.png'
-                              )
-                              // NetworkImage(
-                              //   widget.profilePic,
-                              // ),
+                              backgroundImage: NetworkImage(
+                                '${widget.profilePic}'
+                              ),
                             ),
                             onTap: () {
                               // Navigator.push(
@@ -133,15 +132,101 @@ class _PostState extends State<Post> {
                       ],
                     ),
                   ),
-                  IconButton(
+                  if(widget.isUserPost)
+                    IconButton(
+                      icon: Icon(
+                        Icons.close_rounded,
+                        color: Colors.amber[600],
+                      ),
+                      onPressed: () {
+
+                      }, 
+                    ),
+                  if(!widget.isUserPost)
+                  PopupMenuButton(
+                    color: Colors.grey[200],
                     icon: Icon(
-                      Icons.close_rounded,
+                      Icons.more_horiz_rounded,
                       color: Colors.amber[600],
                     ),
-                    onPressed: () {
+                    onSelected: (selection) async {
+                    
+                      if(selection == 0) {
+                      
+                        Navigator.of(context).push(
+                          RouteTransAnim().createRoute(
+                            0.0, 1.0, 
+                            SelectReason()
+                          )
+                        );
 
-                    }, 
-                  )
+                      } else if(selection == 1) {
+                      
+                        // _updateNameAlert();
+
+                      } else if(selection == 3) {
+                      
+                        // _authService.logOut();
+
+                      } 
+
+                    },
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.report_gmailerrorred_rounded,
+                              color: Colors.black,
+                            ),
+                            SizedBox(width: 8.0,),
+                            Text(
+                              'Report this art',
+                            ),
+                          ],
+                        ),
+                        value: 0
+                      ),
+                      PopupMenuItem(
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.share,
+                              color: Colors.black,
+                            ),
+                            SizedBox(width: 8.0,),
+                            Text(
+                              'Share',
+                            ),
+                          ],
+                        ),
+                        value: 1
+                      ),
+                      PopupMenuItem(
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.download_rounded,
+                              color: Colors.black,
+                            ),
+                            SizedBox(width: 8.0,),
+                            Text(
+                              'Save',
+                            ),
+                          ],
+                        ),
+                        value: 1
+                      ),
+                    ]
+                    )
+                    // IconButton(
+                    //   icon: Icon(
+                    //     Icons.more_horiz_rounded,
+                    //     color: Colors.amber[600],
+                    //   ),
+                    //   onPressed: () { 
+                    //   }, 
+                    // )
                 ],
               ),
               if(widget.desc!.isNotEmpty)

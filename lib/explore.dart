@@ -23,7 +23,7 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin<Ex
           userId: 'user123',
           date: '15 jan 2022',
           reactionCount: 4,
-          isUserPost: true
+          isUserPost: false
         );
       },
     );
