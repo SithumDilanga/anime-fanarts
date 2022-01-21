@@ -59,10 +59,10 @@ class _SelectReasonState extends State<SelectReason> {
                 ),
               ),
               onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => const AddNewArt()),
-                // );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const DescribeReason(reason: 'Violence')),
+                );
 
               }, 
             ),
@@ -95,10 +95,10 @@ class _SelectReasonState extends State<SelectReason> {
                 ),
               ),
               onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => const AddNewArt()),
-                // );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const DescribeReason(reason: 'Excessively sexual')),
+                );
 
               }, 
             ),
@@ -131,10 +131,10 @@ class _SelectReasonState extends State<SelectReason> {
                 ),
               ),
               onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => const AddNewArt()),
-                // );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const DescribeReason(reason: 'Copyright infringement')),
+                );
 
               }, 
             ),
@@ -167,10 +167,118 @@ class _SelectReasonState extends State<SelectReason> {
                 ),
               ),
               onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => const AddNewArt()),
-                // );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const DescribeReason(reason: 'Spam')),
+                );
+
+              }, 
+            ),
+            SizedBox(height: 12,),
+            ElevatedButton(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 12.0
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Advertisement, promotion',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16
+                      ),
+                    ),
+                    Icon(
+                      Icons.arrow_forward_ios_rounded
+                    ),
+                  ],
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.amber[600],
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(32),
+                ),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const DescribeReason(reason: 'Advertisement, promotion')),
+                );
+
+              }, 
+            ),
+            SizedBox(height: 12,),
+            ElevatedButton(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 12.0
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Excessive grotesque content',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16
+                      ),
+                    ),
+                    Icon(
+                      Icons.arrow_forward_ios_rounded
+                    ),
+                  ],
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.amber[600],
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(32),
+                ),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const DescribeReason(reason: 'Excessive grotesque content')),
+                );
+
+              }, 
+            ),
+            SizedBox(height: 12,),
+            ElevatedButton(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 12.0
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Redistributed without permission',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16
+                      ),
+                    ),
+                    Icon(
+                      Icons.arrow_forward_ios_rounded
+                    ),
+                  ],
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.amber[600],
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(32),
+                ),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const DescribeReason(reason: 'Redistributed without permission')),
+                );
 
               }, 
             ),
