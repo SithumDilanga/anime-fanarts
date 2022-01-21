@@ -1,11 +1,20 @@
+import 'package:anime_fanarts/auth/log_in.dart';
+import 'package:anime_fanarts/auth/sign_up.dart';
 import 'package:anime_fanarts/explore.dart';
 import 'package:anime_fanarts/img_fullscreen.dart';
 import 'package:anime_fanarts/post.dart';
 import 'package:anime_fanarts/profile/profile.dart';
+import 'package:anime_fanarts/settings/settings.dart';
+import 'package:anime_fanarts/utils/route_trans_anim.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(MaterialApp(
+    theme: ThemeData(
+      scaffoldBackgroundColor: Color(0xffF0F0F0),
+    ),
+    home: MyApp()
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -14,11 +23,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        scaffoldBackgroundColor: Color(0xffF0F0F0),
-      ),
-      home: DefaultTabController(
+    return DefaultTabController(
         initialIndex: 0,
         length: 2,
         child: Scaffold(
@@ -31,6 +36,67 @@ class MyApp extends StatelessWidget {
                 color: Colors.amber[600]
               ),
             ),
+            actions: <Widget> [
+              IconButton(
+                icon: Icon(
+                  Icons.settings,
+                  color: Colors.black,
+                ),
+                onPressed: () {
+
+                  Navigator.of(context).push(
+                      RouteTransAnim().createRoute(
+                        0.0, 1.0, 
+                        Settings()
+                      )
+                    );
+
+                }, 
+              )
+              // PopupMenuButton(
+              //   icon: Icon(
+              //     Icons.settings,
+              //     color: Colors.black,
+              //   ),
+              //   onSelected: (selection) async {
+
+              //     if(selection == 0) {
+
+              //       Navigator.of(context).push(
+              //         RouteTransAnim().createRoute(
+              //           0.0, 1.0, 
+              //           SignUp()
+              //         )
+              //       );
+
+              //     } else if(selection == 1) {
+
+              //       Navigator.of(context).push(
+              //         RouteTransAnim().createRoute(
+              //           0.0, 1.0, 
+              //           Login()
+              //         )
+              //       );
+
+              //     } 
+
+              //   },
+              //   itemBuilder: (context) => [
+              //     PopupMenuItem(
+              //       child: Text(
+              //         'Sign up',
+              //       ),
+              //       value: 0
+              //     ),
+              //     PopupMenuItem(
+              //       child: Text(
+              //         'Login',
+              //       ),
+              //       value: 1
+              //     )
+              //   ]
+              // )
+            ],
             bottom: TabBar(
               indicatorColor: Colors.amber[600],
               indicator: UnderlineTabIndicator(
@@ -96,8 +162,7 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 }
 
