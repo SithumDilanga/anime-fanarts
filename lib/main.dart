@@ -5,6 +5,7 @@ import 'package:anime_fanarts/img_fullscreen.dart';
 import 'package:anime_fanarts/post.dart';
 import 'package:anime_fanarts/profile/profile.dart';
 import 'package:anime_fanarts/settings/settings.dart';
+import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/route_trans_anim.dart';
 import 'package:flutter/material.dart';
 
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
             title: Text(
               'Anime fanarts',
               style: TextStyle(
-                color: Colors.amber[600]
+                color: ColorTheme.primary
               ),
             ),
             actions: <Widget> [
@@ -98,17 +99,17 @@ class MyApp extends StatelessWidget {
               // )
             ],
             bottom: TabBar(
-              indicatorColor: Colors.amber[600],
+              indicatorColor: ColorTheme.primary,
               indicator: UnderlineTabIndicator(
                 borderSide: BorderSide(
                   width: 2.0,
-                  color: Colors.amber[600]!
+                  color: ColorTheme.primary
                 ),
                 insets: EdgeInsets.symmetric(
                   horizontal: 16.0
                 )
               ),
-              labelColor: Colors.amber[600],
+              labelColor: ColorTheme.primary,
               unselectedLabelColor: Colors.black54,
               tabs: [
                 Tab(

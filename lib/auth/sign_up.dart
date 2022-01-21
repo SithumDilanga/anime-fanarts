@@ -1,4 +1,5 @@
 import 'package:anime_fanarts/auth/log_in.dart';
+import 'package:anime_fanarts/utils/colors.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -148,10 +149,10 @@ class _SignUpState extends State<SignUp> {
                                   ),
                                 ),
                               TextFormField(
-                                cursorColor: Colors.amber[700],
+                                cursorColor: ColorTheme.primary,
                                 decoration: InputDecoration(
                                   focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(color: (Colors.amber[700]!))
+                                    borderSide: BorderSide(color: ColorTheme.primary)
                                   ),
                                   errorText: emailErrorText
                                   // hintText: 'Enter your Email'
@@ -177,11 +178,11 @@ class _SignUpState extends State<SignUp> {
                                 ),
                               TextFormField(
                                 // controller: _textController,
-                                cursorColor: Colors.amber[700],
+                                cursorColor: ColorTheme.primary,
                                 decoration: InputDecoration(
                                   //hintText: 'Enter your Name'
                                   focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(color: (Colors.amber[700]!))
+                                    borderSide: BorderSide(color: ColorTheme.primary)
                                   ),
                                 ),
                                 style: TextStyle(
@@ -203,11 +204,11 @@ class _SignUpState extends State<SignUp> {
                                 ),
                               TextFormField(
                                 obscureText: true,
-                                cursorColor: Colors.amber[700],
+                                cursorColor: ColorTheme.primary,
                                 decoration: InputDecoration(
                                   //hintText: 'Enter your Password'
                                   focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(color: (Colors.amber[700]!))
+                                    borderSide: BorderSide(color: ColorTheme.primary)
                                   ),
                                   errorText: passwordErrorText
                                 ),
@@ -232,11 +233,11 @@ class _SignUpState extends State<SignUp> {
                                 ),
                               TextFormField(
                                 obscureText: true,
-                                cursorColor: Colors.amber[700],
+                                cursorColor: ColorTheme.primary,
                                 decoration: InputDecoration(
                                   //hintText: 'Enter your Password'
                                   focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(color: (Colors.amber[700]!))
+                                    borderSide: BorderSide(color: ColorTheme.primary)
                                   ),
                                   errorText: confirmPSErrorText
                                 ),
@@ -260,7 +261,7 @@ class _SignUpState extends State<SignUp> {
                                     ),
                                   ),
                                   style: ElevatedButton.styleFrom(
-                                    primary: Colors.amber[600],
+                                    primary: ColorTheme.primary,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(25)
                                     ),
@@ -326,7 +327,7 @@ class _SignUpState extends State<SignUp> {
                                       TextSpan(
                                         text: 'Login',
                                         style: TextStyle(
-                                          color: Colors.amber[600],
+                                          color: ColorTheme.primary,
                                           fontWeight: FontWeight.bold,
                                           decoration: TextDecoration.underline
                                         ),

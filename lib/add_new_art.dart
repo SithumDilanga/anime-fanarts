@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:anime_fanarts/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
@@ -39,7 +40,15 @@ class _AddNewArtState extends State<AddNewArt> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.amber[600],
+        backgroundColor: ColorTheme.primary,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios_rounded
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          }, 
+        ),
         elevation: 0,
         title: Text(
           'Add new art'
@@ -94,7 +103,7 @@ class _AddNewArtState extends State<AddNewArt> {
                       primary: Colors.white, //Color(0xffD8D8D8),
                       side: BorderSide(
                         width: 1.5,
-                        color: Colors.amber[600]!
+                        color: ColorTheme.primary
                       )
                     ),
                     onPressed: () {
@@ -111,12 +120,12 @@ class _AddNewArtState extends State<AddNewArt> {
                     ),
                   ),
                   TextFormField(
-                    cursorColor: Colors.amber[700],
+                    cursorColor: ColorTheme.primary,
                     maxLines: null,
                     keyboardType: TextInputType.multiline,
                     decoration: InputDecoration(
                       focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: (Colors.amber[700])!)
+                        borderSide: BorderSide(color: ColorTheme.primary)
                       ),
                       // errorText: emailErrorText
                       hintText: 'type description here...'
@@ -146,10 +155,10 @@ class _AddNewArtState extends State<AddNewArt> {
                           Expanded(
                             child: TextFormField(
                               controller: tagTextController,
-                              cursorColor: Colors.amber[700],
+                              cursorColor: ColorTheme.primary,
                               decoration: InputDecoration(
                                 focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: (Colors.amber[700])!)
+                                  borderSide: BorderSide(color: ColorTheme.primary)
                                 ),
                                 // errorText: emailErrorText
                                 hintText: 'type tags here...'
@@ -168,7 +177,7 @@ class _AddNewArtState extends State<AddNewArt> {
                           IconButton(
                             icon: Icon(
                               Icons.add_box_rounded,
-                              color: Colors.amber[600],
+                              color: ColorTheme.primary,
                             ),
                             onPressed: () {
                               
@@ -217,7 +226,7 @@ class _AddNewArtState extends State<AddNewArt> {
                                   padding: const EdgeInsets.only(right: 4.0),
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      color: Colors.amber[600],
+                                      color: ColorTheme.primary,
                                       borderRadius: BorderRadius.circular(32)
                                     ),
                                     child: Padding(
@@ -278,7 +287,7 @@ class _AddNewArtState extends State<AddNewArt> {
                         ),
                       ),
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.amber[600],
+                        primary: ColorTheme.primary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(32),
                         ),

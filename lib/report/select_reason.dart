@@ -1,4 +1,5 @@
 import 'package:anime_fanarts/report/describe_reason.dart';
+import 'package:anime_fanarts/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class SelectReason extends StatefulWidget {
@@ -13,7 +14,15 @@ class _SelectReasonState extends State<SelectReason> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.amber[600],
+        backgroundColor: ColorTheme.primary,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios_rounded
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          }, 
+        ),
         title: Text(
           'Report this art'
         ),
@@ -53,7 +62,7 @@ class _SelectReasonState extends State<SelectReason> {
                 ),
               ),
               style: ElevatedButton.styleFrom(
-                primary: Colors.amber[600],
+                primary: ColorTheme.primary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(32),
                 ),
@@ -89,7 +98,7 @@ class _SelectReasonState extends State<SelectReason> {
                 ),
               ),
               style: ElevatedButton.styleFrom(
-                primary: Colors.amber[600],
+                primary: ColorTheme.primary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(32),
                 ),
@@ -125,7 +134,7 @@ class _SelectReasonState extends State<SelectReason> {
                 ),
               ),
               style: ElevatedButton.styleFrom(
-                primary: Colors.amber[600],
+                primary: ColorTheme.primary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(32),
                 ),
@@ -161,7 +170,7 @@ class _SelectReasonState extends State<SelectReason> {
                 ),
               ),
               style: ElevatedButton.styleFrom(
-                primary: Colors.amber[600],
+                primary: ColorTheme.primary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(32),
                 ),
@@ -197,7 +206,7 @@ class _SelectReasonState extends State<SelectReason> {
                 ),
               ),
               style: ElevatedButton.styleFrom(
-                primary: Colors.amber[600],
+                primary: ColorTheme.primary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(32),
                 ),
@@ -233,7 +242,7 @@ class _SelectReasonState extends State<SelectReason> {
                 ),
               ),
               style: ElevatedButton.styleFrom(
-                primary: Colors.amber[600],
+                primary: ColorTheme.primary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(32),
                 ),
@@ -269,7 +278,7 @@ class _SelectReasonState extends State<SelectReason> {
                 ),
               ),
               style: ElevatedButton.styleFrom(
-                primary: Colors.amber[600],
+                primary: ColorTheme.primary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(32),
                 ),
@@ -305,7 +314,7 @@ class _SelectReasonState extends State<SelectReason> {
                 ),
               ),
               style: ElevatedButton.styleFrom(
-                primary: Colors.amber[600],
+                primary: ColorTheme.primary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(32),
                 ),

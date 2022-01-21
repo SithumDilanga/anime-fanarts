@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:anime_fanarts/add_new_art.dart';
 import 'package:anime_fanarts/post.dart';
+import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/loading_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -102,10 +103,10 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
               children: <Widget>[
                 TextFormField(
                   controller: _changeName,
-                  cursorColor: Colors.amber[700],
+                  cursorColor: ColorTheme.primary,
                   decoration: InputDecoration(
                     focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: (Colors.amber[700]!))
+                      borderSide: BorderSide(color: ColorTheme.primary)
                     ),
                     // hintText: 'Enter your Email'
                   ),
@@ -123,7 +124,7 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
               child: Text(
                 'CANCEL',
                 style: TextStyle(
-                  color: Colors.amber[700],
+                  color: ColorTheme.primary,
                   fontSize: 18.0
                 ),
               ),
@@ -138,7 +139,7 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
               child: Text(
                 'OK',
                 style: TextStyle(
-                  color: Colors.amber[700],
+                  color: ColorTheme.primary,
                   fontSize: 18.0
                 ),
               ),
@@ -513,7 +514,7 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                           children: [
                             Icon(
                               Icons.add_circle_rounded,
-                              color: Colors.amber[600],
+                              color: ColorTheme.primary,
                               size: 28,
                             ),
                             SizedBox(width: 8.0,),

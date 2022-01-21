@@ -1,3 +1,4 @@
+import 'package:anime_fanarts/utils/colors.dart';
 import 'package:flutter/material.dart';
 // import 'package:gritie_new_app/models/profile_user.dart';
 // import 'package:gritie_new_app/services/database.dart';
@@ -33,7 +34,7 @@ class _EditBioState extends State<EditBio> {
           leading: IconButton(
             icon: Icon(
               Icons.arrow_back_ios_new_rounded,
-              color: Colors.amber[700],
+              color: ColorTheme.primary,
             ),
             onPressed: () {
               Navigator.pop(context);
@@ -59,10 +60,10 @@ class _EditBioState extends State<EditBio> {
                   initialValue: widget.bioText,
                   keyboardType: TextInputType.multiline,
                   maxLines: null,
-                  cursorColor: Colors.amber[700],
+                  cursorColor: ColorTheme.primary,
                   decoration: InputDecoration(
                     focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: (Colors.amber[700])!)
+                      borderSide: BorderSide(color: ColorTheme.primary)
                     ),
                   ),
                   style: TextStyle(
@@ -83,7 +84,7 @@ class _EditBioState extends State<EditBio> {
                     ),
                   ),
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.amber[600],
+                    primary: ColorTheme.primary,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25)
                     ),

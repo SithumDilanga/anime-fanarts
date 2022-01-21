@@ -1,3 +1,4 @@
+import 'package:anime_fanarts/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -17,7 +18,15 @@ class _DescribeReasonState extends State<DescribeReason> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.amber[600],
+        backgroundColor: ColorTheme.primary,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios_rounded
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          }, 
+        ),
         title: Text(
           'Report this art'
         ),
@@ -39,7 +48,7 @@ class _DescribeReasonState extends State<DescribeReason> {
                     child: Container(
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: Colors.amber[600],
+                        color: ColorTheme.primary,
                         borderRadius: BorderRadius.circular(64)
                       ),
                       child: Padding(
@@ -67,12 +76,12 @@ class _DescribeReasonState extends State<DescribeReason> {
                     ),
                   ),
                   TextFormField(
-                    cursorColor: Colors.amber[700],
+                    cursorColor: ColorTheme.primary,
                     maxLines: null,
                     keyboardType: TextInputType.multiline,
                     decoration: InputDecoration(
                       focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: (Colors.amber[700])!)
+                        borderSide: BorderSide(color: ColorTheme.primary)
                       ),
                       // errorText: emailErrorText
                       hintText: 'type details here...'
@@ -115,7 +124,7 @@ class _DescribeReasonState extends State<DescribeReason> {
                       height: 1.3
                     ),
                     linkStyle: TextStyle(
-                      color: Colors.amber[600],
+                      color: ColorTheme.primary,
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
                     ),
@@ -137,7 +146,7 @@ class _DescribeReasonState extends State<DescribeReason> {
                         ),
                       ),
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.amber[600],
+                        primary: ColorTheme.primary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(32),
                         ),

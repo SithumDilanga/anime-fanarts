@@ -1,3 +1,4 @@
+import 'package:anime_fanarts/utils/colors.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -130,10 +131,10 @@ class _LoginState extends State<Login> {
                                 ),
                               ),
                             TextFormField(
-                              cursorColor: Colors.amber[700],
+                              cursorColor: ColorTheme.primary,
                               decoration: InputDecoration(
                                 focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: (Colors.amber[700]!))
+                                  borderSide: BorderSide(color: ColorTheme.primary)
                                 ),
                                 errorText: emailErrorText
                                 // hintText: 'Enter your Email'
@@ -159,11 +160,11 @@ class _LoginState extends State<Login> {
                               ),
                             TextFormField(
                               obscureText: true,
-                              cursorColor: Colors.amber[700],
+                              cursorColor: ColorTheme.primary,
                               decoration: InputDecoration(
                                 //hintText: 'Enter your Password'
                                 focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: (Colors.amber[700]!))
+                                  borderSide: BorderSide(color: ColorTheme.primary)
                                 ),
                                 errorText: passwordErrorText
                               ),
@@ -182,7 +183,7 @@ class _LoginState extends State<Login> {
                             Center(
                               child: RaisedButton(
                                 child: Text('LOGIN', style: TextStyle(fontSize: 16.0, color: Colors.white),),
-                                color: Colors.amber[600],
+                                color: ColorTheme.primary,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(25)
                                 ),
@@ -250,7 +251,7 @@ class _LoginState extends State<Login> {
                                       TextSpan(
                                         text: 'Sign Up',
                                         style: TextStyle(
-                                          color: Colors.amber[600],
+                                          color: ColorTheme.primary,
                                           fontWeight: FontWeight.bold,
                                           decoration: TextDecoration.underline
                                         ),

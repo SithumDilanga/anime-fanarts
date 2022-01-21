@@ -1,6 +1,8 @@
 import 'package:anime_fanarts/comment_section.dart';
 import 'package:anime_fanarts/img_fullscreen.dart';
+import 'package:anime_fanarts/profile/users_profile.dart';
 import 'package:anime_fanarts/report/select_reason.dart';
+import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/route_trans_anim.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -115,9 +117,9 @@ class _PostState extends State<Post> {
                                 ),
                                 onTap: () {
                                 
-                                  // Navigator.of(context).push(
-                                  //   RouteTransAnim().createRoute(1.0, .0, UserProfile())
-                                  // );
+                                  Navigator.of(context).push(
+                                    RouteTransAnim().createRoute(1.0, .0, UsersProfile())
+                                  );
 
                                 },
                               ),
@@ -136,7 +138,7 @@ class _PostState extends State<Post> {
                     IconButton(
                       icon: Icon(
                         Icons.close_rounded,
-                        color: Colors.amber[600],
+                        color: ColorTheme.primary,
                       ),
                       onPressed: () {
 
@@ -147,7 +149,7 @@ class _PostState extends State<Post> {
                     color: Colors.grey[200],
                     icon: Icon(
                       Icons.more_horiz_rounded,
-                      color: Colors.amber[600],
+                      color: ColorTheme.primary,
                     ),
                     onSelected: (selection) async {
                     

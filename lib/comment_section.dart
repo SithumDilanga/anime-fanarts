@@ -1,3 +1,4 @@
+import 'package:anime_fanarts/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class CommentSecion extends StatefulWidget {
@@ -35,7 +36,7 @@ class _CommentSecionState extends State<CommentSecion> {
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios_new_rounded,
-            color: Colors.amber[600],
+            color: ColorTheme.primary,
           ),
           onPressed: () {
             Navigator.pop(context);
@@ -44,7 +45,7 @@ class _CommentSecionState extends State<CommentSecion> {
         title: Text(
           'Comments',
           style: TextStyle(
-            color: Colors.amber[600]
+            color: ColorTheme.primary
           ),
         ),
       ),
@@ -84,10 +85,10 @@ class _CommentSecionState extends State<CommentSecion> {
                         children: [
                           Expanded(
                             child: TextFormField(
-                              cursorColor: Colors.amber[700],
+                              cursorColor: ColorTheme.primary,
                               decoration: InputDecoration(
                                 focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: (Colors.amber[700])!)
+                                  borderSide: BorderSide(color: ColorTheme.primary)
                                 ),
                                 // errorText: emailErrorText
                                 hintText: 'Leave a comment...'
@@ -106,7 +107,7 @@ class _CommentSecionState extends State<CommentSecion> {
                             icon: Icon(
                               Icons.send_rounded,
                               size: 28,
-                              color: Colors.amber[600],
+                              color: ColorTheme.primary,
                             ),
                             onPressed: () {
       
