@@ -1,4 +1,6 @@
+import 'package:anime_fanarts/profile/users_profile.dart';
 import 'package:anime_fanarts/utils/colors.dart';
+import 'package:anime_fanarts/utils/route_trans_anim.dart';
 import 'package:flutter/material.dart';
 
 class CommentSecion extends StatefulWidget {
@@ -133,24 +135,33 @@ class _CommentSecionState extends State<CommentSecion> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Row(
-                              children: [
-                                CircleAvatar(
-                                  radius: 20,
-                                  backgroundColor: Colors.blueGrey[700],
-                                  backgroundImage: NetworkImage(
-                                    'https://i.pinimg.com/736x/8e/de/53/8ede538fcf75a0a1bd812810edb50cb7.jpg'
+                            GestureDetector(
+                              child: Row(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 20,
+                                    backgroundColor: Colors.blueGrey[700],
+                                    backgroundImage: NetworkImage(
+                                      'https://i.pinimg.com/736x/8e/de/53/8ede538fcf75a0a1bd812810edb50cb7.jpg'
+                                    ),
                                   ),
-                                ),
-                                SizedBox(width: 8.0,),
-                                Text(
-                                  'Gojo Satoru',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500
-                                  ),
-                                )
-                              ],
+                                  SizedBox(width: 8.0,),
+                                  Text(
+                                    'Gojo Satoru',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500
+                                    ),
+                                  )
+                                ],
+                              ),
+                              onTap: () {
+
+                                Navigator.of(context).push(
+                                  RouteTransAnim().createRoute(1.0, .0, UsersProfile(name: 'Gojo Satoru'))
+                                );
+
+                              },
                             ),
                             Text(
                               'jan 15 8.32 p.m',

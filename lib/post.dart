@@ -89,9 +89,9 @@ class _PostState extends State<Post> {
                               //   context,
                               //   MaterialPageRoute(builder: (context) => UserProfile()),
                               // );
-                              // Navigator.of(context).push(
-                              //   RouteTransAnim().createRoute(1.0, .0, UserProfile())
-                              // );
+                              Navigator.of(context).push(
+                                RouteTransAnim().createRoute(1.0, .0, UsersProfile(name: widget.name,))
+                              );
                             },
                           ),
                         SizedBox(width: 8.0,),
@@ -118,7 +118,7 @@ class _PostState extends State<Post> {
                                 onTap: () {
                                 
                                   Navigator.of(context).push(
-                                    RouteTransAnim().createRoute(1.0, .0, UsersProfile())
+                                    RouteTransAnim().createRoute(1.0, .0, UsersProfile(name: widget.name))
                                   );
 
                                 },

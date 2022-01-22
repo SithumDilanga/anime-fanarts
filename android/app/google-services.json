@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "233524954455",
+    "project_id": "anime-fanarts",
+    "storage_bucket": "anime-fanarts.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:233524954455:android:1af37c615b8e9cdb07aa12",
+        "android_client_info": {
+          "package_name": "com.example.anime_fanarts"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "233524954455-e8bi61vun35rtack1s4s238ef9goccpj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTMenqZ6pLWMzvMTlWSi_lkKXDvpz_GyE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "233524954455-e8bi61vun35rtack1s4s238ef9goccpj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

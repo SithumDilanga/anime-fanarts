@@ -1,21 +1,44 @@
+import 'dart:async';
+
 import 'package:anime_fanarts/auth/log_in.dart';
 import 'package:anime_fanarts/auth/sign_up.dart';
 import 'package:anime_fanarts/explore.dart';
 import 'package:anime_fanarts/img_fullscreen.dart';
 import 'package:anime_fanarts/post.dart';
 import 'package:anime_fanarts/profile/profile.dart';
+import 'package:anime_fanarts/services/shared_pref.dart';
 import 'package:anime_fanarts/settings/settings.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/route_trans_anim.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(MaterialApp(
-    theme: ThemeData(
-      scaffoldBackgroundColor: Color(0xffF0F0F0),
-    ),
-    home: MyApp()
-  ));
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  await SharedPref.init();
+
+  // Pass all uncaught errors from the framework to Crashlytics.
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+
+  runZonedGuarded<Future<void>>(() async {
+    runApp(MaterialApp(
+      theme: ThemeData(
+        scaffoldBackgroundColor: Color(0xffF0F0F0),
+      ),
+      home: MyApp()
+    ));
+    }, (error, stackTrace) {
+      FirebaseCrashlytics.instance.recordError(error, stackTrace);
+    });
+  
+  // runApp(MaterialApp(
+  //   theme: ThemeData(
+  //     scaffoldBackgroundColor: Color(0xffF0F0F0),
+  //   ),
+  //   home: MyApp()
+  // ));
 }
 
 class MyApp extends StatelessWidget {
