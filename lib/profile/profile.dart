@@ -87,14 +87,13 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
     });
   }
 
+
   // update name Alert Dialog
   Future<void> _updateNameAlert() async {
 
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
-
-        // final user = Provider.of<UID>(context, listen: false);
 
         return AlertDialog(
           title: const Text('Chane your Name '),
@@ -129,7 +128,7 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                 ),
               ),
               style: ButtonStyle(
-                overlayColor: MaterialStateProperty.all(Colors.amber[50]),
+                overlayColor: MaterialStateProperty.all(Colors.blue[50]),
               ),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -144,12 +143,12 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                 ),
               ),
               style: ButtonStyle(
-                overlayColor: MaterialStateProperty.all(Colors.amber[50]),
+                overlayColor: MaterialStateProperty.all(Colors.blue[50]),
               ),
               onPressed: () {
 
                 // DatabaseService(uid: user.uid).updateUserName(
-                //   name: _changeName!.text
+                //   name: _changeName.text
                 // ).onError((error, stackTrace) {
 
                 //   Fluttertoast.showToast(
@@ -162,7 +161,7 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                 // }).whenComplete(() {
 
                 //   Fluttertoast.showToast(
-                //     msg: "Your public name changed to ${_changeName!.text}",
+                //     msg: "Your public name changed to ${_changeName.text}",
                 //     toastLength: Toast.LENGTH_LONG,
                 //     gravity: ToastGravity.BOTTOM,
                 //     fontSize: 16.0
@@ -271,8 +270,8 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
 
     return RefreshIndicator(
       onRefresh: _loadData,
-      color: Colors.amber[400],
-      backgroundColor: Colors.amber[800],
+      color: Colors.blue[200],
+      backgroundColor: ColorTheme.primary,
       child: Material(
         child: Container(
           color: Color(0xffF0F0F0),
@@ -404,46 +403,86 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                         ],
                       ),
                       SizedBox(height: 8.0,),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 16.0),
-                        child: Align(
-                          alignment: Alignment.bottomRight,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.grey.withOpacity(0.4),
-                              borderRadius: BorderRadius.circular(4)
-                            ),
-                            child: InkWell(
-                              borderRadius: BorderRadius.circular(4),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 4,
-                                  vertical: 2
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Icon(
-                                      Icons.camera_alt_rounded,
-                                      size: 16,
-                                    ),
-                                    SizedBox(width: 4.0,),
-                                    Text(
-                                      'Profile',
-                                      style: TextStyle(
-                                        fontSize: 11
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 16.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.grey.withOpacity(0.4),
+                                borderRadius: BorderRadius.circular(4)
                               ),
-                              onTap: () {
-                                _pickProfileImage();
-                              },
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(4),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 4,
+                                    vertical: 2
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        Icons.edit,
+                                        size: 16,
+                                      ),
+                                      SizedBox(width: 4.0,),
+                                      Text(
+                                        'Name',
+                                        style: TextStyle(
+                                          fontSize: 11
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                onTap: () {
+                                  _updateNameAlert();
+                                },
+                              ),
                             ),
                           ),
-                        ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 16.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.grey.withOpacity(0.4),
+                                borderRadius: BorderRadius.circular(4)
+                              ),
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(4),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 4,
+                                    vertical: 2
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        Icons.camera_alt_rounded,
+                                        size: 16,
+                                      ),
+                                      SizedBox(width: 4.0,),
+                                      Text(
+                                        'Profile',
+                                        style: TextStyle(
+                                          fontSize: 11
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                onTap: () {
+                                  _pickProfileImage();
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       
                       //TODO: find some other way to make a margin here

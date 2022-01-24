@@ -15,6 +15,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 // import 'package:gritie_new_app/utils/initialLetters.dart';
 import 'package:readmore/readmore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class Post extends StatefulWidget {
 
@@ -42,6 +43,82 @@ class _PostState extends State<Post> {
   // final InitialLetters _initialLetters = InitialLetters();
 
   static const primaryColor = Color(0xffffa500); 
+
+  List imageList = ['https://images.alphacoders.com/120/thumb-1920-1203420.png', 'https://i.pinimg.com/originals/44/c3/21/44c321cf6862f22caf3e6b71a0661565.jpg','https://www.nawpic.com/media/2020/levi-ackerman-nawpic-17.jpg' ];
+
+  // update name Alert Dialog
+  Future<void> _deletPostAlert() async {
+
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+
+        return AlertDialog(
+          title: const Text('Are you sure want to delete this ?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                'CANCEL',
+                style: TextStyle(
+                  color: ColorTheme.primary,
+                  fontSize: 18.0
+                ),
+              ),
+              style: ButtonStyle(
+                overlayColor: MaterialStateProperty.all(Colors.blue[50]),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              }
+            ),
+            TextButton(
+              child: Text(
+                'OK',
+                style: TextStyle(
+                  color: ColorTheme.primary,
+                  fontSize: 18.0
+                ),
+              ),
+              style: ButtonStyle(
+                overlayColor: MaterialStateProperty.all(Colors.blue[50]),
+              ),
+              onPressed: () {
+
+                // DatabaseService(uid: user.uid).updateUserName(
+                //   name: _changeName.text
+                // ).onError((error, stackTrace) {
+
+                //   Fluttertoast.showToast(
+                //     msg: "Error Occured : $error",
+                //     toastLength: Toast.LENGTH_LONG,
+                //     gravity: ToastGravity.BOTTOM,
+                //     fontSize: 16.0
+                //   );
+
+                // }).whenComplete(() {
+
+                //   Fluttertoast.showToast(
+                //     msg: "Your public name changed to ${_changeName.text}",
+                //     toastLength: Toast.LENGTH_LONG,
+                //     gravity: ToastGravity.BOTTOM,
+                //     fontSize: 16.0
+                //   );
+
+                //   Navigator.of(context).pop();
+
+                //   setState(() {
+                    
+                //   });
+
+                // });
+
+              },  
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -141,6 +218,8 @@ class _PostState extends State<Post> {
                         color: ColorTheme.primary,
                       ),
                       onPressed: () {
+
+                        _deletPostAlert();
 
                       }, 
                     ),
@@ -259,30 +338,122 @@ class _PostState extends State<Post> {
                   ),
                 ),
               if(widget.postImg!.isNotEmpty)
-                GestureDetector(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(
-                      minWidth: 70,
-                      minHeight: 70,
-                      maxWidth: double.infinity,
-                      maxHeight: 390,
-                    ),
-                    child: Container(
-                      child: CachedNetworkImage(
-                        imageUrl: widget.postImg!,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => imagePlaceholder(),
+
+                CarouselSlider.builder(
+                  itemCount: imageList.length,
+                  itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
+                    return GestureDetector(
+                      child: Stack(
+                        children: [
+                          ConstrainedBox(
+                            constraints: const BoxConstraints(
+                              minWidth: 70,
+                              minHeight: 70,
+                              maxWidth: double.infinity,
+                              maxHeight: 390,
+                            ),
+                            child: Container(
+                              child: CachedNetworkImage(
+                                imageUrl: imageList[itemIndex].toString(),
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+                                placeholder: (context, url) => imagePlaceholder(),
+                              ),
+                            ),
+                          ),
+                          Positioned.fill(
+                            top: 5,
+                            left: 5,
+                            child: ListView.builder(
+                              itemCount: imageList.length,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                            
+                                if(index == itemIndex) {
+                            
+                                  // return Icon(
+                                  //   Icons.circle,
+                                  //   color: Colors.blueAccent,
+                                  // );
+                                  return Stack(
+                                    children: [
+                                      Text(
+                                        '${index + 1}/${imageList.length}',
+                                        style: TextStyle(
+                                          fontSize: 11,
+                                          foreground: Paint()
+                                          ..style = PaintingStyle.stroke
+                                          ..strokeWidth = 0.8
+                                          ..color = Colors.white,
+                                        ),
+                                      ),
+                                      Text(
+                                        '${index + 1}/${imageList.length}',
+                                        style: TextStyle(
+                                          color: Colors.black.withOpacity(0.5),
+                                          fontSize: 11
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                            
+                                }
+                                        
+                                return Text(
+                                  ''
+                                );
+                            
+                                // return Icon(
+                                //   Icons.circle
+                                // );
+                              }, 
+                            ),
+                          )
+                        ],
                       ),
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ImgFullScreen(imgLink: widget.postImg,)),
+                      onTap: () {
+
+                        // imgLink: imageList[itemIndex].toString()
+
+                        Navigator.push(
+                          context, MaterialPageRoute(builder: (context) => ImgFullScreen(imageList: imageList, selectedimageIndex: itemIndex,)),
+                        );
+                      },
                     );
                   },
+                  options: CarouselOptions(
+                    autoPlay: false,
+                    viewportFraction: 1,
+                    enableInfiniteScroll: false, 
+                    // aspectRatio: 2.0,
+                    // enlargeCenterPage: true,
+                  ),
                 ),
+
+                // GestureDetector(
+                //   child: ConstrainedBox(
+                //     constraints: const BoxConstraints(
+                //       minWidth: 70,
+                //       minHeight: 70,
+                //       maxWidth: double.infinity,
+                //       maxHeight: 390,
+                //     ),
+                //     child: Container(
+                //       child: CachedNetworkImage(
+                //         imageUrl: widget.postImg!,
+                //         width: double.infinity,
+                //         fit: BoxFit.cover,
+                //         placeholder: (context, url) => imagePlaceholder(),
+                //       ),
+                //     ),
+                //   ),
+                //   onTap: () {
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(builder: (context) => ImgFullScreen(imgLink: widget.postImg,)),
+                //     );
+                //   },
+                // ),
               Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 8.0,

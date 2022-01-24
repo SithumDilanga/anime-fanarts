@@ -22,20 +22,28 @@ class _AddNewArtState extends State<AddNewArt> {
   final tagTextController = TextEditingController();
 
   final picker = ImagePicker();
-  var _postImage;
+  List? _postImages = [];
 
   final FirestoreService _firestireService = FirestoreService();
 
   Future _pickFanartImage() async {
     
-    PickedFile? pickedFile = await picker.getImage(
-      source: ImageSource.gallery,
+    List<XFile>? pickedFiles = await picker.pickMultiImage(
+      // source: ImageSource.gallery,
       imageQuality: 50
     );
 
+    print('pickedFiles' + pickedFiles.toString());
+
     setState(() {
-      _postImage = File(pickedFile!.path);
-      // _postImage = compressedFile;
+      // _postImages = File(pickedFiles.path);
+      for(int i = 0; i < pickedFiles!.length; i++) {
+
+        _postImages!.add(File(pickedFiles[i].path));
+
+        print('_postImages' + _postImages.toString());
+
+      }
     });
 
   }
@@ -154,11 +162,59 @@ class _AddNewArtState extends State<AddNewArt> {
             padding: EdgeInsets.only(bottom: 16.0),
             child: Column(
               children: [
-                if(_postImage != null)
-                  Image.file(
-                    _postImage
+                if(_postImages!.isNotEmpty)
+                  Column(
+                    children: [
+                      for(int i = 0; i < _postImages!.length; i++)
+                      Column(
+                        children: [
+                          Image.file(
+                            _postImages![i]
+                          ),
+                          SizedBox(height: 4.0,),
+                        ],
+                      ),
+                      SizedBox(height: 8.0,),
+                      Text(
+                        '${_postImages!.length > 3 ? 'you can only add maximum up to 3 images' : '${_postImages!.length} / 3'}'
+                      ),
+                      SizedBox(height: 8.0,),
+                      if(_postImages!.length > 3)
+                        Container(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.warning_rounded,
+                                  color: Colors.redAccent[700],
+                                ),
+                                SizedBox(width: 8.0,),
+                                Text(
+                                  'maximum image limit exceeds',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.red[300],
+                            borderRadius: BorderRadius.circular(4)
+                          ),
+                        ),
+                      SizedBox(height: 8.0,),
+                    ],
                   ),
-                if(_postImage == null)
+                  
+                  // Image.file(
+                  //   _postImages
+                  // ),
+                if(_postImages!.isEmpty)
                   Image.asset(
                     'assets/images/placeholder-image.png'
                   ),
@@ -393,6 +449,13 @@ class _AddNewArtState extends State<AddNewArt> {
                             //   context,
                             //   MaterialPageRoute(builder: (context) => const AddNewArt()),
                             // );
+
+                            if(_postImages!.length > 3) {
+                              Fluttertoast.showToast(
+                                msg: "Maximum image limit exceeds",
+                                toastLength: Toast.LENGTH_SHORT,
+                              );
+                            }
     
                             if(tagList.isEmpty) {
                               Fluttertoast.showToast(
@@ -418,7 +481,9 @@ class _AddNewArtState extends State<AddNewArt> {
 
         }
 
-        return LoadingAnimation();
+        return Material(
+          child: LoadingAnimation()
+        );
 
       }
     );

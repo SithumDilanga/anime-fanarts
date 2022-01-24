@@ -30,11 +30,11 @@ class _EditBioState extends State<EditBio> {
     return Material(
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: ColorTheme.primary,
           leading: IconButton(
             icon: Icon(
               Icons.arrow_back_ios_new_rounded,
-              color: ColorTheme.primary,
+              color: Colors.white,
             ),
             onPressed: () {
               Navigator.pop(context);

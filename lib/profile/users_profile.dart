@@ -33,8 +33,8 @@ class UsersProfileState extends State<UsersProfile> with AutomaticKeepAliveClien
 
     return RefreshIndicator(
       onRefresh: _loadData,
-      color: Colors.amber[400],
-      backgroundColor: Colors.amber[800],
+      color: Colors.blue[200],
+      backgroundColor: ColorTheme.primary,
       child: SafeArea(
         child: Scaffold(
           appBar: AppBar(
