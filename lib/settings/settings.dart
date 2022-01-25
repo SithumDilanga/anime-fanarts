@@ -1,4 +1,8 @@
 import 'package:anime_fanarts/auth/sign_up.dart';
+import 'package:anime_fanarts/settings/bug_report.dart';
+import 'package:anime_fanarts/settings/contact_us.dart';
+import 'package:anime_fanarts/settings/feedback.dart';
+import 'package:anime_fanarts/settings/what_is.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/route_trans_anim.dart';
 import 'package:flutter/material.dart';
@@ -37,24 +41,24 @@ class _SettingsState extends State<Settings> {
                 Icons.feedback_outlined,
                 'Give feedback',
                 () {
-                  // Navigator.of(context).push(
-                  //   RouteTransAnim().createRoute(
-                  //     -1.0, 0.0, 
-                  //     ContactUs()
-                  //   )
-                  // );
+                  Navigator.of(context).push(
+                    RouteTransAnim().createRoute(
+                      -1.0, 0.0, 
+                      GiveFeedback()
+                    )
+                  );
                 }
               ),
               CustomeListTile(
                 Icons.bug_report_outlined,
                 'Bug report',
                 () {
-                  // Navigator.of(context).push(
-                  //   RouteTransAnim().createRoute(
-                  //     -1.0, 0.0, 
-                  //     ContactUs()
-                  //   )
-                  // );
+                  Navigator.of(context).push(
+                    RouteTransAnim().createRoute(
+                      -1.0, 0.0, 
+                      BugReport()
+                    )
+                  );
                 }
               ),
               CustomeListTile(
@@ -71,40 +75,40 @@ class _SettingsState extends State<Settings> {
               ),
               CustomeListTile(
                 Icons.info_outline_rounded,
-                'About us',
+                'What is Anime Fanarts?',
                 () {
-                  // Navigator.of(context).push(
-                  //   RouteTransAnim().createRoute(
-                  //     -1.0, 0.0, 
-                  //     ContactUs()
-                  //   )
-                  // );
+                  Navigator.of(context).push(
+                    RouteTransAnim().createRoute(
+                      -1.0, 0.0, 
+                      WhatIs()
+                    )
+                  );
                 }
               ),
               CustomeListTile(
                 Icons.contact_support_outlined,
                 'Contact us',
                 () {
-                  // Navigator.of(context).push(
-                  //   RouteTransAnim().createRoute(
-                  //     -1.0, 0.0, 
-                  //     ContactUs()
-                  //   )
-                  // );
-                }
-              ),
-              CustomeListTile(
-                Icons.login_rounded,
-                'Sign up',
-                () {
                   Navigator.of(context).push(
                     RouteTransAnim().createRoute(
                       -1.0, 0.0, 
-                      SignUp()
+                      ContactUs()
                     )
                   );
                 }
               ),
+              // CustomeListTile(
+              //   Icons.login_rounded,
+              //   'Sign up',
+              //   () {
+              //     Navigator.of(context).push(
+              //       RouteTransAnim().createRoute(
+              //         -1.0, 0.0, 
+              //         SignUp()
+              //       )
+              //     );
+              //   }
+              // ),
               CustomeListTile(
                 Icons.logout_rounded,
                 'Logout',

@@ -416,7 +416,11 @@ class _PostState extends State<Post> {
                         // imgLink: imageList[itemIndex].toString()
 
                         Navigator.push(
-                          context, MaterialPageRoute(builder: (context) => ImgFullScreen(imageList: imageList, selectedimageIndex: itemIndex,)),
+                          context, MaterialPageRoute(builder: (context) => ImgFullScreen(
+                            imageList: imageList, 
+                            selectedimageIndex: itemIndex, 
+                            imgLink: imageList[itemIndex],
+                          )),
                         );
                       },
                     );

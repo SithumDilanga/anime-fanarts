@@ -3,11 +3,13 @@ import 'package:carousel_slider/carousel_slider.dart';
 
 class ImgFullScreen extends StatelessWidget {
 
-  // final String? imgLink;
+  //TODO: edit these parameter properly
+  
+  final String? imgLink;
   final int selectedimageIndex;
   final List? imageList;
 
-  const ImgFullScreen({ Key? key, required this.selectedimageIndex, this.imageList }) : super(key: key);
+  const ImgFullScreen({ Key? key, required this.selectedimageIndex, this.imageList, this.imgLink }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,32 +23,17 @@ class ImgFullScreen extends StatelessWidget {
           children: [
             Hero(
               tag: 'fullscreenImg',
-              child: CarouselSlider(
-                options: CarouselOptions(
-                  height: double.infinity,
-                  autoPlay: false,
-                  viewportFraction: 1,
-                  enableInfiniteScroll: false, 
-                  initialPage: selectedimageIndex
+              child: InteractiveViewer(
+                child: Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: NetworkImage(
+                        '$imgLink', // '$imgLink',
+                      ),
+                      fit: BoxFit.contain,
+                    )
+                  ),
                 ),
-                items: imageList!.map((image) {
-                  return Builder(
-                    builder: (BuildContext context) {
-                      return InteractiveViewer( //TODO:   
-                        child: Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: NetworkImage(
-                                '${image}', // '$imgLink',
-                              ),
-                              fit: BoxFit.contain,
-                            )
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                }).toList(),
               ),
             ),
             // Hero(
@@ -99,3 +86,34 @@ class ImgFullScreen extends StatelessWidget {
     );
   }
 }
+
+// Hero(
+//               tag: 'fullscreenImg',
+//               child: CarouselSlider(
+//                 options: CarouselOptions(
+//                   height: double.infinity,
+//                   autoPlay: false,
+//                   viewportFraction: 1,
+//                   enableInfiniteScroll: false, 
+//                   initialPage: selectedimageIndex,
+//                 ),
+//                 items: imageList!.map((image) {
+//                   return Builder(
+//                     builder: (BuildContext context) {
+//                       return InteractiveViewer( 
+//                         child: Container(
+//                           decoration: BoxDecoration(
+//                             image: DecorationImage(
+//                               image: NetworkImage(
+//                                 '${image}', // '$imgLink',
+//                               ),
+//                               fit: BoxFit.contain,
+//                             )
+//                           ),
+//                         ),
+//                       );
+//                     },
+//                   );
+//                 }).toList(),
+//               ),
+//             ),
