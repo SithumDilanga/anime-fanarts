@@ -175,13 +175,11 @@ class _CommentSecionState extends State<CommentSecion> {
                         SizedBox(height: 8.0,),
                         Padding(
                           padding: const EdgeInsets.only(left: 20.0),
-                          child: Expanded(
-                            child: Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                'Phasellus porttitor accumsan dolor et laoreet. In nec tortor aliquet, fermentum mi ut, accumsan felis. Phasellus lobortis neque vel erat commodo consequat.'
-                              ),
-                            )
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              'Phasellus porttitor accumsan dolor et laoreet. In nec tortor aliquet, fermentum mi ut, accumsan felis. Phasellus lobortis neque vel erat commodo consequat.'
+                            ),
                           ),
                         ),
                       ],

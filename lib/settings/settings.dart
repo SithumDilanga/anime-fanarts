@@ -7,6 +7,8 @@ import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/route_trans_anim.dart';
 import 'package:flutter/material.dart';
 
+import '../animation_test.dart';
+
 class Settings extends StatefulWidget {
   const Settings({ Key? key }) : super(key: key);
 
@@ -43,7 +45,7 @@ class _SettingsState extends State<Settings> {
                 () {
                   Navigator.of(context).push(
                     RouteTransAnim().createRoute(
-                      -1.0, 0.0, 
+                      1.0, 0.0, 
                       GiveFeedback()
                     )
                   );
@@ -55,7 +57,7 @@ class _SettingsState extends State<Settings> {
                 () {
                   Navigator.of(context).push(
                     RouteTransAnim().createRoute(
-                      -1.0, 0.0, 
+                      1.0, 0.0, 
                       BugReport()
                     )
                   );
@@ -65,12 +67,12 @@ class _SettingsState extends State<Settings> {
                 Icons.privacy_tip_outlined,
                 'Privacy & policy',
                 () {
-                  // Navigator.of(context).push(
-                  //   RouteTransAnim().createRoute(
-                  //     -1.0, 0.0, 
-                  //     ContactUs()
-                  //   )
-                  // );
+                  Navigator.of(context).push(
+                    RouteTransAnim().createRoute(
+                      1.0, 0.0, 
+                      AnimationsDemo()
+                    )
+                  );
                 }
               ),
               CustomeListTile(
@@ -79,7 +81,7 @@ class _SettingsState extends State<Settings> {
                 () {
                   Navigator.of(context).push(
                     RouteTransAnim().createRoute(
-                      -1.0, 0.0, 
+                      1.0, 0.0, 
                       WhatIs()
                     )
                   );
@@ -91,24 +93,24 @@ class _SettingsState extends State<Settings> {
                 () {
                   Navigator.of(context).push(
                     RouteTransAnim().createRoute(
-                      -1.0, 0.0, 
+                      1.0, 0.0, 
                       ContactUs()
                     )
                   );
                 }
               ),
-              // CustomeListTile(
-              //   Icons.login_rounded,
-              //   'Sign up',
-              //   () {
-              //     Navigator.of(context).push(
-              //       RouteTransAnim().createRoute(
-              //         -1.0, 0.0, 
-              //         SignUp()
-              //       )
-              //     );
-              //   }
-              // ),
+              CustomeListTile(
+                Icons.login_rounded,
+                'Sign up',
+                () {
+                  Navigator.of(context).push(
+                    RouteTransAnim().createRoute(
+                      1.0, 0.0, 
+                      SignUp()
+                    )
+                  );
+                }
+              ),
               CustomeListTile(
                 Icons.logout_rounded,
                 'Logout',

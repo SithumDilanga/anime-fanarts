@@ -69,11 +69,11 @@ class MyApp extends StatelessWidget {
                 onPressed: () {
 
                   Navigator.of(context).push(
-                      RouteTransAnim().createRoute(
-                        0.0, 1.0, 
-                        Settings()
-                      )
-                    );
+                    RouteTransAnim().createRoute(
+                      1.0, -1.0, 
+                      Settings()
+                    )
+                  );
 
                 }, 
               )

@@ -21,18 +21,15 @@ class ImgFullScreen extends StatelessWidget {
         // ),
         body: Stack(
           children: [
-            Hero(
-              tag: 'fullscreenImg',
-              child: InteractiveViewer(
-                child: Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: NetworkImage(
-                        '$imgLink', // '$imgLink',
-                      ),
-                      fit: BoxFit.contain,
-                    )
-                  ),
+            InteractiveViewer(
+              child: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: NetworkImage(
+                      '$imgLink', // '$imgLink',
+                    ),
+                    fit: BoxFit.contain,
+                  )
                 ),
               ),
             ),

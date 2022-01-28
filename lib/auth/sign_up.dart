@@ -1,4 +1,7 @@
 import 'package:anime_fanarts/auth/log_in.dart';
+import 'package:anime_fanarts/main.dart';
+import 'package:anime_fanarts/models/user_sign_up.dart';
+import 'package:anime_fanarts/services/auth_req.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
@@ -22,8 +25,10 @@ class _SignUpState extends State<SignUp> {
   // to identify the form
   final _formKey = GlobalKey<FormState>();
 
+  AuthReq _authReq = AuthReq();
+
   // text fields
-  String name = '';
+  String username = '';
   String email = '';
   String password = '';
   String confirmPassword = '';
@@ -190,7 +195,7 @@ class _SignUpState extends State<SignUp> {
                                 ),
                                 onChanged: (val) {
                                   setState(() {
-                                    name = val;
+                                    username = val;
                                   });
                                 },
                               ),                            
@@ -282,34 +287,24 @@ class _SignUpState extends State<SignUp> {
               
                                     } else {
           
-                                      // registering a user with email and password
-                                      // dynamic result = await _authService.registerWithEmailAndPassword(name, email, password);
-          
-                                      // if(result == null) {
-          
-                                      //     // show an error message
-                                      //     Fluttertoast.showToast(
-                                      //       msg: "Email or password is invalid!",
-                                      //       toastLength: Toast.LENGTH_LONG,
-                                      //       gravity: ToastGravity.BOTTOM,
-                                      //       fontSize: 16.0
-                                      //     );
-          
-                                      // } else {
-          
-                                      //   Fluttertoast.showToast(
-                                      //     msg: "Registration Complete!",
-                                      //     toastLength: Toast.LENGTH_LONG,
-                                      //     gravity: ToastGravity.BOTTOM,
-                                      //     fontSize: 16.0
-                                      //   );
-          
-                                      //   Navigator.pushAndRemoveUntil(
-                                      //     context,
-                                      //     MaterialPageRoute(builder: (context) => Home(selectedPage: 1)),
-                                      //     (Route<dynamic> route) => false,
-                                      //   );
-                                      // }
+                                      _authReq.signUp(userSignUp: UserSignUp(
+                                        name: username,
+                                        username: username,
+                                        email: email,
+                                        password: password,
+                                        passwordConfirm: confirmPassword
+                                      )).then((value) => {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => MyApp()
+                                        ),
+                                      )
+                                      }).onError((error, stackTrace) {
+                                        print('yoyo $error');
+                                        return Future.error(error!);
+                                      });
+                                     
                                     }
                                   } : null,
                                 ),

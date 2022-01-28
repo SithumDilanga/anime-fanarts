@@ -1,3 +1,6 @@
+import 'package:anime_fanarts/main.dart';
+import 'package:anime_fanarts/models/user_login.dart';
+import 'package:anime_fanarts/services/auth_req.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
@@ -22,6 +25,8 @@ class _LoginState extends State<Login> {
   // text fields
   String email = '';
   String password = '';
+
+  AuthReq _authReq = AuthReq();
 
   // ---------- validation functions --------------
 
@@ -193,46 +198,49 @@ class _LoginState extends State<Login> {
                                   passwordErrorText == null
                                 ) ? () async {
                                   
-                                  if(email.isEmpty || password.isEmpty) {
-        
-                                    Fluttertoast.showToast(
-                                      msg: "Please fill all the required fields",
-                                      toastLength: Toast.LENGTH_SHORT,
-                                    );
-        
-                                  } else {
-        
-                                    // logging a user with email and password
-                                    // dynamic result = await _authService.signInWithEmailAndPassword(email, password);
-        
-                                    // // if(result == null) {
-                                    // //     // changing the errorMsg
-                                    // //     setState(() {
-        
-                                    // //       Fluttertoast.showToast(
-                                    // //         msg: "Plaese enter a valid email and password",
-                                    // //         toastLength: Toast.LENGTH_LONG,
-                                    // //         gravity: ToastGravity.BOTTOM,
-                                    // //         fontSize: 16.0
-                                    // //       );
-                                    // //     });
-        
-                                    // //   } 
-                                    //   if(result != null) {
-        
-                                    //     Fluttertoast.showToast(
-                                    //       msg: "Login Success!",
-                                    //       toastLength: Toast.LENGTH_LONG,
-                                    //       gravity: ToastGravity.BOTTOM,
-                                    //       fontSize: 16.0
-                                    //     );
-        
-                                    //     Navigator.pushAndRemoveUntil(
-                                    //       context,
-                                    //       MaterialPageRoute(builder: (context) => Home(selectedPage: 1,)),
-                                    //       (Route<dynamic> route) => false,
-                                    //     );
-                                    //   }
+                                    if(email.isEmpty || password.isEmpty) {
+                                    
+                                      Fluttertoast.showToast(
+                                        msg: "Please fill all the required fields",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        );
+          
+                                      } else {
+                                    
+                                        if(email.isEmpty || password.isEmpty) {
+                                      
+                                          Fluttertoast.showToast(
+                                            msg: "Please fill all the required fields",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                          );
+  
+                                    } else {
+                                  
+                                    _authReq.loginUser(userLogin: UserLogin(
+                                      email: email, 
+                                      password: password
+                                    )).then((value) => {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => MyApp()
+                                        ),
+                                      )
+                                    }).onError((error, stackTrace) {
+                                      print('yoyo $error');
+                                      return Future.error(error!);
+                                    });
+                                    // .whenComplete(() => {
+                                    //   Navigator.push(
+                                    //     context,
+                                    //     MaterialPageRoute(
+                                    //       builder: (context) => MyApp()
+                                    //     ),
+                                    //   )
+                                      // })
+  
+                                    }
+
                                   }
         
                                 } : null,

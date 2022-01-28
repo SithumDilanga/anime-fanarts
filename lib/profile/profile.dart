@@ -573,10 +573,14 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                           ),
                         ),
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const AddNewArt()),
+
+                          Navigator.of(context).push(
+                            RouteTransAnim().createRoute(
+                              1.0, 1.0, 
+                              AddNewArt()
+                            )
                           );
+
                         }, 
                       )
                     ],

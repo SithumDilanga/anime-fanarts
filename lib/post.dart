@@ -16,6 +16,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:readmore/readmore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:animations/animations.dart';
 
 class Post extends StatefulWidget {
 
@@ -236,7 +237,7 @@ class _PostState extends State<Post> {
                       
                         Navigator.of(context).push(
                           RouteTransAnim().createRoute(
-                            0.0, 1.0, 
+                            1.0, 0.0, 
                             SelectReason()
                           )
                         );
@@ -352,13 +353,30 @@ class _PostState extends State<Post> {
                               maxWidth: double.infinity,
                               maxHeight: 390,
                             ),
-                            child: Container(
-                              child: CachedNetworkImage(
-                                imageUrl: imageList[itemIndex].toString(),
-                                width: double.infinity,
-                                fit: BoxFit.cover,
-                                placeholder: (context, url) => imagePlaceholder(),
-                              ),
+                            child: OpenContainer(
+                              openColor: Colors.pink,
+                              transitionType: ContainerTransitionType.fadeThrough,
+                              closedBuilder: (BuildContext _, VoidCallback openContainer){
+                                return CachedNetworkImage(
+                                  imageUrl: imageList[itemIndex].toString(),
+                                  width: double.infinity,
+                                  fit: BoxFit.cover,
+                                  placeholder: (context, url) => imagePlaceholder(),
+                                );
+                              },
+                              openBuilder: (BuildContext _, VoidCallback openContainer){
+                                return ImgFullScreen(
+                                  imageList: imageList, 
+                                  selectedimageIndex: itemIndex, 
+                                  imgLink: imageList[itemIndex],
+                                );
+                              }
+                              // child: CachedNetworkImage(
+                              //   imageUrl: imageList[itemIndex].toString(),
+                              //   width: double.infinity,
+                              //   fit: BoxFit.cover,
+                              //   placeholder: (context, url) => imagePlaceholder(),
+                              // ),
                             ),
                           ),
                           Positioned.fill(
@@ -415,13 +433,14 @@ class _PostState extends State<Post> {
 
                         // imgLink: imageList[itemIndex].toString()
 
-                        Navigator.push(
-                          context, MaterialPageRoute(builder: (context) => ImgFullScreen(
-                            imageList: imageList, 
-                            selectedimageIndex: itemIndex, 
-                            imgLink: imageList[itemIndex],
-                          )),
-                        );
+                        // Navigator.push(
+                        //   context, MaterialPageRoute(builder: (context) => ImgFullScreen(
+                        //     imageList: imageList, 
+                        //     selectedimageIndex: itemIndex, 
+                        //     imgLink: imageList[itemIndex],
+                        //   )),
+                        // );
+
                       },
                     );
                   },
@@ -500,10 +519,12 @@ class _PostState extends State<Post> {
                           )
                         ),
                         onPressed: () {
-    
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => CommentSecion()),
+
+                          Navigator.of(context).push(
+                            RouteTransAnim().createRoute(
+                              0.0, 1.0, 
+                              CommentSecion()
+                            )
                           );
 
                         },
