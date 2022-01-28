@@ -110,15 +110,15 @@ class _LoginState extends State<Login> {
                       ],
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(8.0, 16.0, 0, 0),
-                    child: IconButton(
-                      icon: Icon(Icons.arrow_back, color: Colors.white, size: 32.0,), 
-                      onPressed: () {
-                        Navigator.pop(context);
-                      }
-                    ),
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.fromLTRB(8.0, 16.0, 0, 0),
+                  //   child: IconButton(
+                  //     icon: Icon(Icons.arrow_back, color: Colors.white, size: 32.0,), 
+                  //     onPressed: () {
+                  //       Navigator.pop(context);
+                  //     }
+                  //   ),
+                  // ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16.0, 200.0, 16.0, 0),
                     child: Card(
@@ -220,12 +220,13 @@ class _LoginState extends State<Login> {
                                       email: email, 
                                       password: password
                                     )).then((value) => {
-                                      Navigator.push(
+
+                                      Navigator.pushAndRemoveUntil(
                                         context,
-                                        MaterialPageRoute(
-                                          builder: (context) => MyApp()
-                                        ),
+                                        MaterialPageRoute(builder: (context) => MyApp()),
+                                        (Route<dynamic> route) => false,
                                       )
+
                                     }).onError((error, stackTrace) {
                                       print('yoyo $error');
                                       return Future.error(error!);

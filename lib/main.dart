@@ -6,9 +6,11 @@ import 'package:anime_fanarts/explore.dart';
 import 'package:anime_fanarts/img_fullscreen.dart';
 import 'package:anime_fanarts/post.dart';
 import 'package:anime_fanarts/profile/profile.dart';
+import 'package:anime_fanarts/services/secure_storage.dart';
 import 'package:anime_fanarts/services/shared_pref.dart';
 import 'package:anime_fanarts/settings/settings.dart';
 import 'package:anime_fanarts/utils/colors.dart';
+import 'package:anime_fanarts/utils/loading_animation.dart';
 import 'package:anime_fanarts/utils/route_trans_anim.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -41,12 +43,48 @@ void main() async {
   // ));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   
   // const MyApp({Key? key}) : super(key: key);
 
   @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  String? token;
+
+  Future<String?> init() async {
+
+    final bearerToken = await SecureStorage.getToken();
+
+    setState(() {
+      this.token = bearerToken;
+    });
+
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    init();
+
+  }
+
+  @override
   Widget build(BuildContext context) {
+
+    print('bearer token $token');
+    
+    // TODO: find a good logic
+    if(token == null) {
+      return SignUp();
+    } 
+
+    if(token != null) {
+
     return DefaultTabController(
         initialIndex: 0,
         length: 2,
@@ -187,6 +225,10 @@ class MyApp extends StatelessWidget {
           ),
         ),
       );
+    }
+
+    return LoadingAnimation();
+
   }
 }
 

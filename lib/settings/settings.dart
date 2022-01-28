@@ -1,4 +1,6 @@
+import 'package:anime_fanarts/auth/log_in.dart';
 import 'package:anime_fanarts/auth/sign_up.dart';
+import 'package:anime_fanarts/services/secure_storage.dart';
 import 'package:anime_fanarts/settings/bug_report.dart';
 import 'package:anime_fanarts/settings/contact_us.dart';
 import 'package:anime_fanarts/settings/feedback.dart';
@@ -114,7 +116,18 @@ class _SettingsState extends State<Settings> {
               CustomeListTile(
                 Icons.logout_rounded,
                 'Logout',
-                () {
+                () async {
+
+                  await SecureStorage.deleteToken().whenComplete(() {
+
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => Login()),
+                      (Route<dynamic> route) => false,
+                    );
+
+                  });
+
                   // Navigator.of(context).push(
                   //   RouteTransAnim().createRoute(
                   //     -1.0, 0.0, 
