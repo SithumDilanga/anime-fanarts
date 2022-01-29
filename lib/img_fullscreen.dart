@@ -11,6 +11,8 @@ class ImgFullScreen extends StatelessWidget {
 
   const ImgFullScreen({ Key? key, required this.selectedimageIndex, this.imageList, this.imgLink }) : super(key: key);
 
+  static const IMGURL = 'http://10.0.2.2:3000/img/users/';
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -26,7 +28,7 @@ class ImgFullScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: NetworkImage(
-                      '$imgLink', // '$imgLink',
+                      '$IMGURL${imgLink}', // '$imgLink',
                     ),
                     fit: BoxFit.contain,
                   )

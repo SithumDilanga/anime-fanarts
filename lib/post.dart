@@ -4,6 +4,7 @@ import 'package:anime_fanarts/profile/users_profile.dart';
 import 'package:anime_fanarts/report/select_reason.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/route_trans_anim.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -24,13 +25,14 @@ class Post extends StatefulWidget {
   final String? name;
   final String? profilePic;
   final String? desc;
-  final String? postImg;
+  final List? postImg;
   final String? userId;
   final String? date;
   final int? reactionCount;
+  final int? commentCount;
   final bool isUserPost;
 
-   Post({ Key? key, this.id, this.name, this.profilePic, this.desc = '', this.postImg = '', this.userId, this.date, this.reactionCount, this.isUserPost = false}) : super(key: key);
+   Post({ Key? key, this.id, this.name, this.profilePic, this.desc = '', this.postImg, this.userId, this.date, this.reactionCount, this.isUserPost = false, this.commentCount}) : super(key: key);
 
   @override
   _PostState createState() => _PostState();
@@ -44,6 +46,7 @@ class _PostState extends State<Post> {
   // final InitialLetters _initialLetters = InitialLetters();
 
   static const primaryColor = Color(0xffffa500); 
+  static const IMGURL = 'http://10.0.2.2:3000/img/users/';
 
   List imageList = ['https://images.alphacoders.com/120/thumb-1920-1203420.png', 'https://i.pinimg.com/originals/44/c3/21/44c321cf6862f22caf3e6b71a0661565.jpg','https://www.nawpic.com/media/2020/levi-ackerman-nawpic-17.jpg' ];
 
@@ -127,6 +130,9 @@ class _PostState extends State<Post> {
     String userName = widget.name.toString();
     print('userName ' + userName);
 
+    print('postImg ' + '$IMGURL${widget.postImg![0]}');
+    print('images ' + '${widget.postImg![0]}');
+
       return Container(
         padding: EdgeInsets.symmetric(
           horizontal: 4.0,
@@ -202,7 +208,7 @@ class _PostState extends State<Post> {
                                 },
                               ),
                             Text(
-                              widget.date!,
+                              widget.date.toString(),
                               style: TextStyle(
                                 fontSize: 11.0
                               ),
@@ -341,7 +347,7 @@ class _PostState extends State<Post> {
               if(widget.postImg!.isNotEmpty)
 
                 CarouselSlider.builder(
-                  itemCount: imageList.length,
+                  itemCount: widget.postImg!.length,
                   itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
                     return GestureDetector(
                       child: Stack(
@@ -358,7 +364,8 @@ class _PostState extends State<Post> {
                               transitionType: ContainerTransitionType.fadeThrough,
                               closedBuilder: (BuildContext _, VoidCallback openContainer){
                                 return CachedNetworkImage(
-                                  imageUrl: imageList[itemIndex].toString(),
+                                  // imageUrl: imageList[itemIndex].toString(),
+                                  imageUrl: '$IMGURL${widget.postImg![itemIndex]}',
                                   width: double.infinity,
                                   fit: BoxFit.cover,
                                   placeholder: (context, url) => imagePlaceholder(),
@@ -366,9 +373,9 @@ class _PostState extends State<Post> {
                               },
                               openBuilder: (BuildContext _, VoidCallback openContainer){
                                 return ImgFullScreen(
-                                  imageList: imageList, 
+                                  imageList: widget.postImg, 
                                   selectedimageIndex: itemIndex, 
-                                  imgLink: imageList[itemIndex],
+                                  imgLink: widget.postImg![itemIndex],
                                 );
                               }
                               // child: CachedNetworkImage(
@@ -383,7 +390,7 @@ class _PostState extends State<Post> {
                             top: 5,
                             left: 5,
                             child: ListView.builder(
-                              itemCount: imageList.length,
+                              itemCount: widget.postImg!.length,
                               scrollDirection: Axis.horizontal,
                               itemBuilder: (context, index) {
                             
@@ -396,7 +403,7 @@ class _PostState extends State<Post> {
                                   return Stack(
                                     children: [
                                       Text(
-                                        '${index + 1}/${imageList.length}',
+                                        '${index + 1}/${widget.postImg!.length}',
                                         style: TextStyle(
                                           fontSize: 11,
                                           foreground: Paint()
@@ -406,7 +413,7 @@ class _PostState extends State<Post> {
                                         ),
                                       ),
                                       Text(
-                                        '${index + 1}/${imageList.length}',
+                                        '${index + 1}/${widget.postImg!.length}',
                                         style: TextStyle(
                                           color: Colors.black.withOpacity(0.5),
                                           fontSize: 11
@@ -433,13 +440,13 @@ class _PostState extends State<Post> {
 
                         // imgLink: imageList[itemIndex].toString()
 
-                        // Navigator.push(
-                        //   context, MaterialPageRoute(builder: (context) => ImgFullScreen(
-                        //     imageList: imageList, 
-                        //     selectedimageIndex: itemIndex, 
-                        //     imgLink: imageList[itemIndex],
-                        //   )),
-                        // );
+                        Navigator.push(
+                          context, MaterialPageRoute(builder: (context) => ImgFullScreen(
+                            imageList: widget.postImg, 
+                            selectedimageIndex: itemIndex, 
+                            imgLink: widget.postImg![itemIndex],
+                          )),
+                        );
 
                       },
                     );
@@ -498,7 +505,7 @@ class _PostState extends State<Post> {
                             ),
                             SizedBox(width: 4.0,),
                             Text(
-                              'comments 4',
+                              'comments ${widget.commentCount}',
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 12.0
@@ -532,7 +539,7 @@ class _PostState extends State<Post> {
                       Row(
                         children: [
                           Text(
-                            '8',
+                            '${widget.reactionCount}',
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 12.0

@@ -1,5 +1,6 @@
 import 'package:anime_fanarts/post.dart';
 import 'package:anime_fanarts/utils/colors.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -176,7 +177,7 @@ class UsersProfileState extends State<UsersProfile> with AutomaticKeepAliveClien
                         name: 'Levi Ackerman',
                         profilePic: 'https://cdna.artstation.com/p/assets/images/images/031/257/402/large/yukisho-art-vector-6.jpg?1603101769&dl=10',
                         desc: 'marin kitagawa from my dress up darling',
-                        postImg: 'https://images.alphacoders.com/120/thumb-1920-1203420.png',
+                        postImg: [ 'https://images.alphacoders.com/120/thumb-1920-1203420.png' ],
                         userId: 'user123',
                         date: '15 jan 2022',
                         reactionCount: 4,
