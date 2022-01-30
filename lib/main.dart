@@ -4,6 +4,7 @@ import 'package:anime_fanarts/auth/log_in.dart';
 import 'package:anime_fanarts/auth/sign_up.dart';
 import 'package:anime_fanarts/explore.dart';
 import 'package:anime_fanarts/img_fullscreen.dart';
+import 'package:anime_fanarts/models/profile_user.dart';
 import 'package:anime_fanarts/post.dart';
 import 'package:anime_fanarts/profile/profile.dart';
 import 'package:anime_fanarts/services/secure_storage.dart';
@@ -15,6 +16,7 @@ import 'package:anime_fanarts/utils/route_trans_anim.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -105,14 +107,14 @@ class _MyAppState extends State<MyApp> {
                   color: Colors.black,
                 ),
                 onPressed: () {
-
+    
                   Navigator.of(context).push(
                     RouteTransAnim().createRoute(
                       1.0, -1.0, 
                       Settings()
                     )
                   );
-
+    
                 }, 
               )
               // PopupMenuButton(
@@ -121,27 +123,27 @@ class _MyAppState extends State<MyApp> {
               //     color: Colors.black,
               //   ),
               //   onSelected: (selection) async {
-
+    
               //     if(selection == 0) {
-
+    
               //       Navigator.of(context).push(
               //         RouteTransAnim().createRoute(
               //           0.0, 1.0, 
               //           SignUp()
               //         )
               //       );
-
+    
               //     } else if(selection == 1) {
-
+    
               //       Navigator.of(context).push(
               //         RouteTransAnim().createRoute(
               //           0.0, 1.0, 
               //           Login()
               //         )
               //       );
-
+    
               //     } 
-
+    
               //   },
               //   itemBuilder: (context) => [
               //     PopupMenuItem(

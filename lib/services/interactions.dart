@@ -1,37 +1,44 @@
-
+import 'package:anime_fanarts/models/reaction.dart';
 import 'package:anime_fanarts/services/secure_storage.dart';
 import 'package:dio/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class GetPosts {
+class Interactions {
 
   var _dio = Dio();
   static const URL = 'http://10.0.2.2:3000/api/v1';
 
-// --------------- get all posts -----------------
+  Future createReaction({required Reaction reaction}) async {
 
-  Future getAllPosts() async {
+    Response userReaction;
 
     try {
 
       final bearerToken = await SecureStorage.getToken() ?? '';
-      print('bearer $bearerToken');
       
-      Response allPostsData = await _dio.get('$URL/posts?page=1&limit=20', options: Options(
+      userReaction = await _dio.post(
+        '$URL/reactions', 
+        data: reaction.toJson(), 
+        options: Options(
         headers: {'Authorization': 'Bearer $bearerToken'},
       ));
-      print('All posts: ${allPostsData.data}');
-      print(allPostsData.statusCode);
-      print(allPostsData.statusMessage);
-      print(allPostsData.headers);
 
-      print('shit ${allPostsData.data['data']['posts']}');
+      print('create reaction: ${userReaction.data}');
+      print(userReaction.statusCode);
+      print(userReaction.statusMessage);
+      print(userReaction.headers);
 
-      return allPostsData.data['data'];
+      Fluttertoast.showToast(
+        msg: 'reaction added!',
+        toastLength: Toast.LENGTH_LONG,
+      );
+
+
+      return userReaction.data['data'];
 
     } on DioError catch (e) {
 
-      print('Error creating post : $e');
+      print('Error creating reaction : $e');
 
       if (e.response != null) {
 
@@ -61,10 +68,8 @@ class GetPosts {
         print(e.message);
       }
 
-    }
+      }
 
   }
-
-  // --------------- End get all posts -----------------
 
 }

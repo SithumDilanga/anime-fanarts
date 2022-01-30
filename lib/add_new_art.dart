@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:anime_fanarts/services/firestore_service.dart';
+import 'package:anime_fanarts/services/get_create_posts.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/loading_animation.dart';
 import 'package:flutter/material.dart';
@@ -20,11 +21,14 @@ class _AddNewArtState extends State<AddNewArt> {
   List<String> tagList = [];
 
   final tagTextController = TextEditingController();
+  final descTextController = TextEditingController();
 
   final picker = ImagePicker();
   List? _postImages = [];
 
   final FirestoreService _firestireService = FirestoreService();
+
+  GetCreatePosts _getCreatePosts = GetCreatePosts();
 
   Future _pickFanartImage() async {
     
@@ -272,6 +276,7 @@ class _AddNewArtState extends State<AddNewArt> {
                         ),
                       ),
                       TextFormField(
+                        controller: descTextController,
                         cursorColor: ColorTheme.primary,
                         maxLines: null,
                         keyboardType: TextInputType.multiline,
@@ -450,13 +455,10 @@ class _AddNewArtState extends State<AddNewArt> {
                             //   MaterialPageRoute(builder: (context) => const AddNewArt()),
                             // );
 
-                            if(_postImages!.length > 3) {
-                              Fluttertoast.showToast(
-                                msg: "Maximum image limit exceeds",
-                                toastLength: Toast.LENGTH_SHORT,
-                              );
-                            }
-    
+                            print('tagList $tagList');
+
+                            //TODO: check those validation toast messages
+
                             if(tagList.isEmpty) {
                               Fluttertoast.showToast(
                                 msg: "please at least add one tag!",
@@ -464,8 +466,29 @@ class _AddNewArtState extends State<AddNewArt> {
                               );
                             }
 
-                            if(snapshot.data!['isRateAvailable']) {
-                              _rateAlert('123');
+                            if(_postImages!.length > 3) {
+                              Fluttertoast.showToast(
+                                msg: "Maximum image limit exceeds",
+                                toastLength: Toast.LENGTH_SHORT,
+                              );
+                            } else if(tagList.isEmpty) {
+                              print('culprit');
+                              Fluttertoast.showToast(
+                                msg: "please at least add one tag!",
+                                toastLength: Toast.LENGTH_SHORT,
+                              );
+                            } else {
+
+                              _getCreatePosts.createPost(
+                                postImageFile: _postImages![0],
+                                desc: descTextController.text,
+                                tags: tagList
+                              ).whenComplete(() {
+
+                                Navigator.pop(context);
+
+                              });
+
                             }
     
                           }, 

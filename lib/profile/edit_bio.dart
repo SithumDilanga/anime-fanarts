@@ -1,3 +1,5 @@
+import 'package:anime_fanarts/models/profile_user.dart';
+import 'package:anime_fanarts/services/profile_req.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:flutter/material.dart';
 // import 'package:gritie_new_app/models/profile_user.dart';
@@ -21,6 +23,8 @@ class _EditBioState extends State<EditBio> {
 
   // TextEditingController _bioText = TextEditingController();
   String updatedBioText = '';
+
+  ProfileReq _profileReq = ProfileReq();
 
   @override
   Widget build(BuildContext context) {
@@ -99,10 +103,10 @@ class _EditBioState extends State<EditBio> {
       
                     } else {
       
-                      // DatabaseService(uid: widget.uid).updateBio(updatedBioText).whenComplete(() => {
-                      //   profileData.updateBio(updatedBioText),
-                      //   Navigator.pop(context)
-                      // });
+                      _profileReq.updateBio(updatedBioText).whenComplete(() => {
+                        // profileData.updateBio(updatedBioText),
+                        Navigator.pop(context)
+                      });
       
                     }
       

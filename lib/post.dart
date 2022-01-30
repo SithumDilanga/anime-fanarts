@@ -1,7 +1,9 @@
 import 'package:anime_fanarts/comment_section.dart';
 import 'package:anime_fanarts/img_fullscreen.dart';
+import 'package:anime_fanarts/models/reaction.dart';
 import 'package:anime_fanarts/profile/users_profile.dart';
 import 'package:anime_fanarts/report/select_reason.dart';
+import 'package:anime_fanarts/services/interactions.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/route_trans_anim.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -31,8 +33,9 @@ class Post extends StatefulWidget {
   final int? reactionCount;
   final int? commentCount;
   final bool isUserPost;
+  bool isReacted;
 
-   Post({ Key? key, this.id, this.name, this.profilePic, this.desc = '', this.postImg, this.userId, this.date, this.reactionCount, this.isUserPost = false, this.commentCount}) : super(key: key);
+   Post({ Key? key, this.id, this.name, this.profilePic, this.desc = '', this.postImg, this.userId, this.date, this.reactionCount, this.isUserPost = false, this.commentCount, this.isReacted = false}) : super(key: key);
 
   @override
   _PostState createState() => _PostState();
@@ -40,13 +43,15 @@ class Post extends StatefulWidget {
 
 class _PostState extends State<Post> {
 
-  bool isReacted = false;
+  // bool isReacted = false;
 
   // final DatabaseService _database = DatabaseService();
   // final InitialLetters _initialLetters = InitialLetters();
 
   static const primaryColor = Color(0xffffa500); 
   static const IMGURL = 'http://10.0.2.2:3000/img/users/';
+
+  Interactions _interactionsReq = Interactions();
 
   List imageList = ['https://images.alphacoders.com/120/thumb-1920-1203420.png', 'https://i.pinimg.com/originals/44/c3/21/44c321cf6862f22caf3e6b71a0661565.jpg','https://www.nawpic.com/media/2020/levi-ackerman-nawpic-17.jpg' ];
 
@@ -515,7 +520,7 @@ class _PostState extends State<Post> {
                         ),
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
-                          primary: isReacted ? primaryColor : Colors.white,
+                          primary: Colors.white,
                           minimumSize: Size(50, 30),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30.0),
@@ -545,11 +550,40 @@ class _PostState extends State<Post> {
                               fontSize: 12.0
                             ),
                           ),
+                          widget.isReacted ? 
                           IconButton(
                             icon: Icon(
-                              Icons.favorite_border_rounded
+                              Icons.favorite_rounded,
+                              color: ColorTheme.primary,
                             ),
                             onPressed: () {
+
+                              _interactionsReq.createReaction(reaction: Reaction(
+                                post: widget.id, 
+                                reaction: 1
+                              ));
+
+                              setState(() {
+                                widget.isReacted = !widget.isReacted;
+                              });
+
+                            }, 
+                          ) : 
+                          IconButton(
+                            icon: Icon(
+                              Icons.favorite_border_rounded,
+                              color: Colors.black,
+                            ),
+                            onPressed: () {
+
+                              _interactionsReq.createReaction(reaction: Reaction(
+                                post: widget.id, 
+                                reaction: 1
+                              ));
+
+                              setState(() {
+                                widget.isReacted = !widget.isReacted;
+                              });
 
                             }, 
                           ),
