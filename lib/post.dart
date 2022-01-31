@@ -5,6 +5,7 @@ import 'package:anime_fanarts/profile/users_profile.dart';
 import 'package:anime_fanarts/report/select_reason.dart';
 import 'package:anime_fanarts/services/interactions.dart';
 import 'package:anime_fanarts/utils/colors.dart';
+import 'package:anime_fanarts/utils/date_time_formatter.dart';
 import 'package:anime_fanarts/utils/route_trans_anim.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -53,6 +54,7 @@ class _PostState extends State<Post> {
   static const IMGURL = 'http://10.0.2.2:3000/img/users/';
 
   Interactions _interactionsReq = Interactions();
+  DateTimeFormatter _dateTimeFormatter = DateTimeFormatter();
 
   List imageList = ['https://images.alphacoders.com/120/thumb-1920-1203420.png', 'https://i.pinimg.com/originals/44/c3/21/44c321cf6862f22caf3e6b71a0661565.jpg','https://www.nawpic.com/media/2020/levi-ackerman-nawpic-17.jpg' ];
 
@@ -130,23 +132,6 @@ class _PostState extends State<Post> {
     );
   }
 
-  // convert MongoDB createdAt into Datetime
-  getFormattedDateFromFormattedString(
-      {required value,
-      required String currentFormat,
-      required String desiredFormat,
-      isUtc = false}) {
-    DateTime? dateTime = DateTime.now();
-    if (value != null || value.isNotEmpty) {
-      try {
-        dateTime = DateFormat(currentFormat).parse(value, isUtc).toLocal();
-      } catch (e) {
-        print("$e");
-      }
-    }
-    return dateTime;
-  }
-
   @override
   Widget build(BuildContext context) {
 
@@ -156,13 +141,11 @@ class _PostState extends State<Post> {
     print('postImg ' + '$IMGURL${widget.postImg![0]}');
     print('images ' + '${widget.postImg![0]}');
 
-      DateTime dateTime = getFormattedDateFromFormattedString(  
-        value: widget.date,
-        currentFormat: "yyyy-MM-ddTHH:mm:ssZ",
-        desiredFormat: "yyyy-MM-dd HH:mm"
-      );
-
-      String formattedDate = DateFormat('yyyy-MM-dd hh:mm a').format(dateTime);
+    String formattedDate = _dateTimeFormatter.getFormattedDateFromFormattedString(
+      value: widget.date, 
+      currentFormat: "yyyy-MM-ddTHH:mm:ssZ", 
+      desiredFormat: "yyyy-MM-dd hh:mm a"
+    );
 
       return Container(
         padding: EdgeInsets.symmetric(
