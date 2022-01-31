@@ -50,5 +50,18 @@ class SharedPref {
     return _preferences?.getString(_keyUserName) ?? 'Test';
   }
 
+  // profile image
+
+  static const _keyProfilePic = 'profileImage';
+
+  static Future<bool> setProfilePic(String profileImage) async {
+    print('prifilePic ' +  profileImage.toString());
+    return await _preferences!.setString(_keyProfilePic, profileImage);
+  }
+
+  static String getProfilePic() {
+    return _preferences?.getString(_keyProfilePic) ?? 'Test';
+  }
+
 
 }

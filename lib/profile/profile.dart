@@ -20,8 +20,8 @@ import 'package:image_picker/image_picker.dart';
 // import 'package:gritie_new_app/models/profile_user.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
 import 'edit_bio.dart';
+import 'package:path_provider/path_provider.dart';
 
 class Profile extends StatefulWidget {
   const Profile({ Key? key }) : super(key: key);
@@ -41,6 +41,7 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
   TextEditingController? _changeName;
 
   ProfileReq _profileReq = ProfileReq();
+  SharedPref _sharedPref = SharedPref();
 
   @override
   void initState() {
@@ -64,6 +65,19 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
       // _profileImage = File(pickedFile!.path);
       _profileImage = File(pickedFile!.path);
     });
+
+    // add image to shared preferences
+    if(_profileImage != null) {
+
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+
+      String path = appDocDir.path;
+
+      final File newImage = await _profileImage.copy('$path/image1.png');
+
+      SharedPref.setProfilePic(newImage.path);
+
+    }
 
     _profileReq.uploadProfilePic(_profileImage);
 
@@ -553,8 +567,10 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                                             ],
                                           ),
                                         ),
-                                        onTap: () {
+                                        onTap: () async {
                                           _pickProfileImage();
+
+                                          
                                         },
                                       ),
                                     ),

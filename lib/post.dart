@@ -10,6 +10,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 // import 'package:gritie_new_app/utils/loading_animation.dart';
 // import 'package:gritie_new_app/utils/route_trans_anim.dart';
 // import 'package:gritie_new_app/services/shared_pref.dart';
@@ -129,6 +130,23 @@ class _PostState extends State<Post> {
     );
   }
 
+  // convert MongoDB createdAt into Datetime
+  getFormattedDateFromFormattedString(
+      {required value,
+      required String currentFormat,
+      required String desiredFormat,
+      isUtc = false}) {
+    DateTime? dateTime = DateTime.now();
+    if (value != null || value.isNotEmpty) {
+      try {
+        dateTime = DateFormat(currentFormat).parse(value, isUtc).toLocal();
+      } catch (e) {
+        print("$e");
+      }
+    }
+    return dateTime;
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -137,6 +155,14 @@ class _PostState extends State<Post> {
 
     print('postImg ' + '$IMGURL${widget.postImg![0]}');
     print('images ' + '${widget.postImg![0]}');
+
+      DateTime dateTime = getFormattedDateFromFormattedString(  
+        value: widget.date,
+        currentFormat: "yyyy-MM-ddTHH:mm:ssZ",
+        desiredFormat: "yyyy-MM-dd HH:mm"
+      );
+
+      String formattedDate = DateFormat('yyyy-MM-dd hh:mm a').format(dateTime);
 
       return Container(
         padding: EdgeInsets.symmetric(
@@ -179,7 +205,7 @@ class _PostState extends State<Post> {
                               //   MaterialPageRoute(builder: (context) => UserProfile()),
                               // );
                               Navigator.of(context).push(
-                                RouteTransAnim().createRoute(1.0, .0, UsersProfile(name: widget.name,))
+                                RouteTransAnim().createRoute(1.0, .0, UsersProfile(name: widget.name, userId: widget.userId,))
                               );
                             },
                           ),
@@ -207,13 +233,13 @@ class _PostState extends State<Post> {
                                 onTap: () {
                                 
                                   Navigator.of(context).push(
-                                    RouteTransAnim().createRoute(1.0, .0, UsersProfile(name: widget.name))
+                                    RouteTransAnim().createRoute(1.0, .0, UsersProfile(name: widget.name, userId: widget.userId))
                                   );
 
                                 },
                               ),
                             Text(
-                              widget.date.toString(),
+                              '$formattedDate',//widget.date.toString(),
                               style: TextStyle(
                                 fontSize: 11.0
                               ),
@@ -535,7 +561,7 @@ class _PostState extends State<Post> {
                           Navigator.of(context).push(
                             RouteTransAnim().createRoute(
                               0.0, 1.0, 
-                              CommentSecion()
+                              CommentSecion(postId: widget.id, userId: widget.userId,)
                             )
                           );
 

@@ -2,6 +2,7 @@ import 'package:anime_fanarts/models/profile_user.dart';
 import 'package:anime_fanarts/services/profile_req.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 // import 'package:gritie_new_app/models/profile_user.dart';
 // import 'package:gritie_new_app/services/database.dart';
 import 'package:provider/provider.dart';
@@ -64,6 +65,7 @@ class _EditBioState extends State<EditBio> {
                   initialValue: widget.bioText,
                   keyboardType: TextInputType.multiline,
                   maxLines: null,
+                  maxLength: 500,
                   cursorColor: ColorTheme.primary,
                   decoration: InputDecoration(
                     focusedBorder: UnderlineInputBorder(

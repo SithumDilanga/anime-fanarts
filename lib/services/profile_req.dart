@@ -116,6 +116,7 @@ class ProfileReq {
 
     try {
 
+
       final bearerToken = await SecureStorage.getToken() ?? '';
       print('bearer $bearerToken');
       
@@ -434,5 +435,52 @@ class ProfileReq {
   }
 
   // ------------ End update username -------------
+
+  // ------------ get user by id -------------
+
+  Future getUserById({required String id}) async {
+
+    print('fucking id ' + id.toString());
+
+    try {
+
+      final bearerToken = await SecureStorage.getToken() ?? '';
+      print('bearer $bearerToken');
+      
+      Response userData = await _dio.get('$URL/users/$id', options: Options(
+        headers: {'Authorization': 'Bearer $bearerToken'},
+      ));
+      print('UserById info: ${userData.data}');
+      print(userData.statusCode);
+      print(userData.statusMessage);
+      print(userData.headers);
+
+      return userData.data['data']['users'];
+
+    } on DioError catch (e) {
+
+      if(e.type == DioErrorType.response) {
+        print('bitch catched!');
+      }
+
+      if (e.response != null) {
+        print('Dio error!');
+        print('STATUS: ${e.response?.statusCode}');
+        print('DATA: ${e.response?.data}');
+        print('HEADERS: ${e.response?.headers}');
+
+        // returning error status code
+        return e.response!.statusCode;
+
+      } else {
+        print('Error sending request!');
+        print(e.message);
+        return e.message;
+      }
+
+    }
+  }
+
+  // ------------ End get user by id -------------
 
 }
