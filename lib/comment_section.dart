@@ -93,7 +93,7 @@ class _CommentSecionState extends State<CommentSecion> {
                               radius: 20,
                               backgroundColor: Colors.blueGrey[700],
                               backgroundImage: FileImage(
-                                File(SharedPref.getProfilePic())
+                                File(SharedPref.getProfilePic()!)
                               )
                               // NetworkImage(
                               //   'https://cdna.artstation.com/p/assets/images/images/031/257/402/large/yukisho-art-vector-6.jpg?1603101769&dl=10'

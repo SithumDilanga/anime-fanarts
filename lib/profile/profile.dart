@@ -73,7 +73,7 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
 
       String path = appDocDir.path;
 
-      final File newImage = await _profileImage.copy('$path/image1.png');
+      final File newImage = await _profileImage.copy('$path/profileImage.png');
 
       SharedPref.setProfilePic(newImage.path);
 
@@ -94,6 +94,19 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
       // _coverImage = File(pickedFile!.path);
       _coverImage = File(pickedFile!.path);
     });
+
+    // add cover image to shared preferences
+    if(_coverImage != null) {
+
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+
+      String path = appDocDir.path;
+
+      final File newCoverImage = await _coverImage.copy('$path/coverImage.png');
+
+      SharedPref.setCoverPic(newCoverImage.path);
+
+    }
 
     _profileReq.uploadCoverPic(_coverImage).whenComplete(() {
 
@@ -378,40 +391,127 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                                         )                                  
                                       ),
                                     ),
+                                  
+                                  
+                                  // ---------- shared pref ----------
 
-                                  if(userInfo['coverPic'] != null)
-                                    ConstrainedBox(
-                                      constraints: const BoxConstraints(
-                                        minHeight: 120,
-                                        maxHeight: 150,
-                                        maxWidth: double.infinity
-                                      ),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(6), 
-                                          topRight: Radius.circular(6)
+                                  // if(userInfo['coverPic'] != null && _coverImage == null)
+                                  //   ConstrainedBox(
+                                  //     constraints: const BoxConstraints(
+                                  //       minHeight: 120,
+                                  //       maxHeight: 150,
+                                  //       maxWidth: double.infinity
+                                  //     ),
+                                  //     child: ClipRRect(
+                                  //       borderRadius: BorderRadius.only(
+                                  //         topLeft: Radius.circular(6), 
+                                  //         topRight: Radius.circular(6)
+                                  //       ),
+                                  //       child: 
+                                  //       // Image.network(
+                                  //       //   'https://i.pinimg.com/originals/30/5c/5a/305c5a457807ba421ed67495c93198d3.jpg'
+                                  //       // )
+                                  //       // Image.network(
+                                  //       //   'http://10.0.2.2:3000/img/users/${userInfo['coverPic']}'
+                                  //       // )
+
+                                  //       //https://pm1.narvii.com/8140/0fdca4b85e6cb881f592dda7294488878bde9541r1-750-250v2_hq.jpg
+
+                                  //       SharedPref.getCoverPic() == null ? 
+                                  //       Image.network(
+                                  //         '$IMGURL${userInfo['coverPic']}',
+                                  //         width: double.infinity,
+                                  //         fit: BoxFit.cover,
+                                  //       ) : Image.file(
+                                  //         File(SharedPref.getCoverPic()!),
+                                  //         width: double.infinity,
+                                  //         fit: BoxFit.cover
+                                  //       ),
+                                        
+
+                                  //       // _coverImage == null ? Image.network(
+                                  //       //   '$IMGURL${userInfo['coverPic']}',
+                                  //       //   width: double.infinity,
+                                  //       //   fit: BoxFit.cover,
+                                  //       // ) : Image.file(
+                                  //       //   _coverImage,
+                                  //       //   width: double.infinity,
+                                  //       //   fit: BoxFit.cover
+                                  //       // ),
+                                  //     ),
+                                  //   ),
+                                  //   if(_coverImage != null)
+                                  //     ConstrainedBox(
+                                  //       constraints: const BoxConstraints(
+                                  //         minHeight: 120,
+                                  //         maxHeight: 150,
+                                  //         maxWidth: double.infinity
+                                  //       ),
+                                  //       child: ClipRRect(
+                                  //         borderRadius: BorderRadius.only(
+                                  //           topLeft: Radius.circular(6), 
+                                  //           topRight: Radius.circular(6)
+                                  //         ),
+                                  //         child: 
+                                  //         // Image.network(
+                                  //         //   'https://i.pinimg.com/originals/30/5c/5a/305c5a457807ba421ed67495c93198d3.jpg'
+                                  //         // )
+                                  //         // Image.network(
+                                  //         //   'http://10.0.2.2:3000/img/users/${userInfo['coverPic']}'
+                                  //         // )
+
+                                  //         //https://pm1.narvii.com/8140/0fdca4b85e6cb881f592dda7294488878bde9541r1-750-250v2_hq.jpg
+
+
+                                  //         _coverImage == null ? Image.network(
+                                  //           '$IMGURL${userInfo['coverPic']}',
+                                  //           width: double.infinity,
+                                  //           fit: BoxFit.cover,
+                                  //         ) : Image.file(
+                                  //           _coverImage,
+                                  //           width: double.infinity,
+                                  //           fit: BoxFit.cover
+                                  //         ),
+                                  //       ),
+                                  //     ),
+
+                                  // ---------- End shared pref ----------
+                                    
+                                    if(userInfo['coverPic'] != null)
+                                      ConstrainedBox(
+                                        constraints: const BoxConstraints(
+                                          minHeight: 120,
+                                          maxHeight: 150,
+                                          maxWidth: double.infinity
                                         ),
-                                        child: 
-                                        // Image.network(
-                                        //   'https://i.pinimg.com/originals/30/5c/5a/305c5a457807ba421ed67495c93198d3.jpg'
-                                        // )
-                                        // Image.network(
-                                        //   'http://10.0.2.2:3000/img/users/${userInfo['coverPic']}'
-                                        // )
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(6), 
+                                            topRight: Radius.circular(6)
+                                          ),
+                                          child: 
+                                          // Image.network(
+                                          //   'https://i.pinimg.com/originals/30/5c/5a/305c5a457807ba421ed67495c93198d3.jpg'
+                                          // )
+                                          // Image.network(
+                                          //   'http://10.0.2.2:3000/img/users/${userInfo['coverPic']}'
+                                          // )
 
-                                        //https://pm1.narvii.com/8140/0fdca4b85e6cb881f592dda7294488878bde9541r1-750-250v2_hq.jpg
+                                          //https://pm1.narvii.com/8140/0fdca4b85e6cb881f592dda7294488878bde9541r1-750-250v2_hq.jpg
 
-                                        _coverImage == null ? Image.network(
-                                          '$IMGURL${userInfo['coverPic']}',
-                                          width: double.infinity,
-                                          fit: BoxFit.cover,
-                                        ) : Image.file(
-                                          _coverImage,
-                                          width: double.infinity,
-                                          fit: BoxFit.cover
+
+                                          _coverImage == null ? Image.network(
+                                            '$IMGURL${userInfo['coverPic']}',
+                                            width: double.infinity,
+                                            fit: BoxFit.cover,
+                                          ) : Image.file(
+                                            _coverImage,
+                                            width: double.infinity,
+                                            fit: BoxFit.cover
+                                          ),
                                         ),
                                       ),
-                                    ),
+
                                   Positioned(
                                     right: 0,
                                     top: 0,
@@ -460,25 +560,71 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                                       padding: const EdgeInsets.only(left: 0.0, top: 0),
                                       child: Column(
                                         children: [
-                                          CircleAvatar(
-                                            radius: 50,
-                                            backgroundColor: Colors.white,
-                                            child: CircleAvatar(
-                                              radius: 47,
-                                              backgroundImage: 
-                                              // NetworkImage(
-                                              //   'http://10.0.2.2:3000/img/users/userPP-615eeaa924d6661b75313366-1633613125657.jpg'
-                                              // )
-                                              // https://cdna.artstation.com/p/assets/images/images/031/257/402/large/yukisho-art-vector-6.jpg?1603101769&dl=10
 
-                                              _profileImage == null ? NetworkImage(
-                                                '$IMGURL${userInfo['profilePic']}'
-                                              ) as ImageProvider : FileImage(
-                                                _profileImage
+                                          // ---------- shared pref ----------
+
+                                          // if(userInfo['profilePic'] != null && _profileImage == null)
+                                          //   CircleAvatar(
+                                          //     radius: 50,
+                                          //     backgroundColor: Colors.white,
+                                          //     child: CircleAvatar(
+                                          //       radius: 47,
+                                          //       backgroundImage: 
+
+                                          //       SharedPref.getProfilePic() == null ? NetworkImage(
+                                          //         '$IMGURL${userInfo['profilePic']}'
+                                          //       ) as ImageProvider : 
+                                          //       FileImage(
+                                          //         File(SharedPref.getProfilePic()!),
+                                          //         // width: double.infinity,
+                                          //         // fit: BoxFit.cover
+                                          //       ),
+
+                                          //     ),
+                                          //   ),
+                                          // if(_profileImage != null)
+                                          //   CircleAvatar(
+                                          //     radius: 50,
+                                          //     backgroundColor: Colors.white,
+                                          //     child: CircleAvatar(
+                                          //       radius: 47,
+                                          //       backgroundImage: 
+                                          //       // NetworkImage(
+                                          //       //   'http://10.0.2.2:3000/img/users/userPP-615eeaa924d6661b75313366-1633613125657.jpg'
+                                          //       // )
+                                          //       // https://cdna.artstation.com/p/assets/images/images/031/257/402/large/yukisho-art-vector-6.jpg?1603101769&dl=10
+
+                                          //       _profileImage == null ? NetworkImage(
+                                          //         '$IMGURL${userInfo['profilePic']}'
+                                          //       ) as ImageProvider : FileImage(
+                                          //         _profileImage
+                                          //       ),
+
+                                          //     ),
+                                          //   ),
+
+                                          // ---------- End shared pref ----------
+
+                                            CircleAvatar(
+                                              radius: 50,
+                                              backgroundColor: Colors.white,
+                                              child: CircleAvatar(
+                                                radius: 47,
+                                                backgroundImage: 
+                                                // NetworkImage(
+                                                //   'http://10.0.2.2:3000/img/users/userPP-615eeaa924d6661b75313366-1633613125657.jpg'
+                                                // )
+                                                // https://cdna.artstation.com/p/assets/images/images/031/257/402/large/yukisho-art-vector-6.jpg?1603101769&dl=10
+
+                                                _profileImage == null ? NetworkImage(
+                                                  '$IMGURL${userInfo['profilePic']}'
+                                                ) as ImageProvider : FileImage(
+                                                  _profileImage
+                                                ),
+
                                               ),
-
                                             ),
-                                          ),
+
                                           SizedBox(height: 4.0,),
                                           Text(
                                             '${userInfo['name']}',

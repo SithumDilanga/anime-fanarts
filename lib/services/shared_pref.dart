@@ -50,7 +50,7 @@ class SharedPref {
     return _preferences?.getString(_keyUserName) ?? 'Test';
   }
 
-  // profile image
+  // ---------- profile image -----------------
 
   static const _keyProfilePic = 'profileImage';
 
@@ -59,9 +59,41 @@ class SharedPref {
     return await _preferences!.setString(_keyProfilePic, profileImage);
   }
 
-  static String getProfilePic() {
+  static String? getProfilePic() {
     return _preferences?.getString(_keyProfilePic) ?? 'Test';
   }
+
+  // ---------- End profile image -----------------
+
+  // ---------- cover image -----------------
+
+  static const _keyCoverPic = 'profileImage';
+
+  static Future<bool> setCoverPic(String coverImage) async {
+    print('coverPicc ' +  coverImage.toString());
+    return await _preferences!.setString(_keyCoverPic, coverImage);
+  }
+
+  static String? getCoverPic() {
+    return _preferences?.getString(_keyCoverPic) ?? 'Test';
+  }
+
+  // ---------- End cover image -----------------
+
+  // --------------- userId --------------------
+
+  // static const _keyUserId = 'profileImage';
+
+  // static Future<bool> setUserId(String userName) async {
+  //   print('userName ' +  userName.toString());
+  //   return await _preferences!.setString(_keyUserId, userName);
+  // }
+
+  // static String? getUserId() {
+  //   return _preferences?.getString(_keyUserId) ?? 'Test';
+  // }
+
+  // --------------- End userId --------------------
 
 
 }

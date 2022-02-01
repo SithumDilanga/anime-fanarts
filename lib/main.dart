@@ -94,6 +94,7 @@ class _MyAppState extends State<MyApp> {
           appBar: AppBar(
             backgroundColor: Color(0xffF0F0F0),
             elevation: 0,
+            automaticallyImplyLeading: false,
             title: Text(
               'Anime fanarts',
               style: TextStyle(

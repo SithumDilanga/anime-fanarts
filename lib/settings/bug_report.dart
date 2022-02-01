@@ -1,4 +1,6 @@
 import 'package:anime_fanarts/services/firestore_service.dart';
+import 'package:anime_fanarts/services/secure_storage.dart';
+import 'package:anime_fanarts/services/shared_pref.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
@@ -6,7 +8,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class BugReport extends StatelessWidget {
-  BugReport({ Key? key }) : super(key: key);
+
+  BugReport({ Key? key, }) : super(key: key);
 
   final FirestoreService _firestireService = FirestoreService();
 
@@ -16,6 +19,7 @@ class BugReport extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorTheme.primary,
@@ -253,15 +257,17 @@ class BugReport extends StatelessWidget {
                       borderRadius: BorderRadius.circular(32),
                     ),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
+
+                    final userNewId = await SecureStorage.getUserId() ?? '';
 
                     if(_deviceTextController.text.isNotEmpty && _andriodTextController.text.isNotEmpty && _descTextController.text.isNotEmpty) {
 
-                      _firestireService.sendBugReports(
+                      await _firestireService.sendBugReports(
                         _deviceTextController.text, 
                         _andriodTextController.text,
                         _descTextController.text,
-                        '123'
+                        userNewId
                       ).whenComplete(() {
 
                         Fluttertoast.showToast(

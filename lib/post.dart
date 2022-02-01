@@ -258,7 +258,7 @@ class _PostState extends State<Post> {
                         Navigator.of(context).push(
                           RouteTransAnim().createRoute(
                             1.0, 0.0, 
-                            SelectReason()
+                            SelectReason(postId: widget.id)
                           )
                         );
 

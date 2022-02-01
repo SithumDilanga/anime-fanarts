@@ -3,7 +3,10 @@ import 'package:anime_fanarts/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class SelectReason extends StatefulWidget {
-  const SelectReason({ Key? key }) : super(key: key);
+
+  final String? postId;
+
+  const SelectReason({ Key? key, required this.postId }) : super(key: key);
 
   @override
   _SelectReasonState createState() => _SelectReasonState();
@@ -70,7 +73,10 @@ class _SelectReasonState extends State<SelectReason> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const DescribeReason(reason: 'Violence')),
+                  MaterialPageRoute(builder: (context) => DescribeReason(
+                    reason: 'Violence',
+                    postId: widget.postId,
+                  )),
                 );
 
               }, 
@@ -106,7 +112,10 @@ class _SelectReasonState extends State<SelectReason> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const DescribeReason(reason: 'Excessively sexual')),
+                  MaterialPageRoute(builder: (context) => DescribeReason(
+                    reason: 'Excessively sexual',
+                    postId: widget.postId,
+                  )),
                 );
 
               }, 
@@ -142,7 +151,10 @@ class _SelectReasonState extends State<SelectReason> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const DescribeReason(reason: 'Copyright infringement')),
+                  MaterialPageRoute(builder: (context) => DescribeReason(
+                    reason: 'Copyright infringement',
+                    postId: widget.postId,
+                  )),
                 );
 
               }, 
@@ -178,7 +190,10 @@ class _SelectReasonState extends State<SelectReason> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const DescribeReason(reason: 'Spam')),
+                  MaterialPageRoute(builder: (context) => DescribeReason(
+                    reason: 'Spam',
+                    postId: widget.postId,
+                  )),
                 );
 
               }, 
@@ -214,7 +229,10 @@ class _SelectReasonState extends State<SelectReason> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const DescribeReason(reason: 'Advertisement, promotion')),
+                  MaterialPageRoute(builder: (context) => DescribeReason(
+                    reason: 'Advertisement, promotion',
+                    postId: widget.postId,
+                  )),
                 );
 
               }, 
@@ -250,7 +268,10 @@ class _SelectReasonState extends State<SelectReason> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const DescribeReason(reason: 'Excessive grotesque content')),
+                  MaterialPageRoute(builder: (context) => DescribeReason(
+                    reason: 'Excessive grotesque content',
+                    postId: widget.postId,
+                  )),
                 );
 
               }, 
@@ -286,7 +307,10 @@ class _SelectReasonState extends State<SelectReason> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const DescribeReason(reason: 'Redistributed without permission')),
+                  MaterialPageRoute(builder: (context) => DescribeReason(
+                    reason: 'Redistributed without permission',
+                    postId: widget.postId,
+                  )),
                 );
 
               }, 
@@ -322,7 +346,10 @@ class _SelectReasonState extends State<SelectReason> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const DescribeReason(reason: 'Something else')),
+                  MaterialPageRoute(builder: (context) => DescribeReason(
+                    reason: 'Something else',
+                    postId: widget.postId,
+                  )),
                 );
 
               }, 

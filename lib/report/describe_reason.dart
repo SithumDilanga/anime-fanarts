@@ -1,3 +1,6 @@
+import 'package:anime_fanarts/explore.dart';
+import 'package:anime_fanarts/main.dart';
+import 'package:anime_fanarts/services/report_req.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
@@ -6,14 +9,19 @@ import 'package:url_launcher/url_launcher.dart';
 class DescribeReason extends StatefulWidget {
 
   final String reason;
+  final String? postId;
 
-  const DescribeReason({ Key? key, required this.reason }) : super(key: key);
+  const DescribeReason({ Key? key, required this.reason, required this.postId }) : super(key: key);
 
   @override
   _DescribeReasonState createState() => _DescribeReasonState();
 }
 
 class _DescribeReasonState extends State<DescribeReason> {
+
+  ReportReq _reportReq = ReportReq();
+  final _descTextController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,6 +84,7 @@ class _DescribeReasonState extends State<DescribeReason> {
                     ),
                   ),
                   TextFormField(
+                    controller: _descTextController,
                     cursorColor: ColorTheme.primary,
                     maxLines: null,
                     keyboardType: TextInputType.multiline,
@@ -152,10 +161,19 @@ class _DescribeReasonState extends State<DescribeReason> {
                         ),
                       ),
                       onPressed: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(builder: (context) => const AddNewArt()),
-                        // );
+                        
+                        _reportReq.reportPost(
+                          reason: widget.reason,
+                          description: _descTextController.text,
+                          postId: widget.postId
+                        ).whenComplete(() {
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => MyApp()),
+                          );
+
+                        });
                   
                       }, 
                     ),

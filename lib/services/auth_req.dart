@@ -1,6 +1,7 @@
 import 'package:anime_fanarts/models/user_login.dart';
 import 'package:anime_fanarts/models/user_sign_up.dart';
 import 'package:anime_fanarts/services/secure_storage.dart';
+import 'package:anime_fanarts/services/shared_pref.dart';
 import 'package:dio/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -24,7 +25,9 @@ class AuthReq {
 
       print('User created: ${response.data}');
       print('token: ${response.data['token']}');
+
       SecureStorage.setToken(response.data['token']);
+      SecureStorage.setUserId(response.data['data']['user']['_id']);
 
       retrievedUser = UserSignUp.fromJson(response.data);
 
@@ -79,9 +82,12 @@ class AuthReq {
     print('User created: ${response.statusCode}');
     print('User Info: ${response.data}');
     print('token: ${response.data['token']}');
-    SecureStorage.setToken(response.data['token']);
 
+    SecureStorage.setToken(response.data['token']);
+    SecureStorage.setUserId(response.data['data']['user']['_id']);
+    
     retrievedUser = UserLogin.fromJson(response.data);
+
   } on DioError catch (e) {
 
     print('Error creating user: $e');
