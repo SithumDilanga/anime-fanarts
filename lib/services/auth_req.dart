@@ -126,4 +126,131 @@ class AuthReq {
 
 // ------------ End login ---------------
 
+
+// ------------ forgot password ---------------
+
+  Future forgotPassword(String email) async {
+
+  Response response;
+
+  try {
+
+    response = await _dio.post(
+      '$URL/users/forgotPassword',
+      data: {
+        'email': email 
+      },
+    );
+
+    print('forgot password: ${response.statusCode}');
+    print('forgot password: ${response.data}');
+
+    return response.statusCode;
+    
+
+  } on DioError catch (e) {
+
+    print('Error sending verifcation code: $e');
+
+    if (e.response != null) {
+
+      print('Dio error!');
+      print('STATUS: ${e.response?.statusCode}');
+      print('DATA: ${e.response?.data}');
+      print('HEADERS: ${e.response?.headers}');
+
+      // return e.response!.statusCode;
+
+      Fluttertoast.showToast(
+        msg: e.response!.data['message'],
+        toastLength: Toast.LENGTH_LONG,
+      );
+
+      // throw Error();
+      throw(e.response!.data['message']);
+
+    } else {
+
+      Fluttertoast.showToast(
+        msg: e.message,
+        toastLength: Toast.LENGTH_LONG,
+      );
+
+      print('Error sending request!');
+      print(e.message);
+    }
+
+    }
+  
+  }
+
+// ------------ End forgot password ---------------
+
+
+// ------------ reset password ---------------
+
+  Future resetPassword(String email, String otpCode, String password, String confirmPassword) async {
+
+  Response response;
+
+  try {
+
+    response = await _dio.patch(
+      '$URL/users/resetPassword',
+      data: {
+        'token': otpCode,
+        'email': email,
+        'password': password,
+        'passwordConfirm': confirmPassword
+         
+      },
+    );
+
+    print('reset password: ${response.statusCode}');
+    print('reset password: ${response.data}');
+
+    SecureStorage.setToken(response.data['token']);
+    SecureStorage.setUserId(response.data['data']['user']['_id']);
+
+    return response.statusCode;
+    
+
+  } on DioError catch (e) {
+
+    print('Error sending verifcation code: $e');
+
+    if (e.response != null) {
+
+      print('Dio error!');
+      print('STATUS: ${e.response?.statusCode}');
+      print('DATA: ${e.response?.data}');
+      print('HEADERS: ${e.response?.headers}');
+
+      // return e.response!.statusCode;
+
+      Fluttertoast.showToast(
+        msg: e.response!.data['message'],
+        toastLength: Toast.LENGTH_LONG,
+      );
+
+      // throw Error();
+      throw(e.response!.data['message']);
+
+    } else {
+
+      Fluttertoast.showToast(
+        msg: e.message,
+        toastLength: Toast.LENGTH_LONG,
+      );
+
+      print('Error sending request!');
+      print(e.message);
+    }
+
+    }
+  
+  }
+
+// ------------ End reset password ---------------
+
 }

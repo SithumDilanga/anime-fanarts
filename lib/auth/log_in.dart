@@ -1,3 +1,5 @@
+import 'package:anime_fanarts/auth/forgot_password.dart';
+import 'package:anime_fanarts/auth/verification_code.dart';
 import 'package:anime_fanarts/main.dart';
 import 'package:anime_fanarts/models/user_login.dart';
 import 'package:anime_fanarts/services/auth_req.dart';
@@ -182,6 +184,29 @@ class _LoginState extends State<Login> {
                                 setState(() {
                                   password = val;
                                 });
+                              },
+                            ),
+                            SizedBox(height: 8.0,),
+                            GestureDetector(
+                              child: Align(
+                                alignment: Alignment.bottomRight,
+                                child: Text(
+                                  'forgot password',
+                                  style: TextStyle(
+                                    color: ColorTheme.primary,
+                                    decoration: TextDecoration.underline
+                                  ),
+                                ),
+                              ),
+                              onTap: () {
+
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ForgotPassword()
+                                  ),
+                                );
+
                               },
                             ),
                             SizedBox(height: 48.0,),
