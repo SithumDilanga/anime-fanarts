@@ -192,6 +192,7 @@ class UsersProfileState extends State<UsersProfile> with AutomaticKeepAliveClien
                             userId: 'user123',
                             date: userPosts[index]['createdAt'],
                             reactionCount: userPosts[index]['reactions'][0]['reactionCount'],
+                            commentCount: userPosts[index]['commentCount'][0]['commentCount'],
                             isUserPost: false
                           );
                 

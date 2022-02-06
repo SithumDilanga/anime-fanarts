@@ -1,24 +1,27 @@
 import 'dart:io';
 import 'package:anime_fanarts/services/secure_storage.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http_parser/http_parser.dart';
 
-class GetCreatePosts {
+class GetCreatePosts extends ChangeNotifier {
 
   var _dio = Dio();
   static const URL = 'http://10.0.2.2:3000/api/v1';
 
 // --------------- get all posts -----------------
 
-  Future getAllPosts() async {
+  Future getAllPosts(int pageNum) async {
+
+    // int page = pageNum;
 
     try {
 
       final bearerToken = await SecureStorage.getToken() ?? '';
       print('bearer $bearerToken');
       
-      Response allPostsData = await _dio.get('$URL/posts?page=1&limit=20', options: Options(
+      Response allPostsData = await _dio.get('$URL/posts?page=$pageNum&limit=3', options: Options(
         headers: {'Authorization': 'Bearer $bearerToken'},
       ));
       print('All posts: ${allPostsData.data}');
@@ -70,17 +73,17 @@ class GetCreatePosts {
 
   // -------------- create post ----------------
 
-  Future createPost({File? postImageFile, String? desc, List<String>? tags}) async {
+  Future createPost({List? postImageFile, String? desc, List<String>? tags}) async {
 
     try {
 
       final bearerToken = await SecureStorage.getToken() ?? '';
 
       FormData data;
-      
+      var formData = FormData();
 
 
-      if(postImageFile?.path == null) {
+      if(postImageFile![0].path == null) {
 
         data = FormData.fromMap({
           'description': desc
@@ -88,19 +91,49 @@ class GetCreatePosts {
 
       } else {
 
-        String fileName = postImageFile!.path.split('/').last;
-        print('file $postImageFile');
-        print('fileName $fileName');
+        // String fileName = postImageFile!.path.split('/').last;
+        // print('file $postImageFile');
+        // print('fileName $fileName');
 
-        data = FormData.fromMap({
-          'postimg': await MultipartFile.fromFile(
-            postImageFile.path,
-            filename: fileName,
-            contentType: MediaType('image', 'jpg'),
-          ),
+        // List<String> postImageFiles = ['sdsd', 'sdsd'];
+
+        
+        // for (var file in postImageFile) {
+        //   formData.files.addAll([
+        //   MapEntry("postimg", await MultipartFile.fromFile(file.path)),
+        //   ]);
+        // }
+        List? imageList = [];
+
+        for (int i = 0; i < postImageFile.length; i++) {
+
+          print('yoyo' + imageList.toString());
+
+          imageList.add(
+            MultipartFile.fromFileSync(postImageFile[i].path, filename: 'img$i.jpg', contentType: MediaType('image', 'jpeg'))
+          );
+
+        }
+
+        formData = FormData.fromMap({
+          // 'postimg': [
+          //   MultipartFile.fromFileSync(postImageFile[0].path, filename: 'img1.jpg', contentType: MediaType('image', 'jpeg')),
+          //   MultipartFile.fromFileSync(postImageFile[1].path, filename: 'img2.jpg', contentType: MediaType('image', 'jpeg')),
+          // ],
+          'postimg': imageList,
           'description': desc,
           'tags': tags
         });
+
+        // data = FormData.fromMap({
+        //   'postimg': await MultipartFile.fromFile(
+        //     postImageFile.path,
+        //     filename: fileName,
+        //     contentType: MediaType('image', 'jpg'),
+        //   ),
+        //   'description': desc,
+        //   'tags': tags
+        // });
 
         // data = FormData.fromMap({
         //   "files": [  
@@ -114,7 +147,7 @@ class GetCreatePosts {
       }
       
       
-      Response userPosts = await _dio.post('$URL/posts', data: data, options: Options(
+      Response userPosts = await _dio.post('$URL/posts', data: formData, options: Options(
         headers: {'Authorization': 'Bearer $bearerToken'},
       ));
 
@@ -171,7 +204,7 @@ class GetCreatePosts {
 
   // -------------- delete post ----------------
 
-  Future deletePost(String postId) async {
+  Future deletePost(String? postId) async {
 
     try {
 
@@ -190,11 +223,11 @@ class GetCreatePosts {
       print(userPosts.headers);
 
       Fluttertoast.showToast(
-        msg: 'post added!',
+        msg: 'post successfully deleted!',
         toastLength: Toast.LENGTH_LONG,
       );
 
-      return userPosts.data['data']['posts'];
+      return userPosts.statusCode;
 
     } on DioError catch (e) {
 

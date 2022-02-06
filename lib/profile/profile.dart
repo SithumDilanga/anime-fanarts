@@ -843,6 +843,24 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                             physics: NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             itemBuilder: (context, index) {
+
+                              bool isReacted = false;
+    
+                              print('bitch profile ${userReactedPosts}');
+
+                              for(int i = 0; i < userReactedPosts.length; i++) {
+                              
+                                // print('reacted posts ${reactedPosts[i]['post']}');
+
+                                if(userReactedPosts[i]['post'] == userPosts[index]['_id']) {
+                                
+                                  isReacted = true;
+
+                                  print('reacted shit profile ${userPosts[index]['_id']}');
+
+                                }
+
+                              }
                             
                             
                               return Post(
@@ -854,7 +872,9 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                                 userId: userPosts[index]['_id'],
                                 date: userPosts[index]['createdAt'],
                                 reactionCount: userPosts[index]['reactions'][0]['reactionCount'],
-                                isUserPost: true
+                                commentCount: userPosts[index]['commentCount'][0]['commentCount'],
+                                isUserPost: true,
+                                isReacted: isReacted,
                               );
 
                               // var date = DateTime.parse(userPosts[index]['timestamp'].toDate().toString());

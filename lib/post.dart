@@ -3,6 +3,7 @@ import 'package:anime_fanarts/img_fullscreen.dart';
 import 'package:anime_fanarts/models/reaction.dart';
 import 'package:anime_fanarts/profile/users_profile.dart';
 import 'package:anime_fanarts/report/select_reason.dart';
+import 'package:anime_fanarts/services/get_create_posts.dart';
 import 'package:anime_fanarts/services/interactions.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/date_time_formatter.dart';
@@ -47,8 +48,7 @@ class _PostState extends State<Post> {
 
   // bool isReacted = false;
 
-  // final DatabaseService _database = DatabaseService();
-  // final InitialLetters _initialLetters = InitialLetters();
+  GetCreatePosts _getCreatePosts = GetCreatePosts();
 
   static const primaryColor = Color(0xffffa500); 
   static const IMGURL = 'http://10.0.2.2:3000/img/users/';
@@ -95,6 +95,16 @@ class _PostState extends State<Post> {
                 overlayColor: MaterialStateProperty.all(Colors.blue[50]),
               ),
               onPressed: () {
+
+                _getCreatePosts.deletePost(widget.id).whenComplete(() {
+
+                  Navigator.pop(context);
+
+                  setState(() {
+                    
+                  });
+
+                });
 
                 // DatabaseService(uid: user.uid).updateUserName(
                 //   name: _changeName.text

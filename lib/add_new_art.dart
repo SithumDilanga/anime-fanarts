@@ -480,7 +480,7 @@ class _AddNewArtState extends State<AddNewArt> {
                             } else {
 
                               _getCreatePosts.createPost(
-                                postImageFile: _postImages![0],
+                                postImageFile: _postImages,
                                 desc: descTextController.text,
                                 tags: tagList
                               ).whenComplete(() {
