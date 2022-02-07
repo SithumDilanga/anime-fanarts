@@ -12,7 +12,7 @@ class GetCreatePosts extends ChangeNotifier {
 
 // --------------- get all posts -----------------
 
-  Future getAllPosts(int pageNum) async {
+  Future getAllPosts(int pageKey, int pageSize) async {
 
     // int page = pageNum;
 
@@ -21,7 +21,7 @@ class GetCreatePosts extends ChangeNotifier {
       final bearerToken = await SecureStorage.getToken() ?? '';
       print('bearer $bearerToken');
       
-      Response allPostsData = await _dio.get('$URL/posts?page=$pageNum&limit=3', options: Options(
+      Response allPostsData = await _dio.get('$URL/posts?page=$pageKey&limit=$pageSize', options: Options(
         headers: {'Authorization': 'Bearer $bearerToken'},
       ));
       print('All posts: ${allPostsData.data}');

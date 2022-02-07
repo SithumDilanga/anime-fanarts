@@ -96,17 +96,17 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
     });
 
     // add cover image to shared preferences
-    if(_coverImage != null) {
+    // if(_coverImage != null) {
 
-      Directory appDocDir = await getApplicationDocumentsDirectory();
+    //   Directory appDocDir = await getApplicationDocumentsDirectory();
 
-      String path = appDocDir.path;
+    //   String path = appDocDir.path;
 
-      final File newCoverImage = await _coverImage.copy('$path/coverImage.png');
+    //   final File newCoverImage = await _coverImage.copy('$path/coverImage.png');
 
-      SharedPref.setCoverPic(newCoverImage.path);
+    //   SharedPref.setCoverPic(newCoverImage.path);
 
-    }
+    // }
 
     _profileReq.uploadCoverPic(_coverImage).whenComplete(() {
 
