@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:anime_fanarts/profile/profile.dart';
 import 'package:anime_fanarts/services/firestore_service.dart';
 import 'package:anime_fanarts/services/get_create_posts.dart';
 import 'package:anime_fanarts/utils/colors.dart';
@@ -8,6 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+
+import 'models/new_post_refresher.dart';
 
 class AddNewArt extends StatefulWidget {
   const AddNewArt({ Key? key }) : super(key: key);
@@ -138,6 +142,9 @@ class _AddNewArtState extends State<AddNewArt> {
   
   @override
   Widget build(BuildContext context) {
+
+    var isNewPostAdded = Provider.of<NewPostFresher>(context);
+
     return FutureBuilder(
       future: _firestireService.readIsRateAvailable(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -486,6 +493,8 @@ class _AddNewArtState extends State<AddNewArt> {
                               ).whenComplete(() {
 
                                 Navigator.pop(context);
+                                
+                                isNewPostAdded.updateIsPostAdded(true);
 
                               });
 

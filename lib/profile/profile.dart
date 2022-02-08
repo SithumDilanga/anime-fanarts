@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:anime_fanarts/add_new_art.dart';
+import 'package:anime_fanarts/models/new_post_refresher.dart';
 import 'package:anime_fanarts/models/profile_user.dart';
 import 'package:anime_fanarts/post.dart';
 import 'package:anime_fanarts/services/profile_req.dart';
@@ -251,7 +252,10 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
   @override
   Widget build(BuildContext context) {
 
-    // var profileData = Provider.of<ProfileUser>(context);
+    var profileData = Provider.of<ProfileUser>(context);
+    
+    var isNewPostAdded = Provider.of<NewPostFresher>(context);
+
 
     // print('profileData ${profileData.bio}');
 

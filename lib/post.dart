@@ -3,8 +3,10 @@ import 'package:anime_fanarts/img_fullscreen.dart';
 import 'package:anime_fanarts/models/reaction.dart';
 import 'package:anime_fanarts/profile/users_profile.dart';
 import 'package:anime_fanarts/report/select_reason.dart';
+import 'package:anime_fanarts/services/download_share.dart';
 import 'package:anime_fanarts/services/get_create_posts.dart';
 import 'package:anime_fanarts/services/interactions.dart';
+import 'package:anime_fanarts/services/permissions_service.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/date_time_formatter.dart';
 import 'package:anime_fanarts/utils/route_trans_anim.dart';
@@ -52,9 +54,11 @@ class _PostState extends State<Post> {
 
   static const primaryColor = Color(0xffffa500); 
   static const IMGURL = 'http://10.0.2.2:3000/img/users/';
+  int imageIndex = 0;
 
   Interactions _interactionsReq = Interactions();
   DateTimeFormatter _dateTimeFormatter = DateTimeFormatter();
+  DownloadShare _downloadShare = DownloadShare();
 
   List imageList = ['https://images.alphacoders.com/120/thumb-1920-1203420.png', 'https://i.pinimg.com/originals/44/c3/21/44c321cf6862f22caf3e6b71a0661565.jpg','https://www.nawpic.com/media/2020/levi-ackerman-nawpic-17.jpg' ];
 
@@ -272,14 +276,6 @@ class _PostState extends State<Post> {
                           )
                         );
 
-                      } else if(selection == 1) {
-                      
-                        // _updateNameAlert();
-
-                      } else if(selection == 3) {
-                      
-                        // _authService.logOut();
-
                       } 
 
                     },
@@ -299,36 +295,36 @@ class _PostState extends State<Post> {
                         ),
                         value: 0
                       ),
-                      PopupMenuItem(
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.share,
-                              color: Colors.black,
-                            ),
-                            SizedBox(width: 8.0,),
-                            Text(
-                              'Share',
-                            ),
-                          ],
-                        ),
-                        value: 1
-                      ),
-                      PopupMenuItem(
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.download_rounded,
-                              color: Colors.black,
-                            ),
-                            SizedBox(width: 8.0,),
-                            Text(
-                              'Save',
-                            ),
-                          ],
-                        ),
-                        value: 1
-                      ),
+                      // PopupMenuItem(
+                      //   child: Row(
+                      //     children: [
+                      //       Icon(
+                      //         Icons.share,
+                      //         color: Colors.black,
+                      //       ),
+                      //       SizedBox(width: 8.0,),
+                      //       Text(
+                      //         'Share',
+                      //       ),
+                      //     ],
+                      //   ),
+                      //   value: 1
+                      // ),
+                      // PopupMenuItem(
+                      //   child: Row(
+                      //     children: [
+                      //       Icon(
+                      //         Icons.download_rounded,
+                      //         color: Colors.black,
+                      //       ),
+                      //       SizedBox(width: 8.0,),
+                      //       Text(
+                      //         'Save',
+                      //       ),
+                      //     ],
+                      //   ),
+                      //   value: 2
+                      // ),
                     ]
                     )
                     // IconButton(
@@ -373,6 +369,7 @@ class _PostState extends State<Post> {
                 CarouselSlider.builder(
                   itemCount: widget.postImg!.length,
                   itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
+
                     return GestureDetector(
                       child: Stack(
                         children: [

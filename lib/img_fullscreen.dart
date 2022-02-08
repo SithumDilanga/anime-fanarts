@@ -1,5 +1,8 @@
+import 'package:anime_fanarts/services/download_share.dart';
+import 'package:anime_fanarts/services/permissions_service.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class ImgFullScreen extends StatelessWidget {
 
@@ -9,9 +12,25 @@ class ImgFullScreen extends StatelessWidget {
   final int selectedimageIndex;
   final List? imageList;
 
-  const ImgFullScreen({ Key? key, required this.selectedimageIndex, this.imageList, this.imgLink }) : super(key: key);
+  ImgFullScreen({ Key? key, required this.selectedimageIndex, this.imageList, this.imgLink }) : super(key: key);
 
   static const IMGURL = 'http://10.0.2.2:3000/img/users/';
+  DownloadShare _downloadShare = DownloadShare();
+
+  // --- asking user permission ---
+   askPermission(){
+    PermissionsService().requestStoragePermission(
+      onPermissionDenied: () {
+        print('Permission has been denied');
+        Fluttertoast.showToast(
+         msg: 'Permission denied! cannot download image',
+         toastLength: Toast.LENGTH_SHORT,
+         backgroundColor: Colors.grey[800],
+     );
+ 
+    });
+   }
+  // --- End asking user permission ---
 
   @override
   Widget build(BuildContext context) {
@@ -67,14 +86,37 @@ class ImgFullScreen extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(right: 8.0),
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.share_rounded,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {
+                  child: Row(
+                    children: [
+                      IconButton(
+                        icon: Icon(
+                          Icons.share_rounded,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+
+                          _downloadShare.shareImage(
+                            '$IMGURL$imgLink'
+                          );
+                          
+                        }, 
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          Icons.download_rounded,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+
+                          askPermission();
                       
-                    }, 
+                          _downloadShare.downloadImage(
+                            '$IMGURL$imgLink'
+                          );
+                          
+                        }, 
+                      ),
+                    ],
                   ),
                 ),
               ],

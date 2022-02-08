@@ -4,6 +4,7 @@ import 'package:anime_fanarts/auth/log_in.dart';
 import 'package:anime_fanarts/auth/sign_up.dart';
 import 'package:anime_fanarts/explore.dart';
 import 'package:anime_fanarts/img_fullscreen.dart';
+import 'package:anime_fanarts/models/new_post_refresher.dart';
 import 'package:anime_fanarts/models/profile_user.dart';
 import 'package:anime_fanarts/post.dart';
 import 'package:anime_fanarts/profile/profile.dart';
@@ -27,11 +28,20 @@ void main() async {
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
 
   runZonedGuarded<Future<void>>(() async {
-    runApp(MaterialApp(
-      theme: ThemeData(
-        scaffoldBackgroundColor: Color(0xffF0F0F0),
+    runApp(
+      MultiProvider(
+      providers: [
+        ChangeNotifierProvider<ProfileUser>(create: (_) => ProfileUser()),
+        ChangeNotifierProvider<NewPostFresher>(create: (_) => NewPostFresher(
+          isPostAdded: false
+        )),
+      ],
+      child: MaterialApp(
+        theme: ThemeData(
+          scaffoldBackgroundColor: Color(0xffF0F0F0),
+        ),
+        home: MyApp()
       ),
-      home: MyApp()
     ));
     }, (error, stackTrace) {
       FirebaseCrashlytics.instance.recordError(error, stackTrace);

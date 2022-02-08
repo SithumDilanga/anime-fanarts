@@ -1,3 +1,4 @@
+import 'package:anime_fanarts/models/new_post_refresher.dart';
 import 'package:anime_fanarts/post.dart';
 import 'package:anime_fanarts/services/get_create_posts.dart';
 import 'package:anime_fanarts/services/secure_storage.dart';
@@ -8,6 +9,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:provider/provider.dart';
 
 class Explore extends StatefulWidget {
   const Explore({ Key? key }) : super(key: key);
@@ -20,6 +22,7 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin<Ex
 
   int pageNum = 1;
   List allPosts = [];
+  List reactedPosts = [];
 
   static const IMGURL = 'http://10.0.2.2:3000/img/users/';
   GetCreatePosts _getCreatePosts = GetCreatePosts();
@@ -31,7 +34,7 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin<Ex
     });
   }
   
-  static const _pageSize = 3;
+  static const _pageSize = 9;
 
   final PagingController<int, dynamic> _pagingController =
       PagingController(firstPageKey: 1);
@@ -41,15 +44,27 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin<Ex
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
     });
+
     super.initState();
   }
 
+  void _fetchReactedPosts(int pageKey) async {
+
+    final allPostsData = await _getCreatePosts.getAllPosts(
+      pageKey,
+      3
+    );
+
+    print('nigga ${allPostsData['data']['reacted']}');
+
+    setState(() {
+      reactedPosts = allPostsData['data']['reacted'];
+    });
+
+
+  }
+
   void _fetchPage(int pageKey) async {
-
-    var _dio = Dio();
-    const URL = 'http://10.0.2.2:3000/api/v1';
-
-    final bearerToken = await SecureStorage.getToken() ?? '';
 
     print('pageKey $pageKey');
     print('_pageSize $_pageSize');
@@ -63,8 +78,6 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin<Ex
       _pageSize
     );
 
-    print('allPostsData $allPostsData');
-
      try {
       final newItems = await allPostsData['data']['posts'];
 
@@ -76,6 +89,14 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin<Ex
         int nextPageKey = (pageKey + 1);
         _pagingController.appendPage(newItems, nextPageKey);
       }
+
+      setState(() {
+        reactedPosts = reactedPosts + allPostsData['data']['reacted'];
+        print('reactedPosts2 $reactedPosts');
+      });
+
+      print('reactedPosts1 $allPostsData');
+
     } catch (error) {
       _pagingController.error = error;
     }
@@ -98,6 +119,8 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin<Ex
   @override
   Widget build(BuildContext context) {
 
+    dynamic reactedNewPosts = reactedPosts; 
+
     return RefreshIndicator(
         onRefresh: () => Future.sync(
           () => _pagingController.refresh(),
@@ -107,6 +130,28 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin<Ex
           builderDelegate: PagedChildBuilderDelegate<dynamic>(
             animateTransitions: true,
             itemBuilder: (context, item, index) {
+
+              // dynamic reactedPosts = snapshot.data['data']['reacted'];
+
+              bool isReacted = false;
+        
+              // print('bitch ${snapshot.data['data']['reacted']}');
+              print('reactedPosts $reactedNewPosts');
+        
+              for(int i = 0; i < reactedNewPosts.length; i++) {
+        
+                // print('reacted posts ${reactedPosts[i]['post']}');
+        
+                if(reactedNewPosts[i]['post'] == item['_id']) {
+        
+                  isReacted = true;
+        
+                  print('reacted shit ${item['_id']}');
+        
+                }
+        
+              }
+
               return Post(
                 id: item['_id'],
                 name: item['user'][0]['name'],
@@ -118,7 +163,7 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin<Ex
                 reactionCount: item['reactions'][0]['reactionCount'],
                 commentCount: item['commentCount'][0]['commentCount'],
                 isUserPost: false,
-                isReacted: false,
+                isReacted: isReacted,
               );
             },
             firstPageErrorIndicatorBuilder: (context) => ErrorLoading(

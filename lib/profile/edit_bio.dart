@@ -30,7 +30,7 @@ class _EditBioState extends State<EditBio> {
   @override
   Widget build(BuildContext context) {
 
-    // var profileData = Provider.of<ProfileUser>(context);
+    var profileData = Provider.of<ProfileUser>(context);
 
     return Material(
       child: Scaffold(
@@ -106,7 +106,7 @@ class _EditBioState extends State<EditBio> {
                     } else {
       
                       _profileReq.updateBio(updatedBioText).whenComplete(() => {
-                        // profileData.updateBio(updatedBioText),
+                        profileData.updateBio(updatedBioText),
                         Navigator.pop(context)
                       });
       
