@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:anime_fanarts/profile/users_profile.dart';
 import 'package:anime_fanarts/services/interactions.dart';
 import 'package:anime_fanarts/services/shared_pref.dart';
@@ -8,6 +7,7 @@ import 'package:anime_fanarts/utils/date_time_formatter.dart';
 import 'package:anime_fanarts/utils/loading_animation.dart';
 import 'package:anime_fanarts/utils/route_trans_anim.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class CommentSecion extends StatefulWidget {
 
@@ -23,8 +23,9 @@ class CommentSecion extends StatefulWidget {
 class _CommentSecionState extends State<CommentSecion> {
 
   Interactions _interactionsReq = Interactions();
-  static const IMGURL = 'http://10.0.2.2:3000/img/users/';
-   DateTimeFormatter _dateTimeFormatter = DateTimeFormatter();
+  // static const IMGURL = 'http://10.0.2.2:3000/img/users/';
+  static const IMGURL = 'https://vast-cliffs-19346.herokuapp.com/img/users/';
+  DateTimeFormatter _dateTimeFormatter = DateTimeFormatter();
 
   final commentTextController = TextEditingController();
 
@@ -89,12 +90,24 @@ class _CommentSecionState extends State<CommentSecion> {
                       children: [
                         Row(
                           children: [
+                            if(SharedPref.getProfilePic() == null)
+                              CircleAvatar(
+                                radius: 20,
+                                backgroundColor: Colors.blueGrey[700],
+                                backgroundImage: AssetImage(
+                                  'assets/images/blank-profile-picture.jpg'
+                                )
+                                // NetworkImage(
+                                //   'https://cdna.artstation.com/p/assets/images/images/031/257/402/large/yukisho-art-vector-6.jpg?1603101769&dl=10'
+                                // ),
+                              ),
+                            if(SharedPref.getProfilePic() != null)
                             CircleAvatar(
                               radius: 20,
                               backgroundColor: Colors.blueGrey[700],
                               backgroundImage: FileImage(
                                 File(SharedPref.getProfilePic()!)
-                              )
+                              ),
                               // NetworkImage(
                               //   'https://cdna.artstation.com/p/assets/images/images/031/257/402/large/yukisho-art-vector-6.jpg?1603101769&dl=10'
                               // ),
@@ -138,16 +151,29 @@ class _CommentSecionState extends State<CommentSecion> {
                                     color: ColorTheme.primary,
                                   ),
                                   onPressed: () {
-                            
-                                    _interactionsReq.addNewComment(
-                                      commentTextController.text, 
-                                      widget.postId
-                                    );
-                            
-                                    setState(() {
-                                      commentTextController.clear();
-                                    });
-                                      
+
+                                    if(commentTextController.text.isNotEmpty) {
+
+                                      _interactionsReq.addNewComment(
+                                        commentTextController.text, 
+                                        widget.postId
+                                      );
+                              
+                                      setState(() {
+                                        commentTextController.clear();
+                                      });
+
+                                    } else {
+
+                                      Fluttertoast.showToast(
+                                        msg: "comment text is empty",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.BOTTOM,
+                                        fontSize: 16.0
+                                      );
+
+                                    }
+                                                                  
                                   }, 
                                 )
                               ],
@@ -213,10 +239,13 @@ class _CommentSecionState extends State<CommentSecion> {
                     itemBuilder: (context, index) {
 
                       String formattedDate = _dateTimeFormatter.getFormattedDateFromFormattedString(
-                        value: comments[index]['user'][0]['createdAt'], 
+                        value: comments[index]['user'][0]['createdAt'].toString(), 
                         currentFormat: "yyyy-MM-ddTHH:mm:ssZ", 
                         desiredFormat: "yyyy-MM-dd hh:mm a"
                       );
+                      
+                      print('commentsUTC ${comments[index]['user'][0]['createdAt'].toString()}');
+                      print('commentsformattedDate $formattedDate');
 
                     return Card(  
                       child: Padding(

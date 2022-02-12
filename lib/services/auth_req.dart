@@ -8,7 +8,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 class AuthReq {
 
   var _dio = Dio();
-  static const URL = 'http://10.0.2.2:3000/api/v1';
+  // static const URL = 'http://10.0.2.2:3000/api/v1';
+  static const URL = 'https://vast-cliffs-19346.herokuapp.com/api/v1';
 
   Future signUp({required UserSignUp userSignUp}) async {
 

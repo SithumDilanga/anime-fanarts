@@ -11,10 +11,12 @@ class ImgFullScreen extends StatelessWidget {
   final String? imgLink;
   final int selectedimageIndex;
   final List? imageList;
+  final String? username;
 
-  ImgFullScreen({ Key? key, required this.selectedimageIndex, this.imageList, this.imgLink }) : super(key: key);
+  ImgFullScreen({ Key? key, required this.selectedimageIndex, this.imageList, this.imgLink, this.username }) : super(key: key);
 
-  static const IMGURL = 'http://10.0.2.2:3000/img/users/';
+  // static const IMGURL = 'http://10.0.2.2:3000/img/users/';
+  static const IMGURL = 'https://vast-cliffs-19346.herokuapp.com/img/users/';
   DownloadShare _downloadShare = DownloadShare();
 
   // --- asking user permission ---
@@ -96,7 +98,8 @@ class ImgFullScreen extends StatelessWidget {
                         onPressed: () {
 
                           _downloadShare.shareImage(
-                            '$IMGURL$imgLink'
+                            '$IMGURL$imgLink',
+                            username
                           );
                           
                         }, 

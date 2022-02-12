@@ -1,5 +1,6 @@
 import 'package:anime_fanarts/report/describe_reason.dart';
 import 'package:anime_fanarts/utils/colors.dart';
+import 'package:anime_fanarts/utils/route_trans_anim.dart';
 import 'package:flutter/material.dart';
 
 class SelectReason extends StatefulWidget {
@@ -13,6 +14,9 @@ class SelectReason extends StatefulWidget {
 }
 
 class _SelectReasonState extends State<SelectReason> {
+
+  List<String> reasonList = ['Violence', 'Excessively sexual', 'Copyright infringement', 'Spam', 'Advertisement, promotion', 'Excessive grotesque content', 'Redistributed without permission', 'Something else'];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,317 +47,52 @@ class _SelectReasonState extends State<SelectReason> {
               ),
             ),
             SizedBox(height: 24,),
-            ElevatedButton(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 12.0
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Violence',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16
-                      ),
-                    ),
-                    Icon(
-                      Icons.arrow_forward_ios_rounded
-                    ),
-                  ],
-                ),
-              ),
-              style: ElevatedButton.styleFrom(
-                primary: ColorTheme.primary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(32),
-                ),
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => DescribeReason(
-                    reason: 'Violence',
-                    postId: widget.postId,
-                  )),
-                );
 
-              }, 
-            ),
-            SizedBox(height: 12,),
-            ElevatedButton(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 12.0
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Excessively sexual',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16
-                      ),
+            for(String reason in reasonList)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 12.0),
+                child: ElevatedButton(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 12.0
                     ),
-                    Icon(
-                      Icons.arrow_forward_ios_rounded
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '$reason',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16
+                          ),
+                        ),
+                        Icon(
+                          Icons.arrow_forward_ios_rounded
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-              style: ElevatedButton.styleFrom(
-                primary: ColorTheme.primary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(32),
-                ),
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => DescribeReason(
-                    reason: 'Excessively sexual',
-                    postId: widget.postId,
-                  )),
-                );
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    primary: ColorTheme.primary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(32),
+                    ),
+                  ),
+                  onPressed: () {
 
-              }, 
-            ),
-            SizedBox(height: 12,),
-            ElevatedButton(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 12.0
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Copyright infringement',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16
-                      ),
-                    ),
-                    Icon(
-                      Icons.arrow_forward_ios_rounded
-                    ),
-                  ],
-                ),
-              ),
-              style: ElevatedButton.styleFrom(
-                primary: ColorTheme.primary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(32),
-                ),
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => DescribeReason(
-                    reason: 'Copyright infringement',
-                    postId: widget.postId,
-                  )),
-                );
+                    Navigator.of(context).push(
+                      RouteTransAnim().createRoute(
+                        1.0, 0.0, 
+                        DescribeReason(
+                          reason: '$reason',
+                          postId: widget.postId,
+                        )
+                      )
+                    );
 
-              }, 
-            ),
-            SizedBox(height: 12,),
-            ElevatedButton(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 12.0
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Spam',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16
-                      ),
-                    ),
-                    Icon(
-                      Icons.arrow_forward_ios_rounded
-                    ),
-                  ],
+                  }, 
                 ),
               ),
-              style: ElevatedButton.styleFrom(
-                primary: ColorTheme.primary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(32),
-                ),
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => DescribeReason(
-                    reason: 'Spam',
-                    postId: widget.postId,
-                  )),
-                );
-
-              }, 
-            ),
-            SizedBox(height: 12,),
-            ElevatedButton(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 12.0
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Advertisement, promotion',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16
-                      ),
-                    ),
-                    Icon(
-                      Icons.arrow_forward_ios_rounded
-                    ),
-                  ],
-                ),
-              ),
-              style: ElevatedButton.styleFrom(
-                primary: ColorTheme.primary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(32),
-                ),
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => DescribeReason(
-                    reason: 'Advertisement, promotion',
-                    postId: widget.postId,
-                  )),
-                );
-
-              }, 
-            ),
-            SizedBox(height: 12,),
-            ElevatedButton(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 12.0
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Excessive grotesque content',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16
-                      ),
-                    ),
-                    Icon(
-                      Icons.arrow_forward_ios_rounded
-                    ),
-                  ],
-                ),
-              ),
-              style: ElevatedButton.styleFrom(
-                primary: ColorTheme.primary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(32),
-                ),
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => DescribeReason(
-                    reason: 'Excessive grotesque content',
-                    postId: widget.postId,
-                  )),
-                );
-
-              }, 
-            ),
-            SizedBox(height: 12,),
-            ElevatedButton(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 12.0
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Redistributed without permission',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16
-                      ),
-                    ),
-                    Icon(
-                      Icons.arrow_forward_ios_rounded
-                    ),
-                  ],
-                ),
-              ),
-              style: ElevatedButton.styleFrom(
-                primary: ColorTheme.primary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(32),
-                ),
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => DescribeReason(
-                    reason: 'Redistributed without permission',
-                    postId: widget.postId,
-                  )),
-                );
-
-              }, 
-            ),
-            SizedBox(height: 12,),
-            ElevatedButton(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 12.0
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Something else',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16
-                      ),
-                    ),
-                    Icon(
-                      Icons.arrow_forward_ios_rounded
-                    ),
-                  ],
-                ),
-              ),
-              style: ElevatedButton.styleFrom(
-                primary: ColorTheme.primary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(32),
-                ),
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => DescribeReason(
-                    reason: 'Something else',
-                    postId: widget.postId,
-                  )),
-                );
-
-              }, 
-            ),
           ],
         ),
       ),

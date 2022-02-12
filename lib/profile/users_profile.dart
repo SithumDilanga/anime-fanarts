@@ -26,7 +26,8 @@ class UsersProfileState extends State<UsersProfile> with AutomaticKeepAliveClien
 
 
   ProfileReq _profileReq = ProfileReq();
-  static const IMGURL = 'http://10.0.2.2:3000/img/users/';
+  // static const IMGURL = 'http://10.0.2.2:3000/img/users/';
+  static const IMGURL = 'https://vast-cliffs-19346.herokuapp.com/img/users/';
 
   Future<void> _loadData() async {
     await Future.delayed(Duration(milliseconds: 1000));

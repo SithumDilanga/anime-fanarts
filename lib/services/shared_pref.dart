@@ -60,7 +60,7 @@ class SharedPref {
   }
 
   static String? getProfilePic() {
-    return _preferences?.getString(_keyProfilePic) ?? 'Test';
+    return _preferences?.getString(_keyProfilePic);
   }
 
   // ---------- End profile image -----------------

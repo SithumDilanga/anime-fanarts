@@ -11,9 +11,30 @@ class DateTimeFormatter {
     if (value != null || value.isNotEmpty) {
       try {
         
+        //server time(UTC)
         dateTime = DateFormat(currentFormat).parse(value, isUtc).toLocal();
 
-        formattedDate = DateFormat(desiredFormat).format(dateTime);
+        print('timeZoneName ${dateTime.timeZoneOffset}');
+
+        // -------- convert UTC time to device time ----------
+
+        //get current system local time
+        DateTime localDatetime = DateTime.now();
+
+        //get time diff
+        var timezoneOffset = localDatetime.timeZoneOffset;
+        var timeDiff = new Duration(hours: timezoneOffset.inHours, minutes: timezoneOffset.inMinutes % 60);
+
+        //adjust the time diff
+        var newLocalTime = dateTime.add(timeDiff);
+
+        print('new_local_time $newLocalTime');
+
+        formattedDate = DateFormat(desiredFormat).format(newLocalTime);
+
+        // -------- End convert UTC time to device time ----------
+
+        // formattedDate = DateFormat(desiredFormat).format(dateTime);
 
       } catch (e) {
         print("$e");

@@ -11,7 +11,7 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 class DownloadShare {
 
   // --- share image function ---
-  shareImage(String imageurl) async {
+  shareImage(String imageurl, String? username) async {
 
     try {
 
@@ -22,7 +22,7 @@ class DownloadShare {
       final path = '${temp.path}/image.jpg';
       File(path).writeAsBytesSync(bytes);
 
-      await Share.shareFiles([path], text: 'Image Shared');
+      await Share.shareFiles([path], text: ' art by $username');
 
    } catch (e) {
       print('error: $e');

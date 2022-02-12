@@ -7,6 +7,7 @@ import 'package:anime_fanarts/utils/error_loading.dart';
 import 'package:anime_fanarts/utils/loading_animation.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:intl/intl.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +25,8 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin<Ex
   List allPosts = [];
   List reactedPosts = [];
 
-  static const IMGURL = 'http://10.0.2.2:3000/img/users/';
+  // static const IMGURL = 'http://10.0.2.2:3000/img/users/';
+  static const IMGURL = 'https://vast-cliffs-19346.herokuapp.com/img/users/';
   GetCreatePosts _getCreatePosts = GetCreatePosts();
 
   Future<void> _loadData() async {
@@ -65,6 +67,9 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin<Ex
   }
 
   void _fetchPage(int pageKey) async {
+
+    final String currentTimeZone = await FlutterNativeTimezone.getLocalTimezone();
+    print('nativetimezone $currentTimeZone');
 
     print('pageKey $pageKey');
     print('_pageSize $_pageSize');

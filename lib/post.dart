@@ -1,12 +1,12 @@
 import 'package:anime_fanarts/comment_section.dart';
 import 'package:anime_fanarts/img_fullscreen.dart';
+import 'package:anime_fanarts/models/new_post_refresher.dart';
 import 'package:anime_fanarts/models/reaction.dart';
 import 'package:anime_fanarts/profile/users_profile.dart';
 import 'package:anime_fanarts/report/select_reason.dart';
 import 'package:anime_fanarts/services/download_share.dart';
 import 'package:anime_fanarts/services/get_create_posts.dart';
 import 'package:anime_fanarts/services/interactions.dart';
-import 'package:anime_fanarts/services/permissions_service.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/date_time_formatter.dart';
 import 'package:anime_fanarts/utils/route_trans_anim.dart';
@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 // import 'package:gritie_new_app/utils/loading_animation.dart';
 // import 'package:gritie_new_app/utils/route_trans_anim.dart';
 // import 'package:gritie_new_app/services/shared_pref.dart';
@@ -53,8 +54,10 @@ class _PostState extends State<Post> {
   GetCreatePosts _getCreatePosts = GetCreatePosts();
 
   static const primaryColor = Color(0xffffa500); 
-  static const IMGURL = 'http://10.0.2.2:3000/img/users/';
+  // static const IMGURL = 'http://10.0.2.2:3000/img/users/';
+  static const IMGURL = 'https://vast-cliffs-19346.herokuapp.com/img/users/';
   int imageIndex = 0;
+  String userReaction = 'default';
 
   Interactions _interactionsReq = Interactions();
   DateTimeFormatter _dateTimeFormatter = DateTimeFormatter();
@@ -63,7 +66,9 @@ class _PostState extends State<Post> {
   List imageList = ['https://images.alphacoders.com/120/thumb-1920-1203420.png', 'https://i.pinimg.com/originals/44/c3/21/44c321cf6862f22caf3e6b71a0661565.jpg','https://www.nawpic.com/media/2020/levi-ackerman-nawpic-17.jpg' ];
 
   // update name Alert Dialog
-  Future<void> _deletPostAlert() async {
+  Future<void> _deletPostAlert(BuildContext context) async {
+
+    var isNewPostAdded = Provider.of<NewPostFresher>(context, listen: false);
 
     return showDialog<void>(
       context: context,
@@ -104,9 +109,7 @@ class _PostState extends State<Post> {
 
                   Navigator.pop(context);
 
-                  setState(() {
-                    
-                  });
+                  isNewPostAdded.updateIsPostAdded(false);
 
                 });
 
@@ -254,7 +257,7 @@ class _PostState extends State<Post> {
                       ),
                       onPressed: () {
 
-                        _deletPostAlert();
+                        _deletPostAlert(context);
 
                       }, 
                     ),
@@ -370,106 +373,91 @@ class _PostState extends State<Post> {
                   itemCount: widget.postImg!.length,
                   itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
 
-                    return GestureDetector(
-                      child: Stack(
-                        children: [
-                          ConstrainedBox(
-                            constraints: const BoxConstraints(
-                              minWidth: 70,
-                              minHeight: 70,
-                              maxWidth: double.infinity,
-                              maxHeight: 390,
-                            ),
-                            child: OpenContainer(
-                              openColor: Colors.pink,
-                              transitionType: ContainerTransitionType.fadeThrough,
-                              closedBuilder: (BuildContext _, VoidCallback openContainer){
-                                return CachedNetworkImage(
-                                  // imageUrl: imageList[itemIndex].toString(),
-                                  imageUrl: '$IMGURL${widget.postImg![itemIndex]}',
-                                  width: double.infinity,
-                                  fit: BoxFit.cover,
-                                  placeholder: (context, url) => imagePlaceholder(),
-                                );
-                              },
-                              openBuilder: (BuildContext _, VoidCallback openContainer){
-                                return ImgFullScreen(
-                                  imageList: widget.postImg, 
-                                  selectedimageIndex: itemIndex, 
-                                  imgLink: widget.postImg![itemIndex],
-                                );
-                              }
-                              // child: CachedNetworkImage(
-                              //   imageUrl: imageList[itemIndex].toString(),
-                              //   width: double.infinity,
-                              //   fit: BoxFit.cover,
-                              //   placeholder: (context, url) => imagePlaceholder(),
-                              // ),
-                            ),
+                    return Stack(
+                      children: [
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(
+                            minWidth: 70,
+                            minHeight: 70,
+                            maxWidth: double.infinity,
+                            maxHeight: 390,
                           ),
-                          Positioned.fill(
-                            top: 5,
-                            left: 5,
-                            child: ListView.builder(
-                              itemCount: widget.postImg!.length,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                            
-                                if(index == itemIndex) {
-                            
-                                  // return Icon(
-                                  //   Icons.circle,
-                                  //   color: Colors.blueAccent,
-                                  // );
-                                  return Stack(
-                                    children: [
-                                      Text(
-                                        '${index + 1}/${widget.postImg!.length}',
-                                        style: TextStyle(
-                                          fontSize: 11,
-                                          foreground: Paint()
-                                          ..style = PaintingStyle.stroke
-                                          ..strokeWidth = 0.8
-                                          ..color = Colors.white,
-                                        ),
-                                      ),
-                                      Text(
-                                        '${index + 1}/${widget.postImg!.length}',
-                                        style: TextStyle(
-                                          color: Colors.black.withOpacity(0.5),
-                                          fontSize: 11
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                            
-                                }
-                                        
-                                return Text(
-                                  ''
-                                );
-                            
+                          child: OpenContainer(
+                            openColor: Colors.pink,
+                            transitionType: ContainerTransitionType.fade,
+                            closedBuilder: (BuildContext _, VoidCallback openContainer){
+                              return CachedNetworkImage(
+                                // imageUrl: imageList[itemIndex].toString(),
+                                imageUrl: '$IMGURL${widget.postImg![itemIndex]}',
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+                                placeholder: (context, url) => imagePlaceholder(),
+                              );
+                            },
+                            openBuilder: (BuildContext _, VoidCallback openContainer){
+                              return ImgFullScreen(
+                                imageList: widget.postImg, 
+                                selectedimageIndex: itemIndex, 
+                                imgLink: widget.postImg![itemIndex],
+                              );
+                            }
+                            // child: CachedNetworkImage(
+                            //   imageUrl: imageList[itemIndex].toString(),
+                            //   width: double.infinity,
+                            //   fit: BoxFit.cover,
+                            //   placeholder: (context, url) => imagePlaceholder(),
+                            // ),
+                          ),
+                        ),
+                        Positioned.fill(
+                          top: 5,
+                          left: 5,
+                          child: ListView.builder(
+                            itemCount: widget.postImg!.length,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) {
+                          
+                              if(index == itemIndex) {
+                          
                                 // return Icon(
-                                //   Icons.circle
+                                //   Icons.circle,
+                                //   color: Colors.blueAccent,
                                 // );
-                              }, 
-                            ),
-                          )
-                        ],
-                      ),
-                      onTap: () {
-
-                        // imgLink: imageList[itemIndex].toString()
-
-                        Navigator.push(
-                          context, MaterialPageRoute(builder: (context) => ImgFullScreen(
-                            imageList: widget.postImg, 
-                            selectedimageIndex: itemIndex, 
-                            imgLink: widget.postImg![itemIndex],
-                          )),
-                        );
-
-                      },
+                                return Stack(
+                                  children: [
+                                    Text(
+                                      '${index + 1}/${widget.postImg!.length}',
+                                      style: TextStyle(
+                                        fontSize: 11,
+                                        foreground: Paint()
+                                        ..style = PaintingStyle.stroke
+                                        ..strokeWidth = 0.8
+                                        ..color = Colors.white,
+                                      ),
+                                    ),
+                                    Text(
+                                      '${index + 1}/${widget.postImg!.length}',
+                                      style: TextStyle(
+                                        color: Colors.black.withOpacity(0.5),
+                                        fontSize: 11
+                                      ),
+                                    ),
+                                  ],
+                                );
+                          
+                              }
+                                      
+                              return Text(
+                                ''
+                              );
+                          
+                              // return Icon(
+                              //   Icons.circle
+                              // );
+                            }, 
+                          ),
+                        )
+                      ],
                     );
                   },
                   options: CarouselOptions(
@@ -559,13 +547,23 @@ class _PostState extends State<Post> {
                       ),
                       Row(
                         children: [
-                          Text(
-                            '${widget.reactionCount}',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 12.0
+                          if(userReaction == 'default')
+                            Text(
+                              '${widget.reactionCount}',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 12.0
+                              ),
                             ),
-                          ),
+                          if(userReaction != 'default')
+                            Text(
+                              '${userReaction == 'add' ? widget.reactionCount! + 1 : 
+                              widget.reactionCount}',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 12.0
+                              ),
+                            ),
                           widget.isReacted ? 
                           IconButton(
                             icon: Icon(
@@ -581,6 +579,7 @@ class _PostState extends State<Post> {
 
                               setState(() {
                                 widget.isReacted = !widget.isReacted;
+                                userReaction = 'remove';
                               });
 
                             }, 
@@ -599,6 +598,7 @@ class _PostState extends State<Post> {
 
                               setState(() {
                                 widget.isReacted = !widget.isReacted;
+                                userReaction = 'add';
                               });
 
                             }, 

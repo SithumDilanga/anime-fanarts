@@ -8,8 +8,8 @@ import 'package:http_parser/http_parser.dart';
 class ProfileReq {
 
   var _dio = Dio();
-  // static const URL = 'https://morning-dusk-42798.herokuapp.com/api/v1';
-  static const URL = 'http://10.0.2.2:3000/api/v1';
+  // static const URL = 'http://10.0.2.2:3000/api/v1';
+  static const URL = 'https://vast-cliffs-19346.herokuapp.com/api/v1';
 
   // ----------- getting user details(/me route) --------------
 

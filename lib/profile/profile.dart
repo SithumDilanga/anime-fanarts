@@ -33,7 +33,8 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Profile> {
 
-  static const IMGURL = 'http://10.0.2.2:3000/img/users/';
+  // static const IMGURL = 'http://10.0.2.2:3000/img/users/';
+  static const IMGURL = 'https://vast-cliffs-19346.herokuapp.com/img/users/';
 
   final picker = ImagePicker();
   var _profileImage;
@@ -872,7 +873,7 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                                 name: userInfo['name'],
                                 profilePic: '$IMGURL${userInfo['profilePic']}',
                                 desc: userPosts[index]['description'],
-                                postImg: ['${userPosts[index]['postImages'][0]}'],
+                                postImg: userPosts[index]['postImages'],
                                 userId: userPosts[index]['_id'],
                                 date: userPosts[index]['createdAt'],
                                 reactionCount: userPosts[index]['reactions'][0]['reactionCount'],
