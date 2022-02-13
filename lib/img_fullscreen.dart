@@ -1,5 +1,6 @@
 import 'package:anime_fanarts/services/download_share.dart';
 import 'package:anime_fanarts/services/permissions_service.dart';
+import 'package:anime_fanarts/utils/urls.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -12,11 +13,12 @@ class ImgFullScreen extends StatelessWidget {
   final int selectedimageIndex;
   final List? imageList;
   final String? username;
+  final bool isUserPost;
 
-  ImgFullScreen({ Key? key, required this.selectedimageIndex, this.imageList, this.imgLink, this.username }) : super(key: key);
+  ImgFullScreen({ Key? key, required this.selectedimageIndex, this.imageList, this.imgLink, this.username, required this.isUserPost }) : super(key: key);
 
   // static const IMGURL = 'http://10.0.2.2:3000/img/users/';
-  static const IMGURL = 'https://vast-cliffs-19346.herokuapp.com/img/users/';
+  static const IMGURL = Urls.IMGURL;
   DownloadShare _downloadShare = DownloadShare();
 
   // --- asking user permission ---
@@ -44,15 +46,18 @@ class ImgFullScreen extends StatelessWidget {
         // ),
         body: Stack(
           children: [
-            InteractiveViewer(
-              child: Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage(
-                      '$IMGURL${imgLink}', // '$imgLink',
-                    ),
-                    fit: BoxFit.contain,
-                  )
+            Hero(
+              tag: '${isUserPost.toString() + imgLink.toString()}',
+              child: InteractiveViewer(
+                child: Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: NetworkImage(
+                        '$IMGURL${imgLink}', // '$imgLink',
+                      ),
+                      fit: BoxFit.contain,
+                    )
+                  ),
                 ),
               ),
             ),

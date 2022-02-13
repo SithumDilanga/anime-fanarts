@@ -6,6 +6,7 @@ import 'package:anime_fanarts/post.dart';
 import 'package:anime_fanarts/services/profile_req.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/loading_animation.dart';
+import 'package:anime_fanarts/utils/urls.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -15,6 +16,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:anime_fanarts/services/shared_pref.dart';
 // import 'package:gritie_new_app/services/storage.dart';
 import 'package:anime_fanarts/utils/route_trans_anim.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 // import 'package:gritie_new_app/auth/log_in.dart';
 // import 'package:gritie_new_app/auth/sign_up.dart';
@@ -34,7 +36,7 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Profile> {
 
   // static const IMGURL = 'http://10.0.2.2:3000/img/users/';
-  static const IMGURL = 'https://vast-cliffs-19346.herokuapp.com/img/users/';
+  static const IMGURL = Urls.IMGURL;
 
   final picker = ImagePicker();
   var _profileImage;
@@ -63,10 +65,12 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
       imageQuality: 50
     );
 
-    setState(() {
-      // _profileImage = File(pickedFile!.path);
-      _profileImage = File(pickedFile!.path);
-    });
+    // setState(() {
+    //   // _profileImage = File(pickedFile!.path);
+    //   _profileImage = File(pickedFile!.path);
+    // });
+
+    _cropProfileImage(pickedFile!.path);
 
     // add image to shared preferences
     if(_profileImage != null) {
@@ -81,7 +85,47 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
 
     }
 
-    _profileReq.uploadProfilePic(_profileImage);
+    // _profileReq.uploadProfilePic(_profileImage);
+
+  }
+
+  // Crop Profile Image
+  _cropProfileImage(filePath) async {
+    File? croppedImage = await ImageCropper.cropImage(
+      sourcePath: filePath,
+      maxWidth: 1080,
+      maxHeight: 1080,
+      aspectRatio: CropAspectRatio(ratioX: 1.0, ratioY: 1.0)
+    );
+
+    if(croppedImage != null) {
+
+      setState(() {
+        _profileImage = croppedImage;
+      });
+      
+    }
+      _profileReq.uploadProfilePic(_profileImage);
+
+  }
+
+  // Crop Cover Image
+  _cropCoverImage(filePath) async {
+    File? croppedImage = await ImageCropper.cropImage(
+      sourcePath: filePath,
+      // maxWidth: 1080,
+      // maxHeight: 1080,
+      aspectRatio: CropAspectRatio(ratioX: 5.0, ratioY: 2.0)
+    );
+
+    if(croppedImage != null) {
+
+      setState(() {
+        _coverImage = croppedImage;
+      });
+      
+    }
+      _profileReq.uploadCoverPic(_coverImage);
 
   }
 
@@ -92,10 +136,12 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
       imageQuality: 50
     );
 
-    setState(() {
-      // _coverImage = File(pickedFile!.path);
-      _coverImage = File(pickedFile!.path);
-    });
+    _cropCoverImage(pickedFile!.path);
+
+    // setState(() {
+    //   // _coverImage = File(pickedFile!.path);
+    //   _coverImage = File(pickedFile!.path);
+    // });
 
     // add cover image to shared preferences
     // if(_coverImage != null) {
@@ -110,13 +156,13 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
 
     // }
 
-    _profileReq.uploadCoverPic(_coverImage).whenComplete(() {
+    // _profileReq.uploadCoverPic(_coverImage).whenComplete(() {
 
-      setState(() {
+    //   setState(() {
         
-      });
+    //   });
 
-    });
+    // });
 
   }
 

@@ -3,6 +3,7 @@ import 'package:anime_fanarts/main.dart';
 import 'package:anime_fanarts/models/user_sign_up.dart';
 import 'package:anime_fanarts/services/auth_req.dart';
 import 'package:anime_fanarts/utils/colors.dart';
+import 'package:anime_fanarts/utils/route_trans_anim.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -329,11 +330,11 @@ class _SignUpState extends State<SignUp> {
                                         ),
                                         recognizer: TapGestureRecognizer()..onTap = (){
                                           print('tapped');
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => Login()
-                                            ),
+                                          Navigator.of(context).push(
+                                            RouteTransAnim().createRoute(
+                                              1.0, 0.0, 
+                                              Login()
+                                            )
                                           );
                                         }
                                       )

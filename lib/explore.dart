@@ -5,6 +5,7 @@ import 'package:anime_fanarts/services/secure_storage.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/error_loading.dart';
 import 'package:anime_fanarts/utils/loading_animation.dart';
+import 'package:anime_fanarts/utils/urls.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
@@ -26,7 +27,7 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin<Ex
   List reactedPosts = [];
 
   // static const IMGURL = 'http://10.0.2.2:3000/img/users/';
-  static const IMGURL = 'https://vast-cliffs-19346.herokuapp.com/img/users/';
+  static const IMGURL = Urls.IMGURL;
   GetCreatePosts _getCreatePosts = GetCreatePosts();
 
   Future<void> _loadData() async {

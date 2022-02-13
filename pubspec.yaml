@@ -62,6 +62,7 @@ dependencies:
   image_gallery_saver: ^1.7.1
   permission_handler: ^8.3.0
   flutter_native_timezone: ^2.0.0
+  image_cropper: ^1.4.1
 
 dev_dependencies:
   flutter_test:

@@ -2,6 +2,7 @@ import 'package:anime_fanarts/post.dart';
 import 'package:anime_fanarts/services/profile_req.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/loading_animation.dart';
+import 'package:anime_fanarts/utils/urls.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -27,7 +28,7 @@ class UsersProfileState extends State<UsersProfile> with AutomaticKeepAliveClien
 
   ProfileReq _profileReq = ProfileReq();
   // static const IMGURL = 'http://10.0.2.2:3000/img/users/';
-  static const IMGURL = 'https://vast-cliffs-19346.herokuapp.com/img/users/';
+  static const IMGURL = Urls.IMGURL;
 
   Future<void> _loadData() async {
     await Future.delayed(Duration(milliseconds: 1000));

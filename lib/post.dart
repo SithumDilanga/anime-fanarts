@@ -10,6 +10,7 @@ import 'package:anime_fanarts/services/interactions.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/date_time_formatter.dart';
 import 'package:anime_fanarts/utils/route_trans_anim.dart';
+import 'package:anime_fanarts/utils/urls.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -55,7 +56,7 @@ class _PostState extends State<Post> {
 
   static const primaryColor = Color(0xffffa500); 
   // static const IMGURL = 'http://10.0.2.2:3000/img/users/';
-  static const IMGURL = 'https://vast-cliffs-19346.herokuapp.com/img/users/';
+  static const IMGURL = Urls.IMGURL;
   int imageIndex = 0;
   String userReaction = 'default';
 
@@ -373,91 +374,118 @@ class _PostState extends State<Post> {
                   itemCount: widget.postImg!.length,
                   itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
 
-                    return Stack(
-                      children: [
-                        ConstrainedBox(
-                          constraints: const BoxConstraints(
-                            minWidth: 70,
-                            minHeight: 70,
-                            maxWidth: double.infinity,
-                            maxHeight: 390,
-                          ),
-                          child: OpenContainer(
-                            openColor: Colors.pink,
-                            transitionType: ContainerTransitionType.fade,
-                            closedBuilder: (BuildContext _, VoidCallback openContainer){
-                              return CachedNetworkImage(
+                    return GestureDetector(
+                      child: Stack(
+                        children: [
+                          ConstrainedBox(
+                            constraints: const BoxConstraints(
+                              minWidth: 70,
+                              minHeight: 70,
+                              maxWidth: double.infinity,
+                              maxHeight: 390,
+                            ),
+                            child: Hero(
+                              tag: '${widget.isUserPost.toString() + widget.postImg![itemIndex].toString()}',
+                              child: CachedNetworkImage(
                                 // imageUrl: imageList[itemIndex].toString(),
                                 imageUrl: '$IMGURL${widget.postImg![itemIndex]}',
                                 width: double.infinity,
                                 fit: BoxFit.cover,
                                 placeholder: (context, url) => imagePlaceholder(),
-                              );
-                            },
-                            openBuilder: (BuildContext _, VoidCallback openContainer){
-                              return ImgFullScreen(
-                                imageList: widget.postImg, 
-                                selectedimageIndex: itemIndex, 
-                                imgLink: widget.postImg![itemIndex],
-                              );
-                            }
-                            // child: CachedNetworkImage(
-                            //   imageUrl: imageList[itemIndex].toString(),
-                            //   width: double.infinity,
-                            //   fit: BoxFit.cover,
-                            //   placeholder: (context, url) => imagePlaceholder(),
+                              ),
+                            ),
+                            // child: OpenContainer(
+                            //   openColor: Colors.pink,
+                            //   transitionType: ContainerTransitionType.fade,
+                            //   closedBuilder: (BuildContext _, VoidCallback openContainer){
+                            //     return CachedNetworkImage(
+                            //       // imageUrl: imageList[itemIndex].toString(),
+                            //       imageUrl: '$IMGURL${widget.postImg![itemIndex]}',
+                            //       width: double.infinity,
+                            //       fit: BoxFit.cover,
+                            //       placeholder: (context, url) => imagePlaceholder(),
+                            //     );
+                            //   },
+                            //   openBuilder: (BuildContext _, VoidCallback openContainer){
+                            //     return ImgFullScreen(
+                            //       imageList: widget.postImg, 
+                            //       selectedimageIndex: itemIndex, 
+                            //       imgLink: widget.postImg![itemIndex],
+                            //     );
+                            //   }
+                            //   // child: CachedNetworkImage(
+                            //   //   imageUrl: imageList[itemIndex].toString(),
+                            //   //   width: double.infinity,
+                            //   //   fit: BoxFit.cover,
+                            //   //   placeholder: (context, url) => imagePlaceholder(),
+                            //   // ),
                             // ),
                           ),
-                        ),
-                        Positioned.fill(
-                          top: 5,
-                          left: 5,
-                          child: ListView.builder(
-                            itemCount: widget.postImg!.length,
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index) {
-                          
-                              if(index == itemIndex) {
-                          
-                                // return Icon(
-                                //   Icons.circle,
-                                //   color: Colors.blueAccent,
-                                // );
-                                return Stack(
-                                  children: [
-                                    Text(
-                                      '${index + 1}/${widget.postImg!.length}',
-                                      style: TextStyle(
-                                        fontSize: 11,
-                                        foreground: Paint()
-                                        ..style = PaintingStyle.stroke
-                                        ..strokeWidth = 0.8
-                                        ..color = Colors.white,
+                          Positioned.fill(
+                            top: 5,
+                            left: 5,
+                            child: ListView.builder(
+                              itemCount: widget.postImg!.length,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                            
+                                if(index == itemIndex) {
+                            
+                                  // return Icon(
+                                  //   Icons.circle,
+                                  //   color: Colors.blueAccent,
+                                  // );
+                                  return Stack(
+                                    children: [
+                                      Text(
+                                        '${index + 1}/${widget.postImg!.length}',
+                                        style: TextStyle(
+                                          fontSize: 11,
+                                          foreground: Paint()
+                                          ..style = PaintingStyle.stroke
+                                          ..strokeWidth = 0.8
+                                          ..color = Colors.white,
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      '${index + 1}/${widget.postImg!.length}',
-                                      style: TextStyle(
-                                        color: Colors.black.withOpacity(0.5),
-                                        fontSize: 11
+                                      Text(
+                                        '${index + 1}/${widget.postImg!.length}',
+                                        style: TextStyle(
+                                          color: Colors.black.withOpacity(0.5),
+                                          fontSize: 11
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  );
+                            
+                                }
+                                        
+                                return Text(
+                                  ''
                                 );
-                          
-                              }
-                                      
-                              return Text(
-                                ''
-                              );
-                          
-                              // return Icon(
-                              //   Icons.circle
-                              // );
-                            }, 
-                          ),
-                        )
-                      ],
+                            
+                                // return Icon(
+                                //   Icons.circle
+                                // );
+                              }, 
+                            ),
+                          )
+                        ],
+                      ),
+                      onTap: () {
+                    
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) { 
+                            return ImgFullScreen(
+                              imageList: widget.postImg, 
+                              selectedimageIndex: itemIndex, 
+                              imgLink: widget.postImg![itemIndex],
+                              isUserPost: widget.isUserPost
+                            );
+                          }),
+                        );
+                    
+                      },
                     );
                   },
                   options: CarouselOptions(
