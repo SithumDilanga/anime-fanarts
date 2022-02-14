@@ -110,7 +110,7 @@ class _PostState extends State<Post> {
 
                   Navigator.pop(context);
 
-                  isNewPostAdded.updateIsPostAdded(false);
+                  isNewPostAdded.updateIsPostDeleted(true);
 
                 });
 

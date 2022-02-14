@@ -34,7 +34,8 @@ void main() async {
       providers: [
         ChangeNotifierProvider<ProfileUser>(create: (_) => ProfileUser()),
         ChangeNotifierProvider<NewPostFresher>(create: (_) => NewPostFresher(
-          isPostAdded: false
+          isPostAdded: false,
+          isPostDeleted: false
         )),
       ],
       child: MaterialApp(

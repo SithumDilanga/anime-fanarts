@@ -5,10 +5,12 @@ import 'package:anime_fanarts/models/profile_user.dart';
 import 'package:anime_fanarts/post.dart';
 import 'package:anime_fanarts/services/profile_req.dart';
 import 'package:anime_fanarts/utils/colors.dart';
+import 'package:anime_fanarts/utils/error_loading.dart';
 import 'package:anime_fanarts/utils/loading_animation.dart';
 import 'package:anime_fanarts/utils/urls.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 // import 'package:gritie_new_app/gritie_share/post.dart';
 // import 'package:gritie_new_app/models/uid.dart';
@@ -18,6 +20,7 @@ import 'package:anime_fanarts/services/shared_pref.dart';
 import 'package:anime_fanarts/utils/route_trans_anim.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 // import 'package:gritie_new_app/auth/log_in.dart';
 // import 'package:gritie_new_app/auth/sign_up.dart';
 // import 'package:gritie_new_app/models/profile_user.dart';
@@ -47,8 +50,20 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
   ProfileReq _profileReq = ProfileReq();
   SharedPref _sharedPref = SharedPref();
 
+   static const _pageSize = 2;
+   List reactedPosts = [];
+   List allPosts = [];
+
+  final PagingController<int, dynamic> _pagingController = PagingController(firstPageKey: 1);
+
+
   @override
   void initState() {
+
+    _pagingController.addPageRequestListener((pageKey) {
+      _fetchPage(pageKey);
+    });
+
 
     // get userName from cache
     String? userName = SharedPref.getUserName();
@@ -56,6 +71,50 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
     _changeName = TextEditingController(text: userName);
 
     super.initState();
+  }
+
+  void _fetchPage(int pageKey) async {
+
+    final String currentTimeZone = await FlutterNativeTimezone.getLocalTimezone();
+    print('nativetimezone $currentTimeZone');
+
+    print('pageKeyProfile $pageKey');
+    print('_pageSizeProfile $_pageSize');
+
+    final allPostsData = await _profileReq.getUserPosts(
+      pageKey,
+      _pageSize
+    );
+
+     try {
+      final newItems = await allPostsData['data']['posts'];
+
+      final isLastPage = newItems.length < _pageSize;
+      if (isLastPage) {
+        _pagingController.appendLastPage(newItems);
+      } else {
+        // int nextPageKey = (pageKey + newItems.length) as int;
+        int nextPageKey = (pageKey + 1);
+        _pagingController.appendPage(newItems, nextPageKey);
+      }
+
+      setState(() {
+        reactedPosts = reactedPosts + allPostsData['data']['reacted'];
+        allPosts = allPostsData;
+        print('reactedPosts2 $reactedPosts');
+      });
+
+      print('reactedPosts1 $allPostsData');
+
+    } catch (error) {
+      _pagingController.error = error;
+    }
+  }
+
+  @override
+  void dispose() {
+    _pagingController.dispose();
+    super.dispose();
   }
 
   Future _pickProfileImage() async {
@@ -71,21 +130,6 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
     // });
 
     _cropProfileImage(pickedFile!.path);
-
-    // add image to shared preferences
-    if(_profileImage != null) {
-
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-
-      String path = appDocDir.path;
-
-      final File newImage = await _profileImage.copy('$path/profileImage.png');
-
-      SharedPref.setProfilePic(newImage.path);
-
-    }
-
-    // _profileReq.uploadProfilePic(_profileImage);
 
   }
 
@@ -103,6 +147,17 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
       setState(() {
         _profileImage = croppedImage;
       });
+
+      // add image to shared preferences
+
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+
+      String path = appDocDir.path;
+
+      final File newImage = await croppedImage.copy('$path/profileImage.png');
+
+      SharedPref.setProfilePic(newImage.path);
+
       
     }
       _profileReq.uploadProfilePic(_profileImage);
@@ -165,14 +220,6 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
     // });
 
   }
-
-  Future<void> _loadData() async {
-    await Future.delayed(Duration(milliseconds: 1000));
-    setState(() {
-      print('_loadData');
-    });
-  }
-
 
   // update name Alert Dialog
   Future<void> _updateNameAlert() async {
@@ -303,8 +350,13 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
     
     var isNewPostAdded = Provider.of<NewPostFresher>(context);
 
+    dynamic reactedNewPosts = reactedPosts; 
 
-    // print('profileData ${profileData.bio}');
+    print('isNewPostAdded ${isNewPostAdded.isPostAdded} ${isNewPostAdded.isPostDeleted}');
+
+    if(isNewPostAdded.isPostAdded || isNewPostAdded.isPostDeleted) {
+      _pagingController.refresh();
+    }
 
     // final user = Provider.of<UID?>(context, listen: false);
 
@@ -387,21 +439,23 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
     // }
 
     return RefreshIndicator(
-      onRefresh: _loadData,
+      onRefresh: () => Future.sync(
+          () => _pagingController.refresh(),
+      ),
       color: Colors.blue[200],
       backgroundColor: ColorTheme.primary,
       child: FutureBuilder(
         future: Future.wait([
           _profileReq.getUser(),
-          _profileReq.getUserPosts()
+          // _profileReq.getUserPosts()
         ]),
         builder: (context, AsyncSnapshot snapshot) {
 
           if(snapshot.hasData) {
 
             dynamic userInfo = snapshot.data[0];
-            dynamic userPosts = snapshot.data[1]['posts'];
-            dynamic userReactedPosts = snapshot.data[1]['reacted'];
+            // dynamic userPosts = snapshot.data[1]['posts'];
+            // dynamic userReactedPosts = snapshot.data[1]['reacted'];
 
             if(userInfo != null) {
 
@@ -876,91 +930,203 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                             ],
                           ),  
                           SizedBox(height: 8.0,), 
-                          if(userPosts.isEmpty) 
-                            Padding(
-                              padding: const EdgeInsets.only(top: 16.0),
-                              child: Center(
-                                child: Text(
-                                  "You have't add any post yet!",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 20
+                          // if(_pagingController.itemList == null)
+                          //   Padding(
+                          //     padding: const EdgeInsets.only(top: 16.0),
+                          //     child: Center(
+                          //       child: Text(
+                          //         "You have't add any post yet!",
+                          //         style: TextStyle(
+                          //           color: Colors.black,
+                          //           fontSize: 20
+                          //         ),
+                          //       ) 
+                          //     ),
+                          //   ),
+                            PagedListView<int, dynamic>.separated(
+                              pagingController: _pagingController,
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              builderDelegate: PagedChildBuilderDelegate<dynamic>(
+                                animateTransitions: true,
+                                itemBuilder: (context, item, index) {
+
+                                  // dynamic reactedPosts = snapshot.data['data']['reacted'];
+
+                                  bool isReacted = false;
+
+                                  // print('bitch ${snapshot.data['data']['reacted']}');
+                                  print('reactedPosts $reactedNewPosts');
+
+                                  for(int i = 0; i < reactedNewPosts.length; i++) {
+                                  
+                                    // print('reacted posts ${reactedPosts[i]['post']}');
+
+                                    if(reactedNewPosts[i]['post'] == item['_id']) {
+                                    
+                                      isReacted = true;
+
+                                      print('reacted shit ${item['_id']}');
+
+                                    }
+
+                                  }
+
+                                  // return Post(
+                                  //   id: item['_id'],
+                                  //   name: item['user'][0]['name'],
+                                  //   profilePic: '$IMGURL${item['user'][0]['profilePic']}', //'https://cdna.artstation.com/p/assets/images/images/031/257/402/large/yukisho-art-vector-6.jpg?1603101769&dl=10'
+                                  //   desc: item['description'],
+                                  //   postImg: item['postImages'], //$IMGURL${allPosts[index]['postImages']}
+                                  //   userId: item['user'][0]['_id'],
+                                  //   date: item['createdAt'], //formattedDate,
+                                  //   reactionCount: item['reactions'][0]['reactionCount'],
+                                  //   commentCount: item['commentCount'][0]['commentCount'],
+                                  //   isUserPost: false,
+                                  //   isReacted: isReacted,
+                                  // );
+
+                                  if(_pagingController.itemList == null) {
+
+                                    return Padding(
+                                      padding: const EdgeInsets.only(top: 16.0),
+                                      child: Center(
+                                        child: Text(
+                                          "You have't add any post yet!",
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 20
+                                          ),
+                                        ) 
+                                      ),
+                                    );
+
+                                  }
+
+                                  return Post(
+                                    id: item['_id'],
+                                    name: userInfo['name'],
+                                    profilePic: '$IMGURL${userInfo['profilePic']}',
+                                    desc: item['description'],
+                                    postImg: item['postImages'],
+                                    userId: item['user'],
+                                    date: item['createdAt'],
+                                    reactionCount: item['reactions'][0]['reactionCount'],
+                                    commentCount: item['commentCount'][0]['commentCount'],
+                                    isUserPost: true,
+                                    isReacted: isReacted,
+                                  );
+
+                                },
+                                firstPageErrorIndicatorBuilder: (context) => ErrorLoading(
+                                  errorMsg: 'Error loading posts: code #001', 
+                                  onTryAgain: _pagingController.refresh
+                                ) 
+                                ,
+                                noItemsFoundIndicatorBuilder: (context) => Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Center(
+                                    child: Text(
+                                      'No posts to show!',
+                                      style: TextStyle(
+                                        fontSize: 16.0
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                newPageErrorIndicatorBuilder: (context) => ErrorLoading(
+                                  errorMsg: 'Error loading posts: code #002', 
+                                  onTryAgain: _pagingController.refresh
+                                ),
+                                firstPageProgressIndicatorBuilder: (context) => LoadingAnimation(),
+                                newPageProgressIndicatorBuilder: (context) => LoadingAnimation(),
+                                noMoreItemsIndicatorBuilder: (context) => 
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Center(
+                                    child: Text(
+                                      'No posts to show!',
+                                      style: TextStyle(
+                                        fontSize: 16.0
+                                      ),
+                                    ),
                                   ),
                                 )
                               ),
+                              separatorBuilder: (context, index) => const Divider(height: 0,),
                             ),
-                          ListView.builder(
-                            itemCount: userPosts.length,
-                            physics: NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
+                          // ListView.builder(
+                          //   itemCount: userPosts.length,
+                          //   physics: NeverScrollableScrollPhysics(),
+                          //   shrinkWrap: true,
+                          //   itemBuilder: (context, index) {
 
-                              bool isReacted = false;
+                          //     bool isReacted = false;
     
-                              print('bitch profile ${userReactedPosts}');
+                          //     print('bitch profile ${userReactedPosts}');
 
-                              for(int i = 0; i < userReactedPosts.length; i++) {
+                          //     for(int i = 0; i < userReactedPosts.length; i++) {
                               
-                                // print('reacted posts ${reactedPosts[i]['post']}');
+                          //       // print('reacted posts ${reactedPosts[i]['post']}');
 
-                                if(userReactedPosts[i]['post'] == userPosts[index]['_id']) {
+                          //       if(userReactedPosts[i]['post'] == userPosts[index]['_id']) {
                                 
-                                  isReacted = true;
+                          //         isReacted = true;
 
-                                  print('reacted shit profile ${userPosts[index]['_id']}');
+                          //         print('reacted shit profile ${userPosts[index]['_id']}');
 
-                                }
+                          //       }
 
-                              }
+                          //     }
                             
                             
-                              return Post(
-                                id: userPosts[index]['_id'],
-                                name: userInfo['name'],
-                                profilePic: '$IMGURL${userInfo['profilePic']}',
-                                desc: userPosts[index]['description'],
-                                postImg: userPosts[index]['postImages'],
-                                userId: userPosts[index]['_id'],
-                                date: userPosts[index]['createdAt'],
-                                reactionCount: userPosts[index]['reactions'][0]['reactionCount'],
-                                commentCount: userPosts[index]['commentCount'][0]['commentCount'],
-                                isUserPost: true,
-                                isReacted: isReacted,
-                              );
+                          //     return Post(
+                          //       id: userPosts[index]['_id'],
+                          //       name: userInfo['name'],
+                          //       profilePic: '$IMGURL${userInfo['profilePic']}',
+                          //       desc: userPosts[index]['description'],
+                          //       postImg: userPosts[index]['postImages'],
+                          //       userId: userPosts[index]['_id'],
+                          //       date: userPosts[index]['createdAt'],
+                          //       reactionCount: userPosts[index]['reactions'][0]['reactionCount'],
+                          //       commentCount: userPosts[index]['commentCount'][0]['commentCount'],
+                          //       isUserPost: true,
+                          //       isReacted: isReacted,
+                          //     );
 
-                              // var date = DateTime.parse(userPosts[index]['timestamp'].toDate().toString());
-                              // var formattedDate = DateFormat.yMMMd().add_jm().format(date);
+                          //     // var date = DateTime.parse(userPosts[index]['timestamp'].toDate().toString());
+                          //     // var formattedDate = DateFormat.yMMMd().add_jm().format(date);
 
-                              // if(userPosts[index]['postImg'] == null) {
+                          //     // if(userPosts[index]['postImg'] == null) {
                               
-                              //   return Post(
-                              //     isUserPost: true,
-                              //     id: userPosts[index]['postId'], //data.postId, 
-                              //     name: userPosts[index]['name'],
-                              //     profilePic: userInfo['profilePic'],
-                              //     desc: userPosts[index]['desc'],
-                              //     date: formattedDate.toString(),
-                              //     userId: userPosts[index]['userId'],
-                              //     reactionCount: userPosts[index]['reactionCount'],
-                              //   );
+                          //     //   return Post(
+                          //     //     isUserPost: true,
+                          //     //     id: userPosts[index]['postId'], //data.postId, 
+                          //     //     name: userPosts[index]['name'],
+                          //     //     profilePic: userInfo['profilePic'],
+                          //     //     desc: userPosts[index]['desc'],
+                          //     //     date: formattedDate.toString(),
+                          //     //     userId: userPosts[index]['userId'],
+                          //     //     reactionCount: userPosts[index]['reactionCount'],
+                          //     //   );
 
 
-                              // }
+                          //     // }
 
-                              // return Post(
-                              //   isUserPost: true,
-                              //   id: userPosts[index]['postId'], 
-                              //   name: userPosts[index]['name'],
-                              //   profilePic: userInfo['profilePic'],
-                              //   desc: userPosts[index]['desc'],
-                              //   postImg: userPosts[index]['postImg'],
-                              //   date: formattedDate.toString(),
-                              //   userId: userPosts[index]['userId'],
-                              //   reactionCount: userPosts[index]['reactionCount'],
-                              // );
+                          //     // return Post(
+                          //     //   isUserPost: true,
+                          //     //   id: userPosts[index]['postId'], 
+                          //     //   name: userPosts[index]['name'],
+                          //     //   profilePic: userInfo['profilePic'],
+                          //     //   desc: userPosts[index]['desc'],
+                          //     //   postImg: userPosts[index]['postImg'],
+                          //     //   date: formattedDate.toString(),
+                          //     //   userId: userPosts[index]['userId'],
+                          //     //   reactionCount: userPosts[index]['reactionCount'],
+                          //     // );
 
-                            }
-                          )
+                          //   }
+                          // )
                             //  Padding(
                             //   padding: const EdgeInsets.only(top: 16.0),
                             //   child: Center(

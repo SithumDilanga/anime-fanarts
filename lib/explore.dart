@@ -131,6 +131,8 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin<Ex
         onRefresh: () => Future.sync(
           () => _pagingController.refresh(),
         ),
+        color: Colors.blue[200],
+        backgroundColor: ColorTheme.primary,
         child: PagedListView<int, dynamic>.separated(
           pagingController: _pagingController,
           builderDelegate: PagedChildBuilderDelegate<dynamic>(

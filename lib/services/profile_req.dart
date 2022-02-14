@@ -62,13 +62,13 @@ class ProfileReq {
 
   // ----------- get user posts --------------------
 
-  Future getUserPosts() async {
+  Future getUserPosts(int pageKey, int pageSize) async {
 
     try {
 
       final bearerToken = await SecureStorage.getToken() ?? '';
       
-      Response userPosts = await _dio.get('$URL/users/myPosts', options: Options(
+      Response userPosts = await _dio.get('$URL/posts/myPosts?page=$pageKey&limit=$pageSize', options: Options(
         headers: {'Authorization': 'Bearer $bearerToken'},
       ));
 
@@ -82,7 +82,7 @@ class ProfileReq {
       //   return 'empty posts';
       // }
 
-      return userPosts.data['data'];
+      return userPosts.data;
 
     } on DioError catch (e) {
 
