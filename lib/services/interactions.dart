@@ -80,14 +80,14 @@ class Interactions {
 
   // ------------ get comments ----------------
 
-  Future getComments(String? postId) async {
+  Future getComments(String? postId, int pageKey, int pageSize) async {
 
     try {
 
       final bearerToken = await SecureStorage.getToken() ?? '';
       print('bearer $bearerToken');
       
-      Response allComments = await _dio.get('$URL/comments?page=1&limit=20&postId=$postId', options: Options(
+      Response allComments = await _dio.get('$URL/comments?page=$pageKey&limit=$pageSize&postId=$postId', options: Options(
         headers: {'Authorization': 'Bearer $bearerToken'},
       ));
       print('All comments: ${allComments.data}');
@@ -97,7 +97,7 @@ class Interactions {
 
       print('shit ${allComments.data['data']['comments']}');
 
-      return allComments.data['data']['comments'];
+      return allComments.data;
 
     } on DioError catch (e) {
 

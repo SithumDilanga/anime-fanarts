@@ -237,6 +237,13 @@ class _ResetPasswordState extends State<ResetPassword> {
                               ),
                             );
         
+                          } else if(response == 401) {
+
+                            Fluttertoast.showToast(
+                              msg: "token is invalid or has expired!",
+                              toastLength: Toast.LENGTH_SHORT,
+                            );
+
                           }
         
                         }

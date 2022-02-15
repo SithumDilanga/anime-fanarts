@@ -1,12 +1,8 @@
 import 'dart:async';
-
-import 'package:anime_fanarts/auth/log_in.dart';
 import 'package:anime_fanarts/auth/sign_up.dart';
 import 'package:anime_fanarts/explore.dart';
-import 'package:anime_fanarts/img_fullscreen.dart';
 import 'package:anime_fanarts/models/new_post_refresher.dart';
 import 'package:anime_fanarts/models/profile_user.dart';
-import 'package:anime_fanarts/post.dart';
 import 'package:anime_fanarts/profile/profile.dart';
 import 'package:anime_fanarts/services/secure_storage.dart';
 import 'package:anime_fanarts/services/shared_pref.dart';
@@ -18,7 +14,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -69,7 +64,7 @@ class _MyAppState extends State<MyApp> {
 
   String? token;
 
-  Future<String?> init() async {
+  void init() async {
 
     final bearerToken = await SecureStorage.getToken();
 

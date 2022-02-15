@@ -23,7 +23,6 @@ class Explore extends StatefulWidget {
 class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin<Explore>{
 
   int pageNum = 1;
-  List allPosts = [];
   List reactedPosts = [];
 
   // static const IMGURL = 'http://10.0.2.2:3000/img/users/';
@@ -95,8 +94,9 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin<Ex
         int nextPageKey = (pageKey + 1);
         _pagingController.appendPage(newItems, nextPageKey);
       }
-
+      
       setState(() {
+        //TODO: reaction not updating issue. this line is the issue
         reactedPosts = reactedPosts + allPostsData['data']['reacted'];
         print('reactedPosts2 $reactedPosts');
       });
