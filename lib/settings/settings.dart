@@ -4,6 +4,7 @@ import 'package:anime_fanarts/services/secure_storage.dart';
 import 'package:anime_fanarts/settings/bug_report.dart';
 import 'package:anime_fanarts/settings/contact_us.dart';
 import 'package:anime_fanarts/settings/feedback.dart';
+import 'package:anime_fanarts/settings/guidelines.dart';
 import 'package:anime_fanarts/settings/what_is.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/route_trans_anim.dart';
@@ -64,6 +65,18 @@ class _SettingsState extends State<Settings> {
                     RouteTransAnim().createRoute(
                       1.0, 0.0, 
                       BugReport()
+                    )
+                  );
+                }
+              ),
+              CustomeListTile(
+                Icons.description_outlined,
+                'Guidelines',
+                () {
+                  Navigator.of(context).push(
+                    RouteTransAnim().createRoute(
+                      1.0, 0.0, 
+                      GuideLines()
                     )
                   );
                 }

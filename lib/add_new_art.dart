@@ -3,8 +3,11 @@ import 'dart:io';
 import 'package:anime_fanarts/profile/profile.dart';
 import 'package:anime_fanarts/services/firestore_service.dart';
 import 'package:anime_fanarts/services/get_create_posts.dart';
+import 'package:anime_fanarts/settings/guidelines.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/loading_animation.dart';
+import 'package:anime_fanarts/utils/route_trans_anim.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -434,7 +437,36 @@ class _AddNewArtState extends State<AddNewArt> {
                           )
                         ],
                       ),
-                      SizedBox(height: 32.0,),
+                      SizedBox(height: 16.0,),
+                      Center(
+                        child: RichText(
+                          text: TextSpan(
+                            text: 'Make sure your artwork compliance with our ',
+                            style: TextStyle(
+                              color: Colors.black
+                            ),
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: 'Guidelines',
+                                style: TextStyle(
+                                  color: ColorTheme.primary,
+                                  decoration: TextDecoration.underline
+                                ),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    Navigator.of(context).push(
+                                      RouteTransAnim().createRoute(
+                                        1.0, 0.0, 
+                                        GuideLines()
+                                      )
+                                    );
+                                },
+                              ),
+                            ],
+                          ), 
+                        ),
+                      ),
+                      SizedBox(height: 24.0,),
                       Container(
                         width: double.infinity,
                         child: ElevatedButton(

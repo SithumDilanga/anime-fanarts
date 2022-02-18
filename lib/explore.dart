@@ -162,11 +162,11 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin<Ex
 
               return Post(
                 id: item['_id'],
-                name: item['user'][0]['name'],
-                profilePic: '$IMGURL${item['user'][0]['profilePic']}', //'https://cdna.artstation.com/p/assets/images/images/031/257/402/large/yukisho-art-vector-6.jpg?1603101769&dl=10'
+                name: item['user']['name'],
+                profilePic: '$IMGURL${item['user']['profilePic']}', //'https://cdna.artstation.com/p/assets/images/images/031/257/402/large/yukisho-art-vector-6.jpg?1603101769&dl=10'
                 desc: item['description'],
                 postImg: item['postImages'], //$IMGURL${allPosts[index]['postImages']}
-                userId: item['user'][0]['_id'],
+                userId: item['user']['_id'],
                 date: item['createdAt'], //formattedDate,
                 reactionCount: item['reactions'][0]['reactionCount'],
                 commentCount: item['commentCount'][0]['commentCount'],
