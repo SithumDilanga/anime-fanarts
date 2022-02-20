@@ -30,6 +30,7 @@ class _SignUpState extends State<SignUp> {
 
   // text fields
   String username = '';
+  String name = '';
   String email = '';
   String password = '';
   String confirmPassword = '';
@@ -46,6 +47,15 @@ class _SignUpState extends State<SignUp> {
 
     if (!isValid) {
       return 'Invalid email';
+    }
+
+    return null;
+  }
+
+  String? get usernameErrorText {
+
+    if (username.isNotEmpty && username.length < 4) {
+      return 'Username must be at least 4 characterss';
     }
 
     return null;
@@ -180,8 +190,35 @@ class _SignUpState extends State<SignUp> {
                                 style: TextStyle(
                                   fontSize: 16.0, 
                                   color: Colors.grey
-                                  ),
                                 ),
+                              ),
+                              TextFormField(
+                                // controller: _textController,
+                                cursorColor: ColorTheme.primary,
+                                decoration: InputDecoration(
+                                  //hintText: 'Enter your Name'
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(color: ColorTheme.primary)
+                                  ),
+                                  errorText: usernameErrorText
+                                ),
+                                style: TextStyle(
+                                  fontSize: 18
+                                ),
+                                onChanged: (val) {
+                                  setState(() {
+                                    username = val;
+                                  });
+                                },
+                              ),    
+                              SizedBox(height: 16.0),   
+                              Text(
+                                'Name', 
+                                style: TextStyle(
+                                  fontSize: 16.0, 
+                                  color: Colors.grey
+                                ),
+                              ),
                               TextFormField(
                                 // controller: _textController,
                                 cursorColor: ColorTheme.primary,
@@ -196,10 +233,10 @@ class _SignUpState extends State<SignUp> {
                                 ),
                                 onChanged: (val) {
                                   setState(() {
-                                    username = val;
+                                    name = val;
                                   });
                                 },
-                              ),                            
+                              ),                      
                               SizedBox(height: 16.0),
                               Text(
                                 'Password', 
@@ -275,11 +312,12 @@ class _SignUpState extends State<SignUp> {
                                   ),
                                   onPressed:(
                                     emailErrorText == null &&
+                                    usernameErrorText == null &&
                                     passwordErrorText == null && 
                                     confirmPSErrorText == null
                                   ) ? () async {
                                     
-                                    if(email.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
+                                    if(email.isEmpty || username.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
               
                                       Fluttertoast.showToast(
                                         msg: "Please fill all the required fields",
@@ -289,7 +327,7 @@ class _SignUpState extends State<SignUp> {
                                     } else {
           
                                       _authReq.signUp(userSignUp: UserSignUp(
-                                        name: username,
+                                        name: name,
                                         username: username,
                                         email: email,
                                         password: password,

@@ -837,7 +837,8 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                                   '${userInfo['bio'] == null ? 'Add bio' : userInfo['bio']}',
                                   style: TextStyle(
                                     fontSize: 16,
-                                    fontWeight: FontWeight.w500
+                                    fontWeight: FontWeight.w500,
+                                    height: 1.3
                                   ),
                                 ),
                               ),

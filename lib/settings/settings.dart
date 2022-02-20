@@ -5,6 +5,8 @@ import 'package:anime_fanarts/settings/bug_report.dart';
 import 'package:anime_fanarts/settings/contact_us.dart';
 import 'package:anime_fanarts/settings/feedback.dart';
 import 'package:anime_fanarts/settings/guidelines.dart';
+import 'package:anime_fanarts/settings/privacy_policy.dart';
+import 'package:anime_fanarts/settings/terms_of_use.dart';
 import 'package:anime_fanarts/settings/what_is.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/route_trans_anim.dart';
@@ -82,13 +84,25 @@ class _SettingsState extends State<Settings> {
                 }
               ),
               CustomeListTile(
+                Icons.assignment_outlined,
+                'Terms of use',
+                () {
+                  Navigator.of(context).push(
+                    RouteTransAnim().createRoute(
+                      1.0, 0.0, 
+                      TermsOfUse()
+                    )
+                  );
+                }
+              ),
+              CustomeListTile(
                 Icons.privacy_tip_outlined,
                 'Privacy & policy',
                 () {
                   Navigator.of(context).push(
                     RouteTransAnim().createRoute(
                       1.0, 0.0, 
-                      AnimationsDemo()
+                      PrivacyPolicy()
                     )
                   );
                 }

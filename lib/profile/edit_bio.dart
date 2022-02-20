@@ -47,75 +47,77 @@ class _EditBioState extends State<EditBio> {
           )
         ),
         body: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Text(
-                  'Edit Your Bio', 
-                  style: TextStyle(
-                    fontSize: 20.0, 
-                    color: Colors.grey
-                  ),
-                ),
-                TextFormField(
-                  // controller: _bioText,
-                  initialValue: widget.bioText,
-                  keyboardType: TextInputType.multiline,
-                  maxLines: null,
-                  maxLength: 500,
-                  cursorColor: ColorTheme.primary,
-                  decoration: InputDecoration(
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: ColorTheme.primary)
-                    ),
-                  ),
-                  style: TextStyle(
-                    fontSize: 18
-                  ),
-                  onChanged: (text) {
-                    // _bioText.text = text;
-                    updatedBioText = text;
-                  },
-                ),
-                SizedBox(height: 16.0,),
-                ElevatedButton(
-                  child: Text(
-                    'Update', 
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Text(
+                    'Edit Your Bio', 
                     style: TextStyle(
-                      fontSize: 16.0, 
-                      color: Colors.white
+                      fontSize: 20.0, 
+                      color: Colors.grey
                     ),
                   ),
-                  style: ElevatedButton.styleFrom(
-                    primary: ColorTheme.primary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25)
+                  TextFormField(
+                    // controller: _bioText,
+                    initialValue: widget.bioText,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
+                    maxLength: 500,
+                    cursorColor: ColorTheme.primary,
+                    decoration: InputDecoration(
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: ColorTheme.primary)
+                      ),
                     ),
-                    padding: EdgeInsets.fromLTRB(66.0, 16.0, 66.0, 16.0),
+                    style: TextStyle(
+                      fontSize: 18
+                    ),
+                    onChanged: (text) {
+                      // _bioText.text = text;
+                      updatedBioText = text;
+                    },
                   ),
-                  onPressed: () {
-      
-                    if(updatedBioText.isEmpty) {
-      
-                      print('Bio not edited');
-                      Navigator.pop(context);
-      
-                    } else {
-      
-                      _profileReq.updateBio(updatedBioText).whenComplete(() => {
-                        profileData.updateBio(updatedBioText),
-                        Navigator.pop(context)
-                      });
-      
-                    }
-      
-      
-                  }, 
-                ),
-              ],
+                  SizedBox(height: 16.0,),
+                  ElevatedButton(
+                    child: Text(
+                      'Update', 
+                      style: TextStyle(
+                        fontSize: 16.0, 
+                        color: Colors.white
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      primary: ColorTheme.primary,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25)
+                      ),
+                      padding: EdgeInsets.fromLTRB(66.0, 16.0, 66.0, 16.0),
+                    ),
+                    onPressed: () {
+                
+                      if(updatedBioText.isEmpty) {
+                
+                        print('Bio not edited');
+                        Navigator.pop(context);
+                
+                      } else {
+                
+                        _profileReq.updateBio(updatedBioText).whenComplete(() => {
+                          profileData.updateBio(updatedBioText),
+                          Navigator.pop(context)
+                        });
+                
+                      }
+                
+                
+                    }, 
+                  ),
+                ],
+              ),
             ),
           ),
         ),

@@ -44,9 +44,17 @@ class AuthReq {
 
         // return e.response!.statusCode;
 
+        if(e.response!.data['error']['code'] == 11000) {
+
+          Fluttertoast.showToast(
+            msg: 'Email or username already exits!',
+            toastLength: Toast.LENGTH_LONG,
+          );
+        }
+
         Fluttertoast.showToast(
           msg: e.response!.data['message'],
-          toastLength: Toast.LENGTH_LONG,
+          toastLength: Toast.LENGTH_SHORT,
         );
 
         throw(e.response!.data['message']);

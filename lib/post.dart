@@ -7,6 +7,7 @@ import 'package:anime_fanarts/report/select_reason.dart';
 import 'package:anime_fanarts/services/download_share.dart';
 import 'package:anime_fanarts/services/get_create_posts.dart';
 import 'package:anime_fanarts/services/interactions.dart';
+import 'package:anime_fanarts/services/secure_storage.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/date_time_formatter.dart';
 import 'package:anime_fanarts/utils/route_trans_anim.dart';
@@ -59,12 +60,14 @@ class _PostState extends State<Post> {
   static const IMGURL = Urls.IMGURL;
   int imageIndex = 0;
   String userReaction = 'default';
+  String? secureStorageUserId = '';
 
   Interactions _interactionsReq = Interactions();
   DateTimeFormatter _dateTimeFormatter = DateTimeFormatter();
   DownloadShare _downloadShare = DownloadShare();
 
   List imageList = ['https://images.alphacoders.com/120/thumb-1920-1203420.png', 'https://i.pinimg.com/originals/44/c3/21/44c321cf6862f22caf3e6b71a0661565.jpg','https://www.nawpic.com/media/2020/levi-ackerman-nawpic-17.jpg' ];
+  
 
   // update name Alert Dialog
   Future<void> _deletPostAlert(BuildContext context) async {
@@ -150,6 +153,23 @@ class _PostState extends State<Post> {
     );
   }
 
+  Future init() async {
+
+    secureStorageUserId = (await SecureStorage.getUserId())!;
+    
+    setState(() {
+      
+    });
+
+
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    init();
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -213,46 +233,96 @@ class _PostState extends State<Post> {
                             },
                           ),
                         SizedBox(width: 8.0,),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            if(widget.isUserPost)
-                              Text(
-                                widget.name!,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16.0
-                                ),
-                              ),
-                            if(!widget.isUserPost)
-                              GestureDetector(
-                                child: Text(
+
+                        if(widget.userId == '621283374da8dc7d72b975bd')
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if(widget.isUserPost)
+                                Text(
                                   widget.name!,
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16.0
                                   ),
                                 ),
-                                onTap: () {
-                                
-                                  Navigator.of(context).push(
-                                    RouteTransAnim().createRoute(1.0, .0, UsersProfile(name: widget.name, userId: widget.userId))
-                                  );
+                              if(!widget.isUserPost)
+                                GestureDetector(
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        '${widget.name!}',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16.0
+                                        ),
+                                      ),
+                                      SizedBox(width: 4.0,),
+                                      Icon(
+                                        Icons.check_circle_rounded,
+                                        size: 16,
+                                        color: ColorTheme.primary,
+                                      )
+                                    ],
+                                  ),
+                                  onTap: () {
+                                  
+                                    Navigator.of(context).push(
+                                      RouteTransAnim().createRoute(1.0, .0, UsersProfile(name: widget.name, userId: widget.userId))
+                                    );
 
-                                },
+                                  },
                               ),
-                            Text(
-                              '$formattedDate',//widget.date.toString(),
-                              style: TextStyle(
-                                fontSize: 11.0
-                              ),
-                            )
-                          ],
-                        ),
+                              Text(
+                                '$formattedDate',//widget.date.toString(),
+                                style: TextStyle(
+                                  fontSize: 11.0
+                                ),
+                              )
+                            ],
+                          ),
+                        if(widget.userId != '621283374da8dc7d72b975bd')
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+
+                              if(widget.isUserPost)
+                                Text(
+                                  widget.name!,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16.0
+                                  ),
+                                ),
+                              if(!widget.isUserPost)
+                                GestureDetector(
+                                  child: Text(
+                                    widget.name!,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16.0
+                                    ),
+                                  ),
+                                  onTap: () {
+                                  
+                                    Navigator.of(context).push(
+                                      RouteTransAnim().createRoute(1.0, .0, UsersProfile(name: widget.name, userId: widget.userId))
+                                    );
+
+                                  },
+                                ),
+                              Text(
+                                '$formattedDate',//widget.date.toString(),
+                                style: TextStyle(
+                                  fontSize: 11.0
+                                ),
+                              )
+                            ],
+                          ),
                       ],
                     ),
                   ),
-                  if(widget.isUserPost)
+                  if(widget.isUserPost && secureStorageUserId.toString() == widget.userId.toString())
                     IconButton(
                       icon: Icon(
                         Icons.close_rounded,
@@ -353,7 +423,7 @@ class _PostState extends State<Post> {
                   //   ),
                   // ),
                   child: ReadMoreText(
-                    widget.desc!.replaceAll('/n', '\n \n'),
+                    '${widget.desc} ',//'${widget.desc!.replaceAll('/n', '\n \n')} \n',
                     trimLines: 3,
                     colorClickableText: primaryColor,
                     trimMode: TrimMode.Line,

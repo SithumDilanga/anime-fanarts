@@ -350,7 +350,8 @@ class _CommentSecionState extends State<CommentSecion> {
                                         Navigator.of(context).push(
                                           RouteTransAnim().createRoute(1.0, .0, UsersProfile(
                                             name: '${item['user'][0]['name']}', 
-                                            userId: item['user'][0]['_id'],))
+                                            userId: item['user'][0]['_id'],
+                                          )),
                                         );
                     
                                       },

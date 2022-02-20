@@ -5,14 +5,17 @@ import 'package:anime_fanarts/utils/loading_animation.dart';
 import 'package:anime_fanarts/utils/urls.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class UsersProfile extends StatefulWidget {
 
   final String? name;
   final String? userId;
 
-  const UsersProfile({ Key? key, required this.name, required this.userId }) : super(key: key);
+  const UsersProfile({ Key? key, required this.name, required this.userId, }) : super(key: key);
 
   @override
   UsersProfileState createState() => UsersProfileState();
@@ -139,13 +142,32 @@ class UsersProfileState extends State<UsersProfile> with AutomaticKeepAliveClien
                                         ),
                                       ),
                                       SizedBox(height: 4.0,),
-                                      Text(
-                                        '${userInfo['name']}',
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
+                                      if(widget.userId == '621283374da8dc7d72b975bd')
+                                        Row(
+                                          children: [
+                                            Text(
+                                              '${userInfo['name']}',
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            SizedBox(width: 4.0,),
+                                            Icon(
+                                              Icons.check_circle_rounded,
+                                              size: 18,
+                                              color: ColorTheme.primary,
+                                            )
+                                          ],
                                         ),
-                                      ),
+                                      if(widget.userId != '621283374da8dc7d72b975bd')
+                                        Text(
+                                          '${userInfo['name']}',
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
                                     ],
                                   ),
                                 ),
@@ -154,23 +176,49 @@ class UsersProfileState extends State<UsersProfile> with AutomaticKeepAliveClien
                           ),
                           //TODO: find some other way to make a margin here
                           SizedBox(height: 92.0,),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 16.0, right: 8.0),
-                            child: Text(
-                              userInfo['bio'] == null ? '' : userInfo['bio'],
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500
+                          if(widget.userId == '621283374da8dc7d72b975bd') 
+                            Padding(
+                              padding: const EdgeInsets.only(left: 16.0, right: 8.0),
+                              child: Linkify(
+                                onOpen: (link) async {
+                                  if (await canLaunch(link.url)) {
+                                    await launch(link.url);
+                                  } else {
+                                    throw 'Could not launch $link';
+                                  }
+                                },
+                                text: userInfo['bio'] == null ? '' : userInfo['bio'],
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  height: 1.3
+                                ),
+                                linkStyle: TextStyle(
+                                  color: Color(0xffffa500),//Colors.amber[600],
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500
+                                ),
                               ),
                             ),
-                          ),
+                          if(widget.userId != '621283374da8dc7d72b975bd')
+                            Padding(
+                              padding: const EdgeInsets.only(left: 16.0, right: 8.0),
+                              child: Text(
+                                userInfo['bio'] == null ? '' : userInfo['bio'],
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  height: 1.3
+                                ),
+                              ),
+                            ),
                         ],
                       ),  
                       SizedBox(height: 16.0,),
                       Padding(
                         padding: const EdgeInsets.only(left: 16.0),
                         child: Text(
-                          'Fanarts',
+                          'Artworks',
                           style: TextStyle(
                             color: Colors.grey,
                             fontWeight: FontWeight.bold
@@ -195,7 +243,7 @@ class UsersProfileState extends State<UsersProfile> with AutomaticKeepAliveClien
                             date: userPosts[index]['createdAt'],
                             reactionCount: userPosts[index]['reactions'][0]['reactionCount'],
                             commentCount: userPosts[index]['commentCount'][0]['commentCount'],
-                            isUserPost: false
+                            isUserPost: true
                           );
                 
                           // var date = DateTime.parse(userPosts[index]['timestamp'].toDate().toString());

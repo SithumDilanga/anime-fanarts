@@ -303,7 +303,7 @@ class _AddNewArtState extends State<AddNewArt> {
                         // validation
                         validator: (val) => val!.isEmpty ? 'Enter an Email' : null,
                         onChanged: (val) {
-                        
+                          
                         },
                       ),
                       SizedBox(height: 16.0,),
