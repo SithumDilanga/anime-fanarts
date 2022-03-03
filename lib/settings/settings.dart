@@ -1,5 +1,6 @@
 import 'package:anime_fanarts/auth/log_in.dart';
 import 'package:anime_fanarts/auth/sign_up.dart';
+import 'package:anime_fanarts/profile/admin_add_new_art.dart';
 import 'package:anime_fanarts/services/secure_storage.dart';
 import 'package:anime_fanarts/settings/bug_report.dart';
 import 'package:anime_fanarts/settings/contact_us.dart';
@@ -139,6 +140,18 @@ class _SettingsState extends State<Settings> {
                     RouteTransAnim().createRoute(
                       1.0, 0.0, 
                       SignUp()
+                    )
+                  );
+                }
+              ),
+              CustomeListTile(
+                Icons.login_rounded,
+                'Admin add art',
+                () {
+                  Navigator.of(context).push(
+                    RouteTransAnim().createRoute(
+                      1.0, 0.0, 
+                      AdminAddNewArt()
                     )
                   );
                 }

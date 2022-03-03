@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:anime_fanarts/profile/profile.dart';
 import 'package:anime_fanarts/services/firestore_service.dart';
 import 'package:anime_fanarts/services/get_create_posts.dart';
@@ -14,21 +13,23 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-import 'models/new_post_refresher.dart';
+import '../models/new_post_refresher.dart';
 
-class AddNewArt extends StatefulWidget {
-  const AddNewArt({ Key? key }) : super(key: key);
+class AdminAddNewArt extends StatefulWidget {
+  const AdminAddNewArt({ Key? key }) : super(key: key);
 
   @override
-  _AddNewArtState createState() => _AddNewArtState();
+  _AdminAddNewArtState createState() => _AdminAddNewArtState();
 }
 
-class _AddNewArtState extends State<AddNewArt> {
+class _AdminAddNewArtState extends State<AdminAddNewArt> {
 
   List<String> tagList = [];
 
   final tagTextController = TextEditingController();
   final descTextController = TextEditingController();
+  final userNameTextController = TextEditingController();
+  final userIdTextController = TextEditingController();
 
   final picker = ImagePicker();
   List? _postImages = [];
@@ -169,7 +170,7 @@ class _AddNewArtState extends State<AddNewArt> {
             ),
             elevation: 0,
             title: Text(
-              'Add new art'
+              'Admin Add new art'
             ),
           ),
           body: SingleChildScrollView(
@@ -434,7 +435,72 @@ class _AddNewArtState extends State<AddNewArt> {
                                 ],
                               ),
                             ),
-                          )
+                          ),
+                          SizedBox(height: 16.0,),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Mention user name', 
+                                style: TextStyle(
+                                  fontSize: 18.0, 
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w600
+                                ),
+                              ),
+                              TextFormField(
+                                controller: userNameTextController,
+                                cursorColor: ColorTheme.primary,
+                                maxLines: null,
+                                keyboardType: TextInputType.multiline,
+                                decoration: InputDecoration(
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(color: ColorTheme.primary)
+                                  ),
+                                  // errorText: emailErrorText
+                                  hintText: 'type name here...'
+                                ),
+                                style: TextStyle(
+                                  fontSize: 16
+                                ),
+                                // validation
+                                validator: (val) => val!.isEmpty ? 'Enter an Email' : null,
+                                onChanged: (val) {
+                                
+                                },
+                              ),
+                              SizedBox(height: 16.0,),
+                              Text(
+                                'User Id', 
+                                style: TextStyle(
+                                  fontSize: 18.0, 
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w600
+                                ),
+                              ),
+                              TextFormField(
+                                controller: userIdTextController,
+                                cursorColor: ColorTheme.primary,
+                                maxLines: null,
+                                keyboardType: TextInputType.multiline,
+                                decoration: InputDecoration(
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(color: ColorTheme.primary)
+                                  ),
+                                  // errorText: emailErrorText
+                                  hintText: 'type user id here...'
+                                ),
+                                style: TextStyle(
+                                  fontSize: 16
+                                ),
+                                // validation
+                                validator: (val) => val!.isEmpty ? 'Enter an Email' : null,
+                                onChanged: (val) {
+                                
+                                },
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                       SizedBox(height: 16.0,),
@@ -491,19 +557,8 @@ class _AddNewArtState extends State<AddNewArt> {
                           onPressed: () {
                             // Navigator.push(
                             //   context,
-                            //   MaterialPageRoute(builder: (context) => const AddNewArt()),
+                            //   MaterialPageRoute(builder: (context) => const AdminAddNewArt()),
                             // );
-
-                            print('tagList $tagList');
-
-                            //TODO: check those validation toast messages
-
-                            if(tagList.isEmpty) {
-                              Fluttertoast.showToast(
-                                msg: "please at least add one tag!",
-                                toastLength: Toast.LENGTH_SHORT,
-                              );
-                            }
 
                             if(_postImages!.length > 3) {
                               Fluttertoast.showToast(
@@ -511,24 +566,54 @@ class _AddNewArtState extends State<AddNewArt> {
                                 toastLength: Toast.LENGTH_SHORT,
                               );
                             } else if(tagList.isEmpty) {
-                              print('culprit');
                               Fluttertoast.showToast(
                                 msg: "please at least add one tag!",
                                 toastLength: Toast.LENGTH_SHORT,
                               );
                             } else {
 
-                              _getCreatePosts.createPost(
-                                postImageFile: _postImages,
-                                desc: descTextController.text,
-                                tags: tagList
-                              ).whenComplete(() {
+                              if(_postImages!.isNotEmpty) {
 
-                                Navigator.pop(context);
+                                if(userNameTextController.text.isEmpty && userIdTextController.text.isEmpty) {
+
+                                  _getCreatePosts.createPost(
+                                    postImageFile: _postImages,
+                                    desc: '${descTextController.text}',
+                                    tags: tagList,
+                                  ).whenComplete(() {
+                                  
+                                    Navigator.pop(context);
+  
+                                    isNewPostAdded.updateIsPostAdded(true);
+  
+                                  });
+
+                                } else {
+
+                                  // String descText = '${descTextController.text}adminFeature@${userNameTextController.text}adminFeature@${userIdTextController.text}';
+
+                                  _getCreatePosts.createPost(
+                                    postImageFile: _postImages,
+                                    desc: '${descTextController.text}adminFeature@${userNameTextController.text}adminFeature@${userIdTextController.text}',
+                                    tags: tagList,
+                                  ).whenComplete(() {
+
+                                    Navigator.pop(context);
+
+                                    isNewPostAdded.updateIsPostAdded(true);
+
+                                  });
+
+                                }
+
+                              } else {
                                 
-                                isNewPostAdded.updateIsPostAdded(true);
+                                Fluttertoast.showToast(
+                                  msg: "please select your artwork!",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                );
 
-                              });
+                              }
 
                             }
     

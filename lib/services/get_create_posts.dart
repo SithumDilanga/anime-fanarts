@@ -75,7 +75,7 @@ class GetCreatePosts extends ChangeNotifier {
 
   // -------------- create post ----------------
 
-  Future createPost({List? postImageFile, String? desc, List<String>? tags}) async {
+  Future createPost({List? postImageFile, String? desc, List<String>? tags,}) async {
 
     try {
 

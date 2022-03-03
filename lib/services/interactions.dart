@@ -32,12 +32,6 @@ class Interactions {
       print(userReaction.statusMessage);
       print(userReaction.headers);
 
-      Fluttertoast.showToast(
-        msg: 'reaction added!',
-        toastLength: Toast.LENGTH_LONG,
-      );
-
-
       return userReaction.data['data'];
 
     } on DioError catch (e) {

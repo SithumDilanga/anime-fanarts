@@ -1,9 +1,11 @@
 import 'dart:io';
-import 'package:anime_fanarts/add_new_art.dart';
+import 'package:anime_fanarts/profile/add_new_art.dart';
 import 'package:anime_fanarts/models/new_post_refresher.dart';
 import 'package:anime_fanarts/models/profile_user.dart';
 import 'package:anime_fanarts/post.dart';
+import 'package:anime_fanarts/profile/admin_add_new_art.dart';
 import 'package:anime_fanarts/services/profile_req.dart';
+import 'package:anime_fanarts/services/secure_storage.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/error_loading.dart';
 import 'package:anime_fanarts/utils/loading_animation.dart';
@@ -44,6 +46,7 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
   final picker = ImagePicker();
   var _profileImage;
   var _coverImage;
+  String? user_id;
 
   TextEditingController? _changeName;
 
@@ -55,6 +58,10 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
    List allPosts = [];
 
   final PagingController<int, dynamic> _pagingController = PagingController(firstPageKey: 1);
+
+  void init() async {
+    user_id = await SecureStorage.getUserId();
+  }
 
 
   @override
@@ -69,6 +76,8 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
     String? userName = SharedPref.getUserName();
 
     _changeName = TextEditingController(text: userName);
+
+    init();
 
     super.initState();
   }
@@ -891,6 +900,7 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                                   ),
                                 ),
                               ),
+                              // if(user_id == '621283374da8dc7d72b975bd') 
                               ElevatedButton(
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -922,7 +932,7 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                                   Navigator.of(context).push(
                                     RouteTransAnim().createRoute(
                                       1.0, 1.0, 
-                                      AddNewArt()
+                                      user_id == '621283374da8dc7d72b975bd' ? AdminAddNewArt() : AddNewArt()
                                     )
                                   );
 

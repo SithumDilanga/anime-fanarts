@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:anime_fanarts/comment_section.dart';
 import 'package:anime_fanarts/img_fullscreen.dart';
 import 'package:anime_fanarts/models/new_post_refresher.dart';
@@ -15,6 +17,7 @@ import 'package:anime_fanarts/utils/urls.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -28,6 +31,7 @@ import 'package:readmore/readmore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:animations/animations.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Post extends StatefulWidget {
 
@@ -67,7 +71,12 @@ class _PostState extends State<Post> {
   DownloadShare _downloadShare = DownloadShare();
 
   List imageList = ['https://images.alphacoders.com/120/thumb-1920-1203420.png', 'https://i.pinimg.com/originals/44/c3/21/44c321cf6862f22caf3e6b71a0661565.jpg','https://www.nawpic.com/media/2020/levi-ackerman-nawpic-17.jpg' ];
-  
+
+  String? firstHalf;
+  String? secondHalf;
+
+  bool flag = true;
+  List<String> splittedDescText = [];  
 
   // update name Alert Dialog
   Future<void> _deletPostAlert(BuildContext context) async {
@@ -157,10 +166,9 @@ class _PostState extends State<Post> {
 
     secureStorageUserId = (await SecureStorage.getUserId())!;
     
-    setState(() {
-      
-    });
-
+    if(this.mounted) {
+      setState(() { });
+    }
 
   }
 
@@ -168,6 +176,35 @@ class _PostState extends State<Post> {
   void initState() {
     super.initState();
     init();
+
+    if(widget.desc != null) {
+
+      if(widget.desc!.contains('adminFeature@')) {
+        splittedDescText = widget.desc!.split('adminFeature@');
+        print('splittedDescText ${splittedDescText[1]}');
+
+        if (splittedDescText[0].length > 150) {
+          firstHalf = splittedDescText[0].substring(0, 150);
+          secondHalf = splittedDescText[0].substring(150, splittedDescText[0].length);
+        } else {
+          firstHalf = splittedDescText[0];
+          secondHalf = "";
+        }
+
+      } else {
+
+        if (widget.desc!.length > 150) {
+          firstHalf = widget.desc!.substring(0, 150);
+          secondHalf = widget.desc!.substring(150, widget.desc!.length);
+        } else {
+          firstHalf = widget.desc;
+          secondHalf = "";
+        }
+
+      }
+
+    }
+
   }
 
   @override
@@ -413,32 +450,153 @@ class _PostState extends State<Post> {
                     // )
                 ],
               ),
-              if(widget.desc!.isNotEmpty)
+              if(widget.desc!.isNotEmpty && widget.userId == '621283374da8dc7d72b975bd')
+
                 Padding(
                   padding: const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 8.0),
-                  // child: Text(
-                  //   widget.desc,
-                  //   style: TextStyle(
-                  //     fontSize: 16.0
-                  //   ),
-                  // ),
-                  child: ReadMoreText(
-                    '${widget.desc} ',//'${widget.desc!.replaceAll('/n', '\n \n')} \n',
-                    trimLines: 3,
-                    colorClickableText: primaryColor,
-                    trimMode: TrimMode.Line,
-                    trimCollapsedText: 'Show more',
-                    trimExpandedText: 'Show less',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      height: 1.3
-                    ),
-                    moreStyle: TextStyle(
-                      color: primaryColor,
-                      fontSize: 16.0
+                  child: Container(
+                    child: secondHalf!.isEmpty ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '$firstHalf',
+                          style: TextStyle(
+                            fontSize: 16.0
+                          ),
+                        ),
+                        SizedBox(height: 2.0,),
+                        if(splittedDescText.isNotEmpty)
+                          GestureDetector(
+                            child: Text(
+                              '${splittedDescText[1]}',
+                              style: TextStyle(
+                                color: ColorTheme.primary,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w500,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                RouteTransAnim().createRoute(
+                                  1.0, 0.0, 
+                                  UsersProfile(
+                                    name: splittedDescText[1],
+                                    userId: splittedDescText[2],
+                                  )
+                                )
+                              );
+                            },
+                          ),
+                      ],
+                    ) : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Text(flag ? (firstHalf! + "...") : (firstHalf! + secondHalf!)),
+                        Linkify(
+                          onOpen: (link) async {
+                            if (await canLaunch(link.url)) {
+                              await launch(link.url);
+                            } else {
+                              throw 'Could not launch $link';
+                            }
+                          },
+                          text: flag ? (firstHalf! + "...") : (firstHalf! + secondHalf!),
+                          style: TextStyle(
+                            fontSize: 16,
+                            height: 1.3
+                          ),
+                          linkStyle: TextStyle(
+                            color: ColorTheme.primary,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500
+                          ),
+                        ),
+                        if(splittedDescText.isNotEmpty)
+                          GestureDetector(
+                            child: Text(
+                              '${splittedDescText[1]}',
+                              style: TextStyle(
+                                color: ColorTheme.primary,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                RouteTransAnim().createRoute(
+                                  1.0, 0.0, 
+                                  UsersProfile(
+                                    name: splittedDescText[1],
+                                    userId: splittedDescText[2],
+                                  )
+                                )
+                              );
+                            },
+                          ),
+                        SizedBox(height: 2.0,),
+                        GestureDetector(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                flag ? "show more" : "show less",
+                                style: TextStyle(color: ColorTheme.primary),
+                              ),
+                            ],
+                          ),
+                          onTap: () {
+                            setState(() {
+                              flag = !flag;
+                            });
+                          },
+                        )
+                      ],
                     ),
                   ),
+                  
+                ),
+
+              if(widget.desc!.isNotEmpty && widget.userId != '621283374da8dc7d72b975bd')
+              
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 8.0),
+                  child: Container(
+                    child: secondHalf!.isEmpty ? Text(
+                      '$firstHalf',
+                      style: TextStyle(
+                        fontSize: 16.0
+                      ),
+                    ) : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          flag ? (firstHalf! + "...") : (firstHalf! + secondHalf!),
+                          style: TextStyle(
+                            fontSize: 16
+                          ),
+                        ),
+                        GestureDetector(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                flag ? "show more" : "show less",
+                                style: TextStyle(color: ColorTheme.primary),
+                              ),
+                            ],
+                          ),
+                          onTap: () {
+                            setState(() {
+                              flag = !flag;
+                            });
+                          },
+                        )
+                      ],
+                    ),
+                  ),
+                  
                 ),
               if(widget.postImg!.isNotEmpty)
 
