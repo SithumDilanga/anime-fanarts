@@ -1,5 +1,4 @@
 import 'package:anime_fanarts/utils/colors.dart';
-import 'package:anime_fanarts/utils/route_trans_anim.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -71,13 +70,6 @@ class WhatIs extends StatelessWidget {
                           decoration: TextDecoration.underline
                         ),
                         recognizer: TapGestureRecognizer()..onTap = () {
-      
-                          // Navigator.of(context).push(
-                          //   RouteTransAnim().createRoute(
-                          //     0.0, 1.0, 
-                          //     RulesGritieShare()
-                          //   )
-                          // );
       
                         }
                       )

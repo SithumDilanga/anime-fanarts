@@ -1,5 +1,4 @@
 import 'package:anime_fanarts/auth/forgot_password.dart';
-import 'package:anime_fanarts/auth/verification_code.dart';
 import 'package:anime_fanarts/main.dart';
 import 'package:anime_fanarts/models/user_login.dart';
 import 'package:anime_fanarts/services/auth_req.dart';
@@ -11,8 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:anime_fanarts/auth/sign_up.dart';
-// import 'package:motivational_quotes/home/home.dart';
-// import 'package:motivational_quotes/services/auth.dart';
 
 class Login extends StatefulWidget {
   const Login({ Key? key }) : super(key: key);

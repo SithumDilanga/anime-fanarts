@@ -1,5 +1,4 @@
 import 'package:anime_fanarts/auth/reset_password.dart';
-import 'package:anime_fanarts/services/auth_req.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -15,8 +14,6 @@ class VerificationCode extends StatefulWidget {
 }
 
 class _VerificationCodeState extends State<VerificationCode> {
-
-  AuthReq _authReq = AuthReq();
 
   final TextEditingController _otpTextController = TextEditingController();
   

@@ -393,12 +393,6 @@ class ProfileReq {
 
       print(response.statusCode);
 
-      Fluttertoast.showToast(
-        msg: 'Username Updated!',
-        toastLength: Toast.LENGTH_LONG,
-      );
-
-
     } on DioError catch (e) {
 
     print('Error updating username: $e');

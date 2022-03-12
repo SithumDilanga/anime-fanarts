@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:anime_fanarts/services/secure_storage.dart';
 import 'package:anime_fanarts/utils/urls.dart';
 import 'package:dio/dio.dart';
@@ -126,25 +125,6 @@ class GetCreatePosts extends ChangeNotifier {
           'description': desc,
           'tags': tags
         });
-
-        // data = FormData.fromMap({
-        //   'postimg': await MultipartFile.fromFile(
-        //     postImageFile.path,
-        //     filename: fileName,
-        //     contentType: MediaType('image', 'jpg'),
-        //   ),
-        //   'description': desc,
-        //   'tags': tags
-        // });
-
-        // data = FormData.fromMap({
-        //   "files": [  
-        //     MultipartFile.fromFileSync(postImageFile[0].path,
-        //         filename: "upload.txt"),
-        //     MultipartFile.fromFileSync(postImageFile[1].path,
-        //         filename: "upload2.txt"),
-        //   ]
-        // });
 
       }
       

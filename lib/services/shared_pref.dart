@@ -80,20 +80,4 @@ class SharedPref {
 
   // ---------- End cover image -----------------
 
-  // --------------- userId --------------------
-
-  // static const _keyUserId = 'profileImage';
-
-  // static Future<bool> setUserId(String userName) async {
-  //   print('userName ' +  userName.toString());
-  //   return await _preferences!.setString(_keyUserId, userName);
-  // }
-
-  // static String? getUserId() {
-  //   return _preferences?.getString(_keyUserId) ?? 'Test';
-  // }
-
-  // --------------- End userId --------------------
-
-
 }

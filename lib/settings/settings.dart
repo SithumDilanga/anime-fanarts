@@ -13,8 +13,6 @@ import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/route_trans_anim.dart';
 import 'package:flutter/material.dart';
 
-import '../animation_test.dart';
-
 class Settings extends StatefulWidget {
 
 
@@ -171,29 +169,8 @@ class _SettingsState extends State<Settings> {
 
                   });
 
-                  // Navigator.of(context).push(
-                  //   RouteTransAnim().createRoute(
-                  //     -1.0, 0.0, 
-                  //     ContactUs()
-                  //   )
-                  // );
                 }
               ),
-              // ElevatedButton(
-              //   child: Text(
-              //     'Sign up'
-              //   ),
-              //   onPressed: () {
-
-              //     Navigator.of(context).push(
-              //       RouteTransAnim().createRoute(
-              //         0.0, 1.0, 
-              //         SignUp()
-              //       )
-              //     );
-
-              //   }, 
-              // )
             ],
           ),
         ),

@@ -3,10 +3,8 @@ import 'package:anime_fanarts/services/profile_req.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/loading_animation.dart';
 import 'package:anime_fanarts/utils/urls.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -102,16 +100,14 @@ class UsersProfileState extends State<UsersProfile> with AutomaticKeepAliveClien
                                     topLeft: Radius.circular(6), 
                                     topRight: Radius.circular(6)
                                   ),
-                                  child: 
-                                  // Image.network(
-                                  //   'https://i.pinimg.com/originals/30/5c/5a/305c5a457807ba421ed67495c93198d3.jpg'
-                                  // )
-                                  // Image.network(
-                                  //   'http://10.0.2.2:3000/img/users/${userInfo['coverPic']}'
-                                  // )
-                                      
+                                  child:    
+                                  userInfo['coverPic'] == 'default-cover-pic.png' ? Image.asset(
+                                    'assets/images/cover-img-placeholder.jpg',
+                                    width: double.infinity,
+                                    fit: BoxFit.cover,
+                                  ) :                                  
                                   Image.network(
-                                    '$IMGURL${userInfo['coverPic']}',
+                                    '${userInfo['coverPic']}',
                                     width: double.infinity,
                                     fit: BoxFit.cover,
                                   )
@@ -130,13 +126,13 @@ class UsersProfileState extends State<UsersProfile> with AutomaticKeepAliveClien
                                         child: CircleAvatar(
                                           radius: 47,
                                           backgroundImage: 
-                                          // NetworkImage(
-                                          //   'http://10.0.2.2:3000/img/users/userPP-615eeaa924d6661b75313366-1633613125657.jpg'
-                                          // )
-                                          // https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000& q=80
-                                              
+                                          userInfo['profilePic'] == 'default-profile-pic.jpg' ? 
+                                          AssetImage(
+                                            'assets/images/profile-img-placeholder.jpg'
+                                          ) as ImageProvider
+                                          :
                                           NetworkImage(
-                                            '$IMGURL${userInfo['profilePic']}'
+                                            '${userInfo['profilePic']}'
                                           )
                                               
                                         ),
@@ -236,9 +232,9 @@ class UsersProfileState extends State<UsersProfile> with AutomaticKeepAliveClien
                           return Post(
                             id: userPosts[index]['_id'],
                             name: userInfo['name'],
-                            profilePic: '$IMGURL${userInfo['profilePic']}',
+                            profilePic: '${userInfo['profilePic']}',
                             desc: userPosts[index]['description'],
-                            postImg: [ '${userPosts[index]['postImages'][0]}' ],
+                            postImg: userPosts[index]['postImages'], //[ '${userPosts[index]['postImages'][0]}' ],
                             userId: 'user123',
                             date: userPosts[index]['createdAt'],
                             reactionCount: userPosts[index]['reactions'][0]['reactionCount'],
@@ -246,51 +242,8 @@ class UsersProfileState extends State<UsersProfile> with AutomaticKeepAliveClien
                             isUserPost: true
                           );
                 
-                          // var date = DateTime.parse(userPosts[index]['timestamp'].toDate().toString());
-                          // var formattedDate = DateFormat.yMMMd().add_jm().format(date);
-                
-                          // if(userPosts[index]['postImg'] == null) {
-              
-                          //   return Post(
-                          //     isUserPost: true,
-                          //     id: userPosts[index]['postId'], //data.postId, 
-                          //     name: userPosts[index]['name'],
-                          //     profilePic: userInfo['profilePic'],
-                          //     desc: userPosts[index]['desc'],
-                          //     date: formattedDate.toString(),
-                          //     userId: userPosts[index]['userId'],
-                          //     reactionCount: userPosts[index]['reactionCount'],
-                          //   );
-                  
-              
-                          // }
-              
-                          // return Post(
-                          //   isUserPost: true,
-                          //   id: userPosts[index]['postId'], 
-                          //   name: userPosts[index]['name'],
-                          //   profilePic: userInfo['profilePic'],
-                          //   desc: userPosts[index]['desc'],
-                          //   postImg: userPosts[index]['postImg'],
-                          //   date: formattedDate.toString(),
-                          //   userId: userPosts[index]['userId'],
-                          //   reactionCount: userPosts[index]['reactionCount'],
-                          // );
-                
                         }
                       )
-                        //  Padding(
-                        //   padding: const EdgeInsets.only(top: 16.0),
-                        //   child: Center(
-                        //     child: Text(
-                        //       "You have't add any post yet!",
-                        //       style: TextStyle(
-                        //         color: Colors.black,
-                        //         fontSize: 20
-                        //       ),
-                        //     )
-                        //   ),
-                        // ),
                     ],
                   )
                 

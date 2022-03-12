@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:anime_fanarts/profile/profile.dart';
 import 'package:anime_fanarts/services/firestore_service.dart';
 import 'package:anime_fanarts/services/get_create_posts.dart';
 import 'package:anime_fanarts/settings/guidelines.dart';
@@ -489,10 +487,7 @@ class _AddNewArtState extends State<AddNewArt> {
                             ),
                           ),
                           onPressed: () {
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(builder: (context) => const AddNewArt()),
-                            // );
+
 
                             if(_postImages!.length > 3) {
                               Fluttertoast.showToast(

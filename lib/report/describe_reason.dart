@@ -1,4 +1,3 @@
-import 'package:anime_fanarts/explore.dart';
 import 'package:anime_fanarts/main.dart';
 import 'package:anime_fanarts/services/report_req.dart';
 import 'package:anime_fanarts/utils/colors.dart';

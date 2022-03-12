@@ -6,7 +6,7 @@
    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
    <application
-        android:label="anime_fanarts"
+        android:label="Animizu"
         android:icon="@mipmap/ic_launcher">
 
         <meta-data android:name="firebase_analytics_collection_enabled" android:value="false" />

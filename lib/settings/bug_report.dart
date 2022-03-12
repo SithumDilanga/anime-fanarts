@@ -1,6 +1,5 @@
 import 'package:anime_fanarts/services/firestore_service.dart';
 import 'package:anime_fanarts/services/secure_storage.dart';
-import 'package:anime_fanarts/services/shared_pref.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
@@ -70,14 +69,6 @@ class BugReport extends StatelessWidget {
                   ],
                 ),
               ),
-              // Text(
-              //   'Device you use (eg: samsung galaxy 9A)',
-              //   style: TextStyle(
-              //     fontSize: 18.0, 
-              //     color: Colors.black,
-              //     fontWeight: FontWeight.w800
-              //   ),
-              // ),
               SizedBox(height: 16.0,),
               Container(
                 // margin: const EdgeInsets.only(left: 8.0, right: 8.0),

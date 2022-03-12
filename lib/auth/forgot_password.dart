@@ -168,21 +168,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
                       }
 
-                      // .whenComplete(() {
-
-                        
-
-                      //   Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //       builder: (context) => VerificationCode(
-                      //         email: email,
-                      //       )
-                      //     ),
-                      //   );
-
-                      // });
-
                       if(email.isEmpty) {
                         
                         Fluttertoast.showToast(

@@ -63,10 +63,12 @@ dependencies:
   permission_handler: ^8.3.0
   flutter_native_timezone: ^2.0.0
   image_cropper: ^1.4.1
+  
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_native_splash: ^2.1.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -108,3 +110,7 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+flutter_native_splash:
+  image: assets/images/ic_launcher_rounded.png
+  color: "#FFFFFF"

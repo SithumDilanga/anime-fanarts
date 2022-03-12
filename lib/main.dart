@@ -13,6 +13,9 @@ import 'package:anime_fanarts/utils/route_trans_anim.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -22,6 +25,27 @@ void main() async {
 
   // Pass all uncaught errors from the framework to Crashlytics.
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+
+  // Set default home.
+  Widget _defaultHome = new SignUp();
+
+  // final bearerToken = await SecureStorage.getToken();
+  const _storage = FlutterSecureStorage();
+
+  try {
+    final bearerToken = await SecureStorage.getToken();
+    
+    if(bearerToken != null) {
+      _defaultHome = new MyApp();
+    }
+  // ignore: nullable_type_in_catch_clause
+  } on PlatformException catch (e) {
+    await _storage.deleteAll();
+  }
+
+  // if(bearerToken != null) {
+  //   _defaultHome = new MyApp();
+  // }
 
   runZonedGuarded<Future<void>>(() async {
     runApp(
@@ -37,24 +61,17 @@ void main() async {
         theme: ThemeData(
           scaffoldBackgroundColor: Color(0xffF0F0F0),
         ),
-        home: MyApp()
+        home: _defaultHome //MyApp()
       ),
     ));
     }, (error, stackTrace) {
       FirebaseCrashlytics.instance.recordError(error, stackTrace);
     });
   
-  // runApp(MaterialApp(
-  //   theme: ThemeData(
-  //     scaffoldBackgroundColor: Color(0xffF0F0F0),
-  //   ),
-  //   home: MyApp()
-  // ));
 }
 
 class MyApp extends StatefulWidget {
   
-  // const MyApp({Key? key}) : super(key: key);
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -62,37 +79,8 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
-  String? token;
-
-  void init() async {
-
-    final bearerToken = await SecureStorage.getToken();
-
-    setState(() {
-      this.token = bearerToken;
-    });
-
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    init();
-
-  }
-
   @override
   Widget build(BuildContext context) {
-
-    print('bearer token $token');
-    
-    // TODO: find a good logic
-    if(token == null) {
-      return SignUp();
-    } 
-
-    if(token != null) {
 
     return DefaultTabController(
         initialIndex: 0,
@@ -103,10 +91,16 @@ class _MyAppState extends State<MyApp> {
             elevation: 0,
             automaticallyImplyLeading: false,
             title: Text(
-              'Anime fanarts',
-              style: TextStyle(
-                color: ColorTheme.primary
+              'Animizu',
+              style: GoogleFonts.signikaNegative(
+                textStyle: TextStyle(
+                  color: ColorTheme.primary,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold, 
+                  letterSpacing: 1
+                ),
               ),
+
             ),
             actions: <Widget> [
               IconButton(
@@ -125,49 +119,6 @@ class _MyAppState extends State<MyApp> {
     
                 }, 
               )
-              // PopupMenuButton(
-              //   icon: Icon(
-              //     Icons.settings,
-              //     color: Colors.black,
-              //   ),
-              //   onSelected: (selection) async {
-    
-              //     if(selection == 0) {
-    
-              //       Navigator.of(context).push(
-              //         RouteTransAnim().createRoute(
-              //           0.0, 1.0, 
-              //           SignUp()
-              //         )
-              //       );
-    
-              //     } else if(selection == 1) {
-    
-              //       Navigator.of(context).push(
-              //         RouteTransAnim().createRoute(
-              //           0.0, 1.0, 
-              //           Login()
-              //         )
-              //       );
-    
-              //     } 
-    
-              //   },
-              //   itemBuilder: (context) => [
-              //     PopupMenuItem(
-              //       child: Text(
-              //         'Sign up',
-              //       ),
-              //       value: 0
-              //     ),
-              //     PopupMenuItem(
-              //       child: Text(
-              //         'Login',
-              //       ),
-              //       value: 1
-              //     )
-              //   ]
-              // )
             ],
             bottom: TabBar(
               indicatorColor: ColorTheme.primary,
@@ -235,9 +186,9 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
       );
-    }
+    // }
 
-    return LoadingAnimation();
+    // return LoadingAnimation();
 
   }
 }

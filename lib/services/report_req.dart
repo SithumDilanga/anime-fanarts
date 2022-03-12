@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:anime_fanarts/services/secure_storage.dart';
 import 'package:anime_fanarts/utils/urls.dart';
 import 'package:dio/dio.dart';

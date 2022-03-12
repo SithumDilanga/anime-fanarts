@@ -2,7 +2,6 @@ import 'package:anime_fanarts/services/download_share.dart';
 import 'package:anime_fanarts/services/permissions_service.dart';
 import 'package:anime_fanarts/utils/urls.dart';
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class ImgFullScreen extends StatelessWidget {
@@ -53,7 +52,7 @@ class ImgFullScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: NetworkImage(
-                        '$IMGURL${imgLink}', // '$imgLink',
+                        '$imgLink', // '$imgLink',
                       ),
                       fit: BoxFit.contain,
                     )
@@ -61,21 +60,6 @@ class ImgFullScreen extends StatelessWidget {
                 ),
               ),
             ),
-            // Hero(
-            //   tag: 'fullscreenImg',
-            //   child: InteractiveViewer(
-            //     child: Container(
-            //       decoration: BoxDecoration(
-            //         image: DecorationImage(
-            //           image: NetworkImage(
-            //             '${imageList![imageIndex]}' // '$imgLink',
-            //           ),
-            //           fit: BoxFit.contain
-            //         )
-            //       ),
-            //     ),
-            //   ),
-            // ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -103,7 +87,7 @@ class ImgFullScreen extends StatelessWidget {
                         onPressed: () {
 
                           _downloadShare.shareImage(
-                            '$IMGURL$imgLink',
+                            '$imgLink',
                             username
                           );
                           
@@ -119,7 +103,7 @@ class ImgFullScreen extends StatelessWidget {
                           askPermission();
                       
                           _downloadShare.downloadImage(
-                            '$IMGURL$imgLink'
+                            '$imgLink'
                           );
                           
                         }, 
@@ -135,34 +119,3 @@ class ImgFullScreen extends StatelessWidget {
     );
   }
 }
-
-// Hero(
-//               tag: 'fullscreenImg',
-//               child: CarouselSlider(
-//                 options: CarouselOptions(
-//                   height: double.infinity,
-//                   autoPlay: false,
-//                   viewportFraction: 1,
-//                   enableInfiniteScroll: false, 
-//                   initialPage: selectedimageIndex,
-//                 ),
-//                 items: imageList!.map((image) {
-//                   return Builder(
-//                     builder: (BuildContext context) {
-//                       return InteractiveViewer( 
-//                         child: Container(
-//                           decoration: BoxDecoration(
-//                             image: DecorationImage(
-//                               image: NetworkImage(
-//                                 '${image}', // '$imgLink',
-//                               ),
-//                               fit: BoxFit.contain,
-//                             )
-//                           ),
-//                         ),
-//                       );
-//                     },
-//                   );
-//                 }).toList(),
-//               ),
-//             ),

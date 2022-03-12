@@ -9,8 +9,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
-// import 'package:motivational_quotes/home/home.dart';
-// import 'package:motivational_quotes/services/auth.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({ Key? key }) : super(key: key);  
@@ -122,12 +120,6 @@ class _SignUpState extends State<SignUp> {
                             ),
                           ),
                           SizedBox(height: 4.0,),
-                          // Text(  
-                          //   'make someone inspire',
-                          //   style: TextStyle(
-                          //     color: Colors.white
-                          //   ),
-                          // ),
                           SizedBox(height: 16.0,),
                           Text(
                             'one place for anime fanarts',

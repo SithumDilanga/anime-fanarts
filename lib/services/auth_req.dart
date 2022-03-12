@@ -30,8 +30,14 @@ class AuthReq {
 
       SecureStorage.setToken(response.data['token']);
       SecureStorage.setUserId(response.data['data']['user']['_id']);
+      SharedPref.setUserName(response.data['data']['user']['name']);
 
       retrievedUser = UserSignUp.fromJson(response.data);
+
+      Fluttertoast.showToast(
+        msg: 'Successfully signed up!',
+        toastLength: Toast.LENGTH_LONG,
+      );
 
     } on DioError catch (e) {
       print('Error creating user: $e');
@@ -95,8 +101,14 @@ class AuthReq {
 
     SecureStorage.setToken(response.data['token']);
     SecureStorage.setUserId(response.data['data']['user']['_id']);
+    SharedPref.setUserName(response.data['data']['user']['name']);
     
     retrievedUser = UserLogin.fromJson(response.data);
+
+    Fluttertoast.showToast(
+      msg: 'Successfully logged in!',
+      toastLength: Toast.LENGTH_LONG,
+    );
 
   } on DioError catch (e) {
 

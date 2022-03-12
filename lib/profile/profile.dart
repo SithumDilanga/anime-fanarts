@@ -10,23 +10,14 @@ import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/error_loading.dart';
 import 'package:anime_fanarts/utils/loading_animation.dart';
 import 'package:anime_fanarts/utils/urls.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-// import 'package:gritie_new_app/gritie_share/post.dart';
-// import 'package:gritie_new_app/models/uid.dart';
-// import 'package:gritie_new_app/services/database.dart';
 import 'package:anime_fanarts/services/shared_pref.dart';
-// import 'package:gritie_new_app/services/storage.dart';
 import 'package:anime_fanarts/utils/route_trans_anim.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-// import 'package:gritie_new_app/auth/log_in.dart';
-// import 'package:gritie_new_app/auth/sign_up.dart';
-// import 'package:gritie_new_app/models/profile_user.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'edit_bio.dart';
 import 'package:path_provider/path_provider.dart';
@@ -40,7 +31,6 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Profile> {
 
-  // static const IMGURL = 'http://10.0.2.2:3000/img/users/';
   static const IMGURL = Urls.IMGURL;
 
   final picker = ImagePicker();
@@ -132,11 +122,6 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
       source: ImageSource.gallery,
       imageQuality: 50
     );
-
-    // setState(() {
-    //   // _profileImage = File(pickedFile!.path);
-    //   _profileImage = File(pickedFile!.path);
-    // });
 
     _cropProfileImage(pickedFile!.path);
 
@@ -231,7 +216,7 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
   }
 
   // update name Alert Dialog
-  Future<void> _updateNameAlert() async {
+  Future<void> _updateNameAlert(String currentName) async {
 
     return showDialog<void>(
       context: context,
@@ -255,7 +240,7 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                     fontSize: 18
                   ),
                   // validation
-                  validator: (val) => val!.isEmpty ? 'Enter an Email' : null,
+                  validator: (val) => val!.isEmpty ? 'Enter name' : null,
                 ),
               ],
             ),
@@ -299,6 +284,8 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                     fontSize: 16.0
                   );
 
+                  SharedPref.setUserName(_changeName!.text);
+
                 }).whenComplete(() {
 
                   Fluttertoast.showToast(
@@ -315,34 +302,6 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                   });
 
                 });
-
-                // DatabaseService(uid: user.uid).updateUserName(
-                //   name: _changeName.text
-                // ).onError((error, stackTrace) {
-
-                //   Fluttertoast.showToast(
-                //     msg: "Error Occured : $error",
-                //     toastLength: Toast.LENGTH_LONG,
-                //     gravity: ToastGravity.BOTTOM,
-                //     fontSize: 16.0
-                //   );
-
-                // }).whenComplete(() {
-
-                //   Fluttertoast.showToast(
-                //     msg: "Your public name changed to ${_changeName.text}",
-                //     toastLength: Toast.LENGTH_LONG,
-                //     gravity: ToastGravity.BOTTOM,
-                //     fontSize: 16.0
-                //   );
-
-                //   Navigator.of(context).pop();
-
-                //   setState(() {
-                    
-                //   });
-
-                // });
 
               },  
             ),
@@ -366,86 +325,6 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
     if(isNewPostAdded.isPostAdded || isNewPostAdded.isPostDeleted) {
       _pagingController.refresh();
     }
-
-    // final user = Provider.of<UID?>(context, listen: false);
-
-    // if(user == null) {
-    //   return Column(
-    //     mainAxisAlignment: MainAxisAlignment.center,
-    //     children: [ 
-    //       ElevatedButton( 
-    //         child: Text(
-    //           'SIGN UP', 
-    //           style: TextStyle(
-    //             fontSize: 16.0, 
-    //             color: Colors.black
-    //           ),
-    //         ),
-    //         style: ElevatedButton.styleFrom(
-    //           primary: Colors.white,
-    //           shape: RoundedRectangleBorder(
-    //             borderRadius: BorderRadius.circular(25),
-    //           ),
-    //           side: BorderSide(
-    //             color: Colors.black,
-    //             width: 1.5
-    //           ),
-    //           padding: EdgeInsets.fromLTRB(66.0, 16.0, 66.0, 16.0),
-    //         ),
-    //         onPressed:() {
-
-    //           Navigator.of(context).push(
-    //             RouteTransAnim().createRoute(
-    //               -1.0, 0.0, 
-    //               SignUp()
-    //             )
-    //           );
-
-    //         }
-    //       ),
-    //       SizedBox(height: 16.0,),
-    //       Text(
-    //         'If you already have an account',
-    //         style: TextStyle(
-    //           fontSize: 16,
-    //           color: Colors.amber[600],
-    //           fontWeight: FontWeight.w500
-    //         ),
-    //       ),
-    //       SizedBox(height: 16.0,),
-    //       ElevatedButton( 
-    //         child: Text(
-    //           'LOGIN', 
-    //           style: TextStyle(
-    //             fontSize: 16.0, 
-    //             color: Colors.black
-    //           ),
-    //         ),
-    //         style: ElevatedButton.styleFrom(
-    //           primary: Colors.white,
-    //           shape: RoundedRectangleBorder(
-    //             borderRadius: BorderRadius.circular(25),
-    //           ),
-    //           side: BorderSide(
-    //             color: Colors.black,
-    //             width: 1.5
-    //           ),
-    //           padding: EdgeInsets.fromLTRB(66.0, 16.0, 66.0, 16.0),
-    //         ),
-    //         onPressed:() {
-
-    //           Navigator.of(context).push(
-    //             RouteTransAnim().createRoute(
-    //               -1.0, 0.0, 
-    //               Login()
-    //             )
-    //           );
-
-    //         }
-    //       )
-    //     ]
-    //   );
-    // }
 
     return RefreshIndicator(
       onRefresh: () => Future.sync(
@@ -488,28 +367,7 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                                 alignment: AlignmentDirectional.bottomCenter,
                                 children: [
                                   
-                                  if(userInfo['coverPic'] == null)
-                                    ConstrainedBox(
-                                      constraints: const BoxConstraints(
-                                        minHeight: 120,
-                                        maxHeight: 150,
-                                        maxWidth: double.infinity
-                                      ),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(6), 
-                                          topRight: Radius.circular(6)
-                                        ),
-                                        child: Container(
-                                          color: Colors.grey[300],
-                                        )                                  
-                                      ),
-                                    ),
-                                  
-                                  
-                                  // ---------- shared pref ----------
-
-                                  // if(userInfo['coverPic'] != null && _coverImage == null)
+                                  // if(userInfo['coverPic'] == null)
                                   //   ConstrainedBox(
                                   //     constraints: const BoxConstraints(
                                   //       minHeight: 120,
@@ -521,40 +379,13 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                                   //         topLeft: Radius.circular(6), 
                                   //         topRight: Radius.circular(6)
                                   //       ),
-                                  //       child: 
-                                  //       // Image.network(
-                                  //       //   'https://i.pinimg.com/originals/30/5c/5a/305c5a457807ba421ed67495c93198d3.jpg'
-                                  //       // )
-                                  //       // Image.network(
-                                  //       //   'http://10.0.2.2:3000/img/users/${userInfo['coverPic']}'
-                                  //       // )
-
-                                  //       //https://pm1.narvii.com/8140/0fdca4b85e6cb881f592dda7294488878bde9541r1-750-250v2_hq.jpg
-
-                                  //       SharedPref.getCoverPic() == null ? 
-                                  //       Image.network(
-                                  //         '$IMGURL${userInfo['coverPic']}',
-                                  //         width: double.infinity,
-                                  //         fit: BoxFit.cover,
-                                  //       ) : Image.file(
-                                  //         File(SharedPref.getCoverPic()!),
-                                  //         width: double.infinity,
-                                  //         fit: BoxFit.cover
-                                  //       ),
-                                        
-
-                                  //       // _coverImage == null ? Image.network(
-                                  //       //   '$IMGURL${userInfo['coverPic']}',
-                                  //       //   width: double.infinity,
-                                  //       //   fit: BoxFit.cover,
-                                  //       // ) : Image.file(
-                                  //       //   _coverImage,
-                                  //       //   width: double.infinity,
-                                  //       //   fit: BoxFit.cover
-                                  //       // ),
+                                  //       child: Container(
+                                  //         color: Colors.grey[300],
+                                  //       )                                  
                                   //     ),
                                   //   ),
-                                  //   if(_coverImage != null)
+                                                                      
+                                  //   if(userInfo['coverPic'] != null)
                                   //     ConstrainedBox(
                                   //       constraints: const BoxConstraints(
                                   //         minHeight: 120,
@@ -567,18 +398,8 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                                   //           topRight: Radius.circular(6)
                                   //         ),
                                   //         child: 
-                                  //         // Image.network(
-                                  //         //   'https://i.pinimg.com/originals/30/5c/5a/305c5a457807ba421ed67495c93198d3.jpg'
-                                  //         // )
-                                  //         // Image.network(
-                                  //         //   'http://10.0.2.2:3000/img/users/${userInfo['coverPic']}'
-                                  //         // )
-
-                                  //         //https://pm1.narvii.com/8140/0fdca4b85e6cb881f592dda7294488878bde9541r1-750-250v2_hq.jpg
-
-
                                   //         _coverImage == null ? Image.network(
-                                  //           '$IMGURL${userInfo['coverPic']}',
+                                  //           '${userInfo['coverPic']}',
                                   //           width: double.infinity,
                                   //           fit: BoxFit.cover,
                                   //         ) : Image.file(
@@ -589,9 +410,7 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                                   //       ),
                                   //     ),
 
-                                  // ---------- End shared pref ----------
-                                    
-                                    if(userInfo['coverPic'] != null)
+                                    if(userInfo['coverPic'] == 'default-cover-pic.png')
                                       ConstrainedBox(
                                         constraints: const BoxConstraints(
                                           minHeight: 120,
@@ -604,18 +423,8 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                                             topRight: Radius.circular(6)
                                           ),
                                           child: 
-                                          // Image.network(
-                                          //   'https://i.pinimg.com/originals/30/5c/5a/305c5a457807ba421ed67495c93198d3.jpg'
-                                          // )
-                                          // Image.network(
-                                          //   'http://10.0.2.2:3000/img/users/${userInfo['coverPic']}'
-                                          // )
-
-                                          //https://pm1.narvii.com/8140/0fdca4b85e6cb881f592dda7294488878bde9541r1-750-250v2_hq.jpg
-
-
-                                          _coverImage == null ? Image.network(
-                                            '$IMGURL${userInfo['coverPic']}',
+                                          _coverImage == null ? Image.asset(
+                                            'assets/images/cover-img-placeholder.jpg',
                                             width: double.infinity,
                                             fit: BoxFit.cover,
                                           ) : Image.file(
@@ -625,6 +434,31 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                                           ),
                                         ),
                                       ),
+
+                                      if(userInfo['coverPic'] != 'default-cover-pic.png')
+                                        ConstrainedBox(
+                                          constraints: const BoxConstraints(
+                                            minHeight: 120,
+                                            maxHeight: 150,
+                                            maxWidth: double.infinity
+                                          ),
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(6), 
+                                              topRight: Radius.circular(6)
+                                            ),
+                                            child: 
+                                            _coverImage == null ? Image.network(
+                                              '${userInfo['coverPic']}',
+                                              width: double.infinity,
+                                              fit: BoxFit.cover,
+                                            ) : Image.file(
+                                              _coverImage,
+                                              width: double.infinity,
+                                              fit: BoxFit.cover
+                                            ),
+                                          ),
+                                        ),
 
                                   Positioned(
                                     right: 0,
@@ -675,69 +509,37 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                                       child: Column(
                                         children: [
 
-                                          // ---------- shared pref ----------
-
-                                          // if(userInfo['profilePic'] != null && _profileImage == null)
-                                          //   CircleAvatar(
-                                          //     radius: 50,
-                                          //     backgroundColor: Colors.white,
-                                          //     child: CircleAvatar(
-                                          //       radius: 47,
-                                          //       backgroundImage: 
-
-                                          //       SharedPref.getProfilePic() == null ? NetworkImage(
-                                          //         '$IMGURL${userInfo['profilePic']}'
-                                          //       ) as ImageProvider : 
-                                          //       FileImage(
-                                          //         File(SharedPref.getProfilePic()!),
-                                          //         // width: double.infinity,
-                                          //         // fit: BoxFit.cover
-                                          //       ),
-
-                                          //     ),
-                                          //   ),
-                                          // if(_profileImage != null)
-                                          //   CircleAvatar(
-                                          //     radius: 50,
-                                          //     backgroundColor: Colors.white,
-                                          //     child: CircleAvatar(
-                                          //       radius: 47,
-                                          //       backgroundImage: 
-                                          //       // NetworkImage(
-                                          //       //   'http://10.0.2.2:3000/img/users/userPP-615eeaa924d6661b75313366-1633613125657.jpg'
-                                          //       // )
-                                          //       // https://cdna.artstation.com/p/assets/images/images/031/257/402/large/yukisho-art-vector-6.jpg?1603101769&dl=10
-
-                                          //       _profileImage == null ? NetworkImage(
-                                          //         '$IMGURL${userInfo['profilePic']}'
-                                          //       ) as ImageProvider : FileImage(
-                                          //         _profileImage
-                                          //       ),
-
-                                          //     ),
-                                          //   ),
-
-                                          // ---------- End shared pref ----------
-
+                                          if(userInfo['profilePic'] == 'default-profile-pic.jpg')
                                             CircleAvatar(
                                               radius: 50,
                                               backgroundColor: Colors.white,
                                               child: CircleAvatar(
                                                 radius: 47,
                                                 backgroundImage: 
-                                                // NetworkImage(
-                                                //   'http://10.0.2.2:3000/img/users/userPP-615eeaa924d6661b75313366-1633613125657.jpg'
-                                                // )
-                                                // https://cdna.artstation.com/p/assets/images/images/031/257/402/large/yukisho-art-vector-6.jpg?1603101769&dl=10
-
-                                                _profileImage == null ? NetworkImage(
-                                                  '$IMGURL${userInfo['profilePic']}'
+                                                _profileImage == null ? AssetImage(
+                                                  'assets/images/profile-img-placeholder.jpg'
                                                 ) as ImageProvider : FileImage(
                                                   _profileImage
                                                 ),
 
                                               ),
                                             ),
+
+                                            if(userInfo['profilePic'] != 'default-profile-pic.jpg')
+                                              CircleAvatar(
+                                                radius: 50,
+                                                backgroundColor: Colors.white,
+                                                child: CircleAvatar(
+                                                  radius: 47,
+                                                  backgroundImage: 
+                                                  _profileImage == null ? NetworkImage(
+                                                    '${userInfo['profilePic']}'
+                                                  ) as ImageProvider : FileImage(
+                                                    _profileImage
+                                                  ),
+
+                                                ),
+                                              ),
 
                                           SizedBox(height: 4.0,),
                                           Text(
@@ -790,7 +592,7 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                                           ),
                                         ),
                                         onTap: () {
-                                          _updateNameAlert();
+                                          _updateNameAlert(userInfo['name']);
                                         },
                                       ),
                                     ),
@@ -941,19 +743,6 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                             ],
                           ),  
                           SizedBox(height: 8.0,), 
-                          // if(_pagingController.itemList == null)
-                          //   Padding(
-                          //     padding: const EdgeInsets.only(top: 16.0),
-                          //     child: Center(
-                          //       child: Text(
-                          //         "You have't add any post yet!",
-                          //         style: TextStyle(
-                          //           color: Colors.black,
-                          //           fontSize: 20
-                          //         ),
-                          //       ) 
-                          //     ),
-                          //   ),
                             PagedListView<int, dynamic>.separated(
                               pagingController: _pagingController,
                               physics: NeverScrollableScrollPhysics(),
@@ -983,20 +772,6 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
 
                                   }
 
-                                  // return Post(
-                                  //   id: item['_id'],
-                                  //   name: item['user'][0]['name'],
-                                  //   profilePic: '$IMGURL${item['user'][0]['profilePic']}', //'https://cdna.artstation.com/p/assets/images/images/031/257/402/large/yukisho-art-vector-6.jpg?1603101769&dl=10'
-                                  //   desc: item['description'],
-                                  //   postImg: item['postImages'], //$IMGURL${allPosts[index]['postImages']}
-                                  //   userId: item['user'][0]['_id'],
-                                  //   date: item['createdAt'], //formattedDate,
-                                  //   reactionCount: item['reactions'][0]['reactionCount'],
-                                  //   commentCount: item['commentCount'][0]['commentCount'],
-                                  //   isUserPost: false,
-                                  //   isReacted: isReacted,
-                                  // );
-
                                   if(_pagingController.itemList == null) {
 
                                     return Padding(
@@ -1017,7 +792,7 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                                   return Post(
                                     id: item['_id'],
                                     name: userInfo['name'],
-                                    profilePic: '$IMGURL${userInfo['profilePic']}',
+                                    profilePic: '${userInfo['profilePic']}',
                                     desc: item['description'],
                                     postImg: item['postImages'],
                                     userId: item['user'],
@@ -1066,90 +841,6 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                               ),
                               separatorBuilder: (context, index) => const Divider(height: 0,),
                             ),
-                          // ListView.builder(
-                          //   itemCount: userPosts.length,
-                          //   physics: NeverScrollableScrollPhysics(),
-                          //   shrinkWrap: true,
-                          //   itemBuilder: (context, index) {
-
-                          //     bool isReacted = false;
-    
-                          //     print('bitch profile ${userReactedPosts}');
-
-                          //     for(int i = 0; i < userReactedPosts.length; i++) {
-                              
-                          //       // print('reacted posts ${reactedPosts[i]['post']}');
-
-                          //       if(userReactedPosts[i]['post'] == userPosts[index]['_id']) {
-                                
-                          //         isReacted = true;
-
-                          //         print('reacted shit profile ${userPosts[index]['_id']}');
-
-                          //       }
-
-                          //     }
-                            
-                            
-                          //     return Post(
-                          //       id: userPosts[index]['_id'],
-                          //       name: userInfo['name'],
-                          //       profilePic: '$IMGURL${userInfo['profilePic']}',
-                          //       desc: userPosts[index]['description'],
-                          //       postImg: userPosts[index]['postImages'],
-                          //       userId: userPosts[index]['_id'],
-                          //       date: userPosts[index]['createdAt'],
-                          //       reactionCount: userPosts[index]['reactions'][0]['reactionCount'],
-                          //       commentCount: userPosts[index]['commentCount'][0]['commentCount'],
-                          //       isUserPost: true,
-                          //       isReacted: isReacted,
-                          //     );
-
-                          //     // var date = DateTime.parse(userPosts[index]['timestamp'].toDate().toString());
-                          //     // var formattedDate = DateFormat.yMMMd().add_jm().format(date);
-
-                          //     // if(userPosts[index]['postImg'] == null) {
-                              
-                          //     //   return Post(
-                          //     //     isUserPost: true,
-                          //     //     id: userPosts[index]['postId'], //data.postId, 
-                          //     //     name: userPosts[index]['name'],
-                          //     //     profilePic: userInfo['profilePic'],
-                          //     //     desc: userPosts[index]['desc'],
-                          //     //     date: formattedDate.toString(),
-                          //     //     userId: userPosts[index]['userId'],
-                          //     //     reactionCount: userPosts[index]['reactionCount'],
-                          //     //   );
-
-
-                          //     // }
-
-                          //     // return Post(
-                          //     //   isUserPost: true,
-                          //     //   id: userPosts[index]['postId'], 
-                          //     //   name: userPosts[index]['name'],
-                          //     //   profilePic: userInfo['profilePic'],
-                          //     //   desc: userPosts[index]['desc'],
-                          //     //   postImg: userPosts[index]['postImg'],
-                          //     //   date: formattedDate.toString(),
-                          //     //   userId: userPosts[index]['userId'],
-                          //     //   reactionCount: userPosts[index]['reactionCount'],
-                          //     // );
-
-                          //   }
-                          // )
-                            //  Padding(
-                            //   padding: const EdgeInsets.only(top: 16.0),
-                            //   child: Center(
-                            //     child: Text(
-                            //       "You have't add any post yet!",
-                            //       style: TextStyle(
-                            //         color: Colors.black,
-                            //         fontSize: 20
-                            //       ),
-                            //     )
-                            //   ),
-                            // ),
                         ],
                       ),
                     )

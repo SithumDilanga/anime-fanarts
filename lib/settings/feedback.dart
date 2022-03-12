@@ -1,9 +1,7 @@
 import 'package:anime_fanarts/services/firestore_service.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class GiveFeedback extends StatelessWidget {
   GiveFeedback({ Key? key }) : super(key: key);
@@ -83,28 +81,6 @@ class GiveFeedback extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 124.0,),
-              // Linkify(
-              //   onOpen: (link) async {
-              //     if (await canLaunch(link.url)) {
-              //       await launch(link.url);
-              //     } else {
-              //       throw 'Could not launch $link';
-              //     }
-              //   },
-              //   text: 'If you would like to give us more info about your feedback please be kind enough to fill this feedaback form.',
-              //   style: TextStyle(
-              //     fontSize: 16.0, 
-              //     color: Colors.black,
-              //     fontWeight: FontWeight.normal,
-              //     height: 1.3
-              //   ),
-              //   linkStyle: TextStyle(
-              //     color: ColorTheme.primary,
-              //     fontSize: 16,
-              //     fontWeight: FontWeight.w500,
-              //   ),
-              // ),
-              // SizedBox(height: 32.0,),
               Container(
                 width: double.infinity,
                 child: ElevatedButton(

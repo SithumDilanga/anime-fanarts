@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:anime_fanarts/profile/profile.dart';
 import 'package:anime_fanarts/services/firestore_service.dart';
 import 'package:anime_fanarts/services/get_create_posts.dart';
 import 'package:anime_fanarts/settings/guidelines.dart';
@@ -226,9 +225,6 @@ class _AdminAddNewArtState extends State<AdminAddNewArt> {
                     ],
                   ),
                   
-                  // Image.file(
-                  //   _postImages
-                  // ),
                 if(_postImages!.isEmpty)
                   Image.asset(
                     'assets/images/placeholder-image.png'
@@ -412,26 +408,6 @@ class _AdminAddNewArtState extends State<AdminAddNewArt> {
                                         ),
                                       ),
                                     ),
-                                  // SizedBox(width: 4.0,),
-                                  // Container(
-                                  //   decoration: BoxDecoration(
-                                  //     color: Colors.amber[600],
-                                  //     borderRadius: BorderRadius.circular(32)
-                                  //   ),
-                                  //   child: Padding(
-                                  //     padding: const EdgeInsets.symmetric(
-                                  //       horizontal: 8.0,
-                                  //       vertical: 4.0
-                                  //     ),
-                                  //     child: Text(
-                                  //       'gojo',
-                                  //       style: TextStyle(
-                                  //         fontSize: 11,
-                                  //         color: Colors.white
-                                  //       ),
-                                  //     ),
-                                  //   ),
-                                  // )
                                 ],
                               ),
                             ),
@@ -555,10 +531,6 @@ class _AdminAddNewArtState extends State<AdminAddNewArt> {
                             ),
                           ),
                           onPressed: () {
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(builder: (context) => const AdminAddNewArt()),
-                            // );
 
                             if(_postImages!.length > 3) {
                               Fluttertoast.showToast(

@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:anime_fanarts/comment_section.dart';
 import 'package:anime_fanarts/img_fullscreen.dart';
 import 'package:anime_fanarts/models/new_post_refresher.dart';
@@ -14,23 +12,11 @@ import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/date_time_formatter.dart';
 import 'package:anime_fanarts/utils/route_trans_anim.dart';
 import 'package:anime_fanarts/utils/urls.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-// import 'package:gritie_new_app/utils/loading_animation.dart';
-// import 'package:gritie_new_app/utils/route_trans_anim.dart';
-// import 'package:gritie_new_app/services/shared_pref.dart';
-// // import 'package:gritie_new_app/gritie_features/user_profile.dart';
-// import 'package:gritie_new_app/services/database.dart';
-// import 'package:gritie_new_app/utils/initialLetters.dart';
-import 'package:readmore/readmore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:animations/animations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Post extends StatefulWidget {
@@ -126,34 +112,6 @@ class _PostState extends State<Post> {
 
                 });
 
-                // DatabaseService(uid: user.uid).updateUserName(
-                //   name: _changeName.text
-                // ).onError((error, stackTrace) {
-
-                //   Fluttertoast.showToast(
-                //     msg: "Error Occured : $error",
-                //     toastLength: Toast.LENGTH_LONG,
-                //     gravity: ToastGravity.BOTTOM,
-                //     fontSize: 16.0
-                //   );
-
-                // }).whenComplete(() {
-
-                //   Fluttertoast.showToast(
-                //     msg: "Your public name changed to ${_changeName.text}",
-                //     toastLength: Toast.LENGTH_LONG,
-                //     gravity: ToastGravity.BOTTOM,
-                //     fontSize: 16.0
-                //   );
-
-                //   Navigator.of(context).pop();
-
-                //   setState(() {
-                    
-                //   });
-
-                // });
-
               },  
             ),
           ],
@@ -247,7 +205,9 @@ class _PostState extends State<Post> {
                           CircleAvatar(
                             radius: 20,
                             backgroundColor: Colors.blueGrey[700],
-                            backgroundImage: NetworkImage(
+                            backgroundImage: widget.profilePic == 'default-profile-pic.jpg' ? AssetImage(
+                              'assets/images/profile-img-placeholder.jpg'
+                            ) as ImageProvider : NetworkImage(
                               '${widget.profilePic}'
                             ),
                           ),
@@ -255,15 +215,13 @@ class _PostState extends State<Post> {
                           GestureDetector(
                             child: CircleAvatar(
                               radius: 20,
-                              backgroundImage: NetworkImage(
+                              backgroundImage: widget.profilePic == 'default-profile-pic.jpg' ? AssetImage(
+                                'assets/images/profile-img-placeholder.jpg'
+                              ) as ImageProvider : NetworkImage(
                                 '${widget.profilePic}'
                               ),
                             ),
                             onTap: () {
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(builder: (context) => UserProfile()),
-                              // );
                               Navigator.of(context).push(
                                 RouteTransAnim().createRoute(1.0, .0, UsersProfile(name: widget.name, userId: widget.userId,))
                               );
@@ -408,46 +366,8 @@ class _PostState extends State<Post> {
                         ),
                         value: 0
                       ),
-                      // PopupMenuItem(
-                      //   child: Row(
-                      //     children: [
-                      //       Icon(
-                      //         Icons.share,
-                      //         color: Colors.black,
-                      //       ),
-                      //       SizedBox(width: 8.0,),
-                      //       Text(
-                      //         'Share',
-                      //       ),
-                      //     ],
-                      //   ),
-                      //   value: 1
-                      // ),
-                      // PopupMenuItem(
-                      //   child: Row(
-                      //     children: [
-                      //       Icon(
-                      //         Icons.download_rounded,
-                      //         color: Colors.black,
-                      //       ),
-                      //       SizedBox(width: 8.0,),
-                      //       Text(
-                      //         'Save',
-                      //       ),
-                      //     ],
-                      //   ),
-                      //   value: 2
-                      // ),
                     ]
                     )
-                    // IconButton(
-                    //   icon: Icon(
-                    //     Icons.more_horiz_rounded,
-                    //     color: Colors.amber[600],
-                    //   ),
-                    //   onPressed: () { 
-                    //   }, 
-                    // )
                 ],
               ),
               if(widget.desc!.isNotEmpty && widget.userId == '621283374da8dc7d72b975bd')
@@ -618,37 +538,11 @@ class _PostState extends State<Post> {
                               ),
                               child: CachedNetworkImage(
                                 // imageUrl: imageList[itemIndex].toString(),
-                                imageUrl: '$IMGURL${widget.postImg![itemIndex]}',
+                                imageUrl: '${widget.postImg![itemIndex]}',
                                 width: double.infinity,
                                 fit: BoxFit.cover,
                                 placeholder: (context, url) => imagePlaceholder(),
                               ),
-                              // child: OpenContainer(
-                              //   openColor: Colors.pink,
-                              //   transitionType: ContainerTransitionType.fade,
-                              //   closedBuilder: (BuildContext _, VoidCallback openContainer){
-                              //     return CachedNetworkImage(
-                              //       // imageUrl: imageList[itemIndex].toString(),
-                              //       imageUrl: '$IMGURL${widget.postImg![itemIndex]}',
-                              //       width: double.infinity,
-                              //       fit: BoxFit.cover,
-                              //       placeholder: (context, url) => imagePlaceholder(),
-                              //     );
-                              //   },
-                              //   openBuilder: (BuildContext _, VoidCallback openContainer){
-                              //     return ImgFullScreen(
-                              //       imageList: widget.postImg, 
-                              //       selectedimageIndex: itemIndex, 
-                              //       imgLink: widget.postImg![itemIndex],
-                              //     );
-                              //   }
-                              //   // child: CachedNetworkImage(
-                              //   //   imageUrl: imageList[itemIndex].toString(),
-                              //   //   width: double.infinity,
-                              //   //   fit: BoxFit.cover,
-                              //   //   placeholder: (context, url) => imagePlaceholder(),
-                              //   // ),
-                              // ),
                             ),
                             Positioned.fill(
                               top: 5,
@@ -660,10 +554,6 @@ class _PostState extends State<Post> {
                               
                                   if(index == itemIndex) {
                               
-                                    // return Icon(
-                                    //   Icons.circle,
-                                    //   color: Colors.blueAccent,
-                                    // );
                                     return Stack(
                                       children: [
                                         Text(
@@ -727,30 +617,6 @@ class _PostState extends State<Post> {
                   ),
                 ),
 
-                // GestureDetector(
-                //   child: ConstrainedBox(
-                //     constraints: const BoxConstraints(
-                //       minWidth: 70,
-                //       minHeight: 70,
-                //       maxWidth: double.infinity,
-                //       maxHeight: 390,
-                //     ),
-                //     child: Container(
-                //       child: CachedNetworkImage(
-                //         imageUrl: widget.postImg!,
-                //         width: double.infinity,
-                //         fit: BoxFit.cover,
-                //         placeholder: (context, url) => imagePlaceholder(),
-                //       ),
-                //     ),
-                //   ),
-                //   onTap: () {
-                //     Navigator.push(
-                //       context,
-                //       MaterialPageRoute(builder: (context) => ImgFullScreen(imgLink: widget.postImg,)),
-                //     );
-                //   },
-                // ),
               Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 8.0,
