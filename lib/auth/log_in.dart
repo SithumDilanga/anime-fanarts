@@ -246,7 +246,7 @@ class _LoginState extends State<Login> {
 
                                       Navigator.pushAndRemoveUntil(
                                         context,
-                                        MaterialPageRoute(builder: (context) => MyApp()),
+                                        MaterialPageRoute(builder: (context) => MyApp(selectedPage: 0,)),
                                         (Route<dynamic> route) => false,
                                       )
 

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:anime_fanarts/auth/sign_up.dart';
 import 'package:anime_fanarts/explore.dart';
+import 'package:anime_fanarts/intro_screen.dart';
 import 'package:anime_fanarts/models/new_post_refresher.dart';
 import 'package:anime_fanarts/models/profile_user.dart';
 import 'package:anime_fanarts/profile/profile.dart';
@@ -32,11 +33,13 @@ void main() async {
   // final bearerToken = await SecureStorage.getToken();
   const _storage = FlutterSecureStorage();
 
+  bool isWelcomed = SharedPref.getIsWelcomed();
+
   try {
     final bearerToken = await SecureStorage.getToken();
     
     if(bearerToken != null) {
-      _defaultHome = new MyApp();
+      _defaultHome = new MyApp(selectedPage: 0,);
     }
   // ignore: nullable_type_in_catch_clause
   } on PlatformException catch (e) {
@@ -61,7 +64,7 @@ void main() async {
         theme: ThemeData(
           scaffoldBackgroundColor: Color(0xffF0F0F0),
         ),
-        home: _defaultHome //MyApp()
+        home: isWelcomed ? _defaultHome : IntroScreen() //MyApp()
       ),
     ));
     }, (error, stackTrace) {
@@ -71,7 +74,10 @@ void main() async {
 }
 
 class MyApp extends StatefulWidget {
-  
+
+  final int selectedPage;
+
+  MyApp({Key? key, required this.selectedPage}) : super(key: key);
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -83,7 +89,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
 
     return DefaultTabController(
-        initialIndex: 0,
+        initialIndex: widget.selectedPage,
         length: 2,
         child: Scaffold(
           appBar: AppBar(

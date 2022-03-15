@@ -63,6 +63,7 @@ dependencies:
   permission_handler: ^8.3.0
   flutter_native_timezone: ^2.0.0
   image_cropper: ^1.4.1
+  introduction_screen: ^3.0.0
   
 
 dev_dependencies:

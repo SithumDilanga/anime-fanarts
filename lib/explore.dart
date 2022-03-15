@@ -31,7 +31,7 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin<Ex
     });
   }
   
-  static const _pageSize = 9;
+  static const _pageSize = 4;
 
   final PagingController<int, dynamic> _pagingController =
       PagingController(firstPageKey: 1);

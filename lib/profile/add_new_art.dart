@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:anime_fanarts/main.dart';
+import 'package:anime_fanarts/profile/profile.dart';
 import 'package:anime_fanarts/services/firestore_service.dart';
 import 'package:anime_fanarts/services/get_create_posts.dart';
 import 'package:anime_fanarts/settings/guidelines.dart';
@@ -134,6 +136,72 @@ class _AddNewArtState extends State<AddNewArt> {
                 
 
               },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // post add confirmation Alert Dialog
+  Future<void> _addPostAlert(BuildContext context) async {
+
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+
+        var isNewPostAdded = Provider.of<NewPostFresher>(context);
+
+        return AlertDialog(
+          title: const Text('Are you sure want to add this post ?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                'CANCEL',
+                style: TextStyle(
+                  color: ColorTheme.primary,
+                  fontSize: 18.0
+                ),
+              ),
+              style: ButtonStyle(
+                overlayColor: MaterialStateProperty.all(Colors.blue[50]),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              }
+            ),
+            TextButton(
+              child: Text(
+                'YES',
+                style: TextStyle(
+                  color: ColorTheme.primary,
+                  fontSize: 18.0
+                ),
+              ),
+              style: ButtonStyle(
+                overlayColor: MaterialStateProperty.all(Colors.blue[50]),
+              ),
+              onPressed: () {
+
+                _getCreatePosts.createPost(
+                  postImageFile: _postImages,
+                  desc: descTextController.text,
+                  tags: tagList
+                ).whenComplete(() {
+
+                  isNewPostAdded.updateIsPostAdded(true);
+                  
+                  Navigator.pop(context);
+
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => MyApp(selectedPage: 1)),
+                    (Route<dynamic> route) => false,
+                  );
+
+                });
+
+              },  
             ),
           ],
         );
@@ -504,17 +572,7 @@ class _AddNewArtState extends State<AddNewArt> {
 
                               if(_postImages!.isNotEmpty) {
 
-                                _getCreatePosts.createPost(
-                                  postImageFile: _postImages,
-                                  desc: descTextController.text,
-                                  tags: tagList
-                                ).whenComplete(() {
-
-                                  Navigator.pop(context);
-
-                                  isNewPostAdded.updateIsPostAdded(true);
-
-                                });
+                                _addPostAlert(context);
 
                               } else {
 

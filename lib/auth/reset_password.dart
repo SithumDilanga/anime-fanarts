@@ -233,7 +233,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => MyApp()
+                                builder: (context) => MyApp(selectedPage: 0)
                               ),
                             );
         

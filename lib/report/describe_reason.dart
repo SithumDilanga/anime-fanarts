@@ -169,7 +169,7 @@ class _DescribeReasonState extends State<DescribeReason> {
 
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => MyApp()),
+                            MaterialPageRoute(builder: (context) => MyApp(selectedPage: 0)),
                           );
 
                         });

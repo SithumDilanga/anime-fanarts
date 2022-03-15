@@ -142,6 +142,66 @@ class _AdminAddNewArtState extends State<AdminAddNewArt> {
       },
     );
   }
+
+  // post add confirmation Alert Dialog
+  Future<void> _addPostAlert(BuildContext context) async {
+
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+
+        var isNewPostAdded = Provider.of<NewPostFresher>(context);
+
+        return AlertDialog(
+          title: const Text('Are you sure want to add this post ?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                'CANCEL',
+                style: TextStyle(
+                  color: ColorTheme.primary,
+                  fontSize: 18.0
+                ),
+              ),
+              style: ButtonStyle(
+                overlayColor: MaterialStateProperty.all(Colors.blue[50]),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              }
+            ),
+            TextButton(
+              child: Text(
+                'YES',
+                style: TextStyle(
+                  color: ColorTheme.primary,
+                  fontSize: 18.0
+                ),
+              ),
+              style: ButtonStyle(
+                overlayColor: MaterialStateProperty.all(Colors.blue[50]),
+              ),
+              onPressed: () {
+
+                _getCreatePosts.createPost(
+                  postImageFile: _postImages,
+                  desc: '${descTextController.text}',
+                  tags: tagList,
+                ).whenComplete(() {
+                
+                  Navigator.pop(context);
+  
+                  isNewPostAdded.updateIsPostAdded(true);
+  
+                });
+
+              },  
+            ),
+          ],
+        );
+      },
+    );
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -548,17 +608,7 @@ class _AdminAddNewArtState extends State<AdminAddNewArt> {
 
                                 if(userNameTextController.text.isEmpty && userIdTextController.text.isEmpty) {
 
-                                  _getCreatePosts.createPost(
-                                    postImageFile: _postImages,
-                                    desc: '${descTextController.text}',
-                                    tags: tagList,
-                                  ).whenComplete(() {
-                                  
-                                    Navigator.pop(context);
-  
-                                    isNewPostAdded.updateIsPostAdded(true);
-  
-                                  });
+                                  _addPostAlert(context);
 
                                 } else {
 
