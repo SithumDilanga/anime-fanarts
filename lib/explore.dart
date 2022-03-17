@@ -31,7 +31,7 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin<Ex
     });
   }
   
-  static const _pageSize = 4;
+  static const _pageSize = 15;
 
   final PagingController<int, dynamic> _pagingController =
       PagingController(firstPageKey: 1);
@@ -90,10 +90,8 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin<Ex
       setState(() {
         //TODO: reaction not updating issue. this line is the issue
         reactedPosts = reactedPosts + allPostsData['data']['reacted'];
-        print('reactedPosts2 $reactedPosts');
+        print('reactedPosts2bitch $reactedPosts');
       });
-
-      print('reactedPosts1 $allPostsData');
 
     } catch (error) {
       _pagingController.error = error;

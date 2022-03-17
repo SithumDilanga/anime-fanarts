@@ -43,7 +43,7 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
   ProfileReq _profileReq = ProfileReq();
   SharedPref _sharedPref = SharedPref();
 
-   static const _pageSize = 2;
+   static const _pageSize = 8;
    List reactedPosts = [];
    List allPosts = [];
 
@@ -75,20 +75,20 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
   void _fetchPage(int pageKey) async {
 
     final String currentTimeZone = await FlutterNativeTimezone.getLocalTimezone();
-    print('nativetimezone $currentTimeZone');
-
-    print('pageKeyProfile $pageKey');
-    print('_pageSizeProfile $_pageSize');
 
     final allPostsData = await _profileReq.getUserPosts(
       pageKey,
       _pageSize
     );
 
-     try {
+     try {  
+
       final newItems = await allPostsData['data']['posts'];
+      print('nativetimezoneProfile ${allPostsData['data']['reacted']}');
+      print('wtf ${reactedPosts + allPostsData['data']['reacted']}');
 
       final isLastPage = newItems.length < _pageSize;
+
       if (isLastPage) {
         _pagingController.appendLastPage(newItems);
       } else {
@@ -98,12 +98,11 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
       }
 
       setState(() {
+        print('yoyo! $reactedPosts');
         reactedPosts = reactedPosts + allPostsData['data']['reacted'];
-        allPosts = allPostsData;
-        print('reactedPosts2 $reactedPosts');
+        print('yoyo!2 $reactedPosts');
+        // allPosts = allPostsData;
       });
-
-      print('reactedPosts1 $allPostsData');
 
     } catch (error) {
       _pagingController.error = error;
@@ -322,8 +321,12 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
 
     print('isNewPostAdded ${isNewPostAdded.isPostAdded} ${isNewPostAdded.isPostDeleted}');
 
-    if(isNewPostAdded.isPostAdded || isNewPostAdded.isPostDeleted) {
-      _pagingController.refresh();
+    if(isNewPostAdded.isPostDeleted) {
+      // _pagingController.refresh();
+      setState(() {
+        
+      });
+      // isNewPostAdded.updateIsPostDeleted(false);
     }
 
     return RefreshIndicator(
@@ -756,7 +759,7 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                                   bool isReacted = false;
 
                                   // print('bitch ${snapshot.data['data']['reacted']}');
-                                  print('reactedPosts $reactedNewPosts');
+                                  print('reactedPostsProfile $reactedPosts');
 
                                   for(int i = 0; i < reactedNewPosts.length; i++) {
                                   
@@ -766,7 +769,7 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                                     
                                       isReacted = true;
 
-                                      print('reacted shit ${item['_id']}');
+                                      print('reacted shitProfile ${item['_id']}');
 
                                     }
 

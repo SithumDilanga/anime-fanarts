@@ -20,6 +20,7 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
 
+
   // AuthService _authService = AuthService();
 
   // text fields
@@ -220,6 +221,18 @@ class _LoginState extends State<Login> {
                                   emailErrorText == null &&
                                   passwordErrorText == null
                                 ) ? () async {
+
+                                  // final snackBar = SnackBar(
+                                  //   content: const Text('Yay! A SnackBar!'),
+                                  //   action: SnackBarAction(
+                                  //     label: 'Undo',
+                                  //     onPressed: () {
+                                  //       // Some code to undo the change.
+                                  //     },
+                                  //   ),
+                                  // );
+
+                                  // ScaffoldMessenger.of(context).showSnackBar(snackBar);
                                   
                                     if(email.isEmpty || password.isEmpty) {
                                     
@@ -238,21 +251,45 @@ class _LoginState extends State<Login> {
                                           );
   
                                     } else {
+
+                                      final snackBar = SnackBar(
+                                        content: Row(
+                                          children: [
+                                            Container(
+                                              width: 20,
+                                              height: 20,
+                                              child: CircularProgressIndicator(
+                                                strokeWidth: 2,
+                                              ),
+                                            ),
+                                            SizedBox(width: 16.0,),
+                                            Text('Logging in...'),
+                                          ],
+                                        ),
+                                        duration: Duration(days: 1),
+                                      );
+
+                                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
                                   
                                     _authReq.loginUser(userLogin: UserLogin(
                                       email: email, 
                                       password: password
-                                    )).then((value) => {
+                                    )).then((value) {
+
+                                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
                                       Navigator.pushAndRemoveUntil(
                                         context,
                                         MaterialPageRoute(builder: (context) => MyApp(selectedPage: 0,)),
                                         (Route<dynamic> route) => false,
-                                      )
+                                      );
 
                                     }).onError((error, stackTrace) {
-                                      print('yoyo $error');
+
+                                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+
                                       return Future.error(error!);
+
                                     });
                                     // .whenComplete(() => {
                                     //   Navigator.push(

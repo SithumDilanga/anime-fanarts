@@ -106,9 +106,9 @@ class _PostState extends State<Post> {
 
                 _getCreatePosts.deletePost(widget.id).whenComplete(() {
 
+                  isNewPostAdded.updateIsPostDeleted(true);
                   Navigator.pop(context);
 
-                  isNewPostAdded.updateIsPostDeleted(true);
 
                 });
 

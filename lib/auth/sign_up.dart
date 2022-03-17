@@ -7,6 +7,7 @@ import 'package:anime_fanarts/utils/route_trans_anim.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -197,6 +198,12 @@ class _SignUpState extends State<SignUp> {
                                 style: TextStyle(
                                   fontSize: 18
                                 ),
+                                inputFormatters: [
+                                  // not letting user add white spaces
+                                  FilteringTextInputFormatter.deny(
+                                    RegExp(r'\s')
+                                  ),
+                                ],
                                 onChanged: (val) {
                                   setState(() {
                                     username = val;
@@ -317,6 +324,25 @@ class _SignUpState extends State<SignUp> {
                                       );
               
                                     } else {
+
+                                      final snackBar = SnackBar(
+                                        content: Row(
+                                          children: [
+                                            Container(
+                                              width: 20,
+                                              height: 20,
+                                              child: CircularProgressIndicator(
+                                                strokeWidth: 2,
+                                              ),
+                                            ),
+                                            SizedBox(width: 16.0,),
+                                            Text('Signing up...'),
+                                          ],
+                                        ),
+                                        duration: Duration(days: 1),
+                                      );
+
+                                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
           
                                       _authReq.signUp(userSignUp: UserSignUp(
                                         name: name,
@@ -324,17 +350,22 @@ class _SignUpState extends State<SignUp> {
                                         email: email,
                                         password: password,
                                         passwordConfirm: confirmPassword
-                                      )).then((value) => {
+                                      )).then((value) {
+
+                                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
                                         Navigator.pushAndRemoveUntil(
                                           context,
                                           MaterialPageRoute(builder: (context) => MyApp(selectedPage: 0)),
                                           (Route<dynamic> route) => false,
-                                        )
+                                        );
 
                                       }).onError((error, stackTrace) {
-                                        print('yoyo $error');
+
+                                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+
                                         return Future.error(error!);
+
                                       });
                                      
                                     }

@@ -37,6 +37,8 @@ class _AddNewArtState extends State<AddNewArt> {
 
   GetCreatePosts _getCreatePosts = GetCreatePosts();
 
+  bool isLoading = false;
+
   Future _pickFanartImage() async {
     
     List<XFile>? pickedFiles = await picker.pickMultiImage(
@@ -152,58 +154,80 @@ class _AddNewArtState extends State<AddNewArt> {
 
         var isNewPostAdded = Provider.of<NewPostFresher>(context);
 
-        return AlertDialog(
-          title: const Text('Are you sure want to add this post ?'),
-          actions: <Widget>[
-            TextButton(
-              child: Text(
-                'CANCEL',
-                style: TextStyle(
-                  color: ColorTheme.primary,
-                  fontSize: 18.0
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: const Text('Are you sure want to add this post ?'),
+              actions: <Widget>[
+                TextButton(
+                  child: Text(
+                    isLoading ? '' : 'CANCEL',
+                    style: TextStyle(
+                      color: ColorTheme.primary,
+                      fontSize: 18.0
+                    ),
+                  ),
+                  style: ButtonStyle(
+                    overlayColor: MaterialStateProperty.all(Colors.blue[50]),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  }
                 ),
-              ),
-              style: ButtonStyle(
-                overlayColor: MaterialStateProperty.all(Colors.blue[50]),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              }
-            ),
-            TextButton(
-              child: Text(
-                'YES',
-                style: TextStyle(
-                  color: ColorTheme.primary,
-                  fontSize: 18.0
+                TextButton(
+                  child: Text(
+                    isLoading ? 'Loading...' : 'YES',
+                    style: TextStyle(
+                      color: ColorTheme.primary,
+                      fontSize: 18.0
+                    ),
+                  ),
+                  style: ButtonStyle(
+                    overlayColor: MaterialStateProperty.all(Colors.blue[50]),
+                  ),
+                  onPressed: () {
+
+                    setState(() {
+                      isLoading = true;
+                    });
+
+                      try {
+
+                        _getCreatePosts.createPost(
+                          postImageFile: _postImages,
+                          desc: descTextController.text,
+                          tags: tagList
+                        ).whenComplete(() {
+
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (context) => MyApp(selectedPage: 1)),
+                            (Route<dynamic> route) => false,
+                          );
+
+                          isNewPostAdded.updateIsPostAdded(true);
+
+                          // setState(() {
+                          //   isLoading = false;
+                          // });
+
+                        });
+                        
+
+                      } catch(e) {
+
+                        Fluttertoast.showToast(
+                          msg: "Error $e",
+                          toastLength: Toast.LENGTH_SHORT,
+                        );
+
+                      }
+
+                  },  
                 ),
-              ),
-              style: ButtonStyle(
-                overlayColor: MaterialStateProperty.all(Colors.blue[50]),
-              ),
-              onPressed: () {
-
-                _getCreatePosts.createPost(
-                  postImageFile: _postImages,
-                  desc: descTextController.text,
-                  tags: tagList
-                ).whenComplete(() {
-
-                  isNewPostAdded.updateIsPostAdded(true);
-                  
-                  Navigator.pop(context);
-
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => MyApp(selectedPage: 1)),
-                    (Route<dynamic> route) => false,
-                  );
-
-                });
-
-              },  
-            ),
-          ],
+              ],
+            );
+          }
         );
       },
     );
@@ -573,6 +597,36 @@ class _AddNewArtState extends State<AddNewArt> {
                               if(_postImages!.isNotEmpty) {
 
                                 _addPostAlert(context);
+
+
+                                // try {
+
+                                //   _getCreatePosts.createPost(
+                                //     postImageFile: _postImages,
+                                //     desc: descTextController.text,
+                                //     tags: tagList
+                                //   );
+
+                                //     Fluttertoast.showToast(
+                                //       msg: "Post added successfully!",
+                                //       toastLength: Toast.LENGTH_SHORT,
+                                //     );
+
+                                //     Navigator.pop(context);
+
+                                //     isNewPostAdded.updateIsPostAdded(true);
+
+
+
+                                // } catch(e) {
+
+                                //   Fluttertoast.showToast(
+                                //     msg: "Error $e",
+                                //     toastLength: Toast.LENGTH_SHORT,
+                                //   );
+
+                                // }
+
 
                               } else {
 
