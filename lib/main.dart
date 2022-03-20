@@ -1,9 +1,13 @@
 import 'dart:async';
 import 'package:anime_fanarts/auth/sign_up.dart';
 import 'package:anime_fanarts/explore.dart';
+import 'package:anime_fanarts/exploreNew.dart';
+import 'package:anime_fanarts/exploreNew2.dart';
+import 'package:anime_fanarts/explore_stack.dart';
 import 'package:anime_fanarts/intro_screen.dart';
 import 'package:anime_fanarts/models/new_post_refresher.dart';
 import 'package:anime_fanarts/models/profile_user.dart';
+import 'package:anime_fanarts/models/reacted_posts.dart';
 import 'package:anime_fanarts/profile/profile.dart';
 import 'package:anime_fanarts/services/secure_storage.dart';
 import 'package:anime_fanarts/services/shared_pref.dart';
@@ -58,6 +62,10 @@ void main() async {
         ChangeNotifierProvider<NewPostFresher>(create: (_) => NewPostFresher(
           isPostAdded: false,
           isPostDeleted: false
+        )),
+        ChangeNotifierProvider<ReactedPosts>(create: (_) => ReactedPosts(
+          reactedPosts: [], 
+          removedReactionList: {}
         )),
       ],
       child: MaterialApp(
@@ -185,7 +193,10 @@ class _MyAppState extends State<MyApp> {
             padding: const EdgeInsets.only(top: 4.0),
             child: TabBarView(
               children: [
+                // ExploreNew(), 
                 Explore(),
+                // ExploreNew2(),
+                // ExplorePage(),
                 Profile()
               ]
             ),

@@ -433,7 +433,7 @@ class ProfileReq {
 
   // ------------ get user by id -------------
 
-  Future getUserById({required String id}) async {
+  Future getUserById({required String id, required int pageKey, required int pageSize}) async {
 
     print('fucking id ' + id.toString());
 
@@ -442,7 +442,7 @@ class ProfileReq {
       final bearerToken = await SecureStorage.getToken() ?? '';
       print('bearer $bearerToken');
       
-      Response userData = await _dio.get('$URL/users/$id', options: Options(
+      Response userData = await _dio.get('$URL/users/$id?page=$pageKey&limit=$pageSize', options: Options(
         headers: {'Authorization': 'Bearer $bearerToken'},
       ));
       print('UserById info: ${userData.data}');
@@ -450,7 +450,7 @@ class ProfileReq {
       print(userData.statusMessage);
       print(userData.headers);
 
-      return userData.data['data']['users'];
+      return userData.data;
 
     } on DioError catch (e) {
 

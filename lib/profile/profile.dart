@@ -43,7 +43,7 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
   ProfileReq _profileReq = ProfileReq();
   SharedPref _sharedPref = SharedPref();
 
-   static const _pageSize = 8;
+   static const _pageSize = 5;
    List reactedPosts = [];
    List allPosts = [];
 
@@ -317,7 +317,7 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
     
     var isNewPostAdded = Provider.of<NewPostFresher>(context);
 
-    dynamic reactedNewPosts = reactedPosts; 
+    // dynamic reactedNewPosts = reactedPosts; 
 
     print('isNewPostAdded ${isNewPostAdded.isPostAdded} ${isNewPostAdded.isPostDeleted}');
 
@@ -761,11 +761,11 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                                   // print('bitch ${snapshot.data['data']['reacted']}');
                                   print('reactedPostsProfile $reactedPosts');
 
-                                  for(int i = 0; i < reactedNewPosts.length; i++) {
+                                  for(int i = 0; i < reactedPosts.length; i++) {
                                   
                                     // print('reacted posts ${reactedPosts[i]['post']}');
 
-                                    if(reactedNewPosts[i]['post'] == item['_id']) {
+                                    if(reactedPosts[i]['post'] == item['_id']) {
                                     
                                       isReacted = true;
 
@@ -804,6 +804,7 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                                     commentCount: item['commentCount'][0]['commentCount'],
                                     isUserPost: true,
                                     isReacted: isReacted,
+                                    // reactedPosts: []
                                   );
 
                                 },

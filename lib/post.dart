@@ -1,6 +1,7 @@
 import 'package:anime_fanarts/comment_section.dart';
 import 'package:anime_fanarts/img_fullscreen.dart';
 import 'package:anime_fanarts/models/new_post_refresher.dart';
+import 'package:anime_fanarts/models/reacted_posts.dart';
 import 'package:anime_fanarts/models/reaction.dart';
 import 'package:anime_fanarts/profile/users_profile.dart';
 import 'package:anime_fanarts/report/select_reason.dart';
@@ -32,14 +33,16 @@ class Post extends StatefulWidget {
   final int? commentCount;
   final bool isUserPost;
   bool isReacted;
+  // final List reactedPosts;
 
-   Post({ Key? key, this.id, this.name, this.profilePic, this.desc = '', this.postImg, this.userId, this.date, this.reactionCount, this.isUserPost = false, this.commentCount, this.isReacted = false}) : super(key: key);
+    // required this.reactedPosts
+   Post({ Key? key, this.id, this.name, this.profilePic, this.desc = '', this.postImg, this.userId, this.date, this.reactionCount, this.isUserPost = false, this.commentCount, this.isReacted = false }) : super(key: key);
 
   @override
   _PostState createState() => _PostState();
 }
 
-class _PostState extends State<Post> {
+class _PostState extends State<Post> with AutomaticKeepAliveClientMixin<Post> {
 
   // bool isReacted = false;
 
@@ -51,6 +54,8 @@ class _PostState extends State<Post> {
   int imageIndex = 0;
   String userReaction = 'default';
   String? secureStorageUserId = '';
+
+  // static bool isReacted = false;
 
   Interactions _interactionsReq = Interactions();
   DateTimeFormatter _dateTimeFormatter = DateTimeFormatter();
@@ -135,6 +140,10 @@ class _PostState extends State<Post> {
     super.initState();
     init();
 
+    // setState(() {
+    //   isReacted = widget.isReacted;
+    // });
+
     if(widget.desc != null) {
 
       if(widget.desc!.contains('adminFeature@')) {
@@ -165,14 +174,17 @@ class _PostState extends State<Post> {
 
   }
 
+  // bool isReacted = false;
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
 
-    String userName = widget.name.toString();
-    print('userName ' + userName);
+    final reactedPosts = Provider.of<ReactedPosts>(context);
 
-    print('postImg ' + '$IMGURL${widget.postImg![0]}');
-    print('images ' + '${widget.postImg![0]}');
+    // if(widget.isReacted) {
+    //   reactedPosts.addPostToReactedList(widget.id);
+    // }
 
     String formattedDate = _dateTimeFormatter.getFormattedDateFromFormattedString(
       value: widget.date, 
@@ -180,7 +192,28 @@ class _PostState extends State<Post> {
       desiredFormat: "yyyy-MM-dd hh:mm a"
     );
 
-    print('widget.isReacted ${widget.isReacted}');
+    // for(int i = 0; i < widget.reactedPosts.length; i++) {
+        
+    //   // print('reacted posts ${reactedPosts[i]['post']}');
+        
+    //   if(widget.reactedPosts[i]['post'] == widget.id) {
+        
+    //     print('reacted shitNew ${widget.reactedPosts[i]['post']}');
+
+    //     setState(() {
+    //       isReacted = true;
+    //     });
+
+        
+    //   }
+        
+    // }
+
+    // for(int j = 0; j < reactedPosts.reactedPosts.length; j++) {
+    //   if(reactedPosts.reactedPosts[j] == widget.isReacted) {
+    //     widget.isReacted = true;
+    //   }
+    // }
 
       return Container(
         padding: EdgeInsets.symmetric(
@@ -671,64 +704,153 @@ class _PostState extends State<Post> {
                       ),
                       Row(
                         children: [
-                          if(userReaction == 'default')
-                            Text(
-                              '${widget.reactionCount}',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 12.0
-                              ),
-                            ),
-                          if(userReaction != 'default')
-                            Text(
-                              '${userReaction == 'add' ? widget.reactionCount! + 1 : 
-                              widget.reactionCount}',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 12.0
-                              ),
-                            ),
-                          widget.isReacted ? 
-                          IconButton(
-                            icon: Icon(
-                              Icons.favorite_rounded,
-                              color: ColorTheme.primary,
-                            ),
-                            onPressed: () {
-
-                              _interactionsReq.createReaction(reaction: Reaction(
-                                post: widget.id, 
-                                reaction: 1
-                              ));
-
-                              setState(() {
-                                widget.isReacted = !widget.isReacted;
-                                userReaction = 'remove';
-                              });
-
-                            }, 
-                          ) : 
-                          IconButton(
-                            icon: Icon(
-                              Icons.favorite_border_rounded,
+                          Text(
+                            '${widget.reactionCount}',
+                            style: TextStyle(
                               color: Colors.black,
+                              fontSize: 12.0
+                            ),
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              widget.isReacted ? Icons.favorite_rounded : Icons.favorite_outline_rounded,
+                              color: widget.isReacted ? ColorTheme.primary : Colors.black,
                             ),
                             onPressed: () {
+
+                              if(!widget.isReacted) {
+                                reactedPosts.addPostToReactedList(widget.id);
+                                reactedPosts.removeFromRemovedReactionList(widget.id);
+                                // setState(() {
+                                  
+                                // });
+                              } else {
+                                reactedPosts.removePostFromReactedList(widget.id);
+                                reactedPosts.addToRemovedReactionList(widget.id);
+                                // setState(() {
+                                  
+                                // });
+                              }
+
+
+
 
                               _interactionsReq.createReaction(reaction: Reaction(
                                 post: widget.id, 
                                 reaction: 1
                               ));
 
-                              setState(() {
-                                widget.isReacted = !widget.isReacted;
-                                userReaction = 'add';
-                              });
+                              // setState(() {
+                              //   widget.isReacted = !widget.isReacted;
+                              //   print('latestIsReacted ${widget.isReacted.toString()}');
+                              //   // userReaction = 'remove';
+                              // });
+
 
                             }, 
-                          ),
+                          )
+
+                          // isReacted ?
+                          // IconButton(
+                          //   icon: Icon(
+                          //     Icons.favorite_rounded,
+                          //     color: ColorTheme.primary,
+                          //   ),
+                          //   onPressed: () {
+
+                          //     _interactionsReq.createReaction(reaction: Reaction(
+                          //       post: widget.id, 
+                          //       reaction: 1
+                          //     ));
+
+                          //     setState(() {
+                          //       isReacted = false;
+                          //       // userReaction = 'remove';
+                          //     });
+
+                          //   }, 
+                          // ) : 
+                          // IconButton(
+                          //   icon: Icon(
+                          //     Icons.favorite_outline_rounded,
+                          //     color: Colors.black,
+                          //   ),
+                          //   onPressed: () {
+
+                          //     _interactionsReq.createReaction(reaction: Reaction(
+                          //       post: widget.id, 
+                          //       reaction: 1
+                          //     ));
+
+                          //     setState(() {
+                          //       isReacted = false;
+                          //       // userReaction = 'remove';
+                          //     });
+
+                          //   }, 
+                          // )
                         ],
                       )
+                      // Row(
+                      //   children: [
+                      //     if(userReaction == 'default')
+                      //       Text(
+                      //         '${widget.reactionCount}',
+                      //         style: TextStyle(
+                      //           color: Colors.black,
+                      //           fontSize: 12.0
+                      //         ),
+                      //       ),
+                      //     if(userReaction != 'default')
+                      //       Text(
+                      //         '${userReaction == 'add' ? widget.reactionCount! + 1 : 
+                      //         widget.reactionCount}',
+                      //         style: TextStyle(
+                      //           color: Colors.black,
+                      //           fontSize: 12.0
+                      //         ),
+                      //       ),
+                      //     widget.isReacted ? 
+                      //     IconButton(
+                      //       icon: Icon(
+                      //         Icons.favorite_rounded,
+                      //         color: ColorTheme.primary,
+                      //       ),
+                      //       onPressed: () {
+
+                      //         _interactionsReq.createReaction(reaction: Reaction(
+                      //           post: widget.id, 
+                      //           reaction: 1
+                      //         ));
+
+                      //         setState(() {
+                      //           widget.isReacted = false;
+                      //           userReaction = 'remove';
+                      //         });
+
+                      //       }, 
+                      //     ) : 
+                      //     IconButton(
+                      //       icon: Icon(
+                      //         Icons.favorite_border_rounded,
+                      //         color: Colors.black,
+                      //       ),
+                      //       onPressed: () {
+
+                      //         _interactionsReq.createReaction(reaction: Reaction(
+                      //           post: widget.id, 
+                      //           reaction: 1
+                      //         ));
+
+                      //         setState(() {
+                      //           widget.isReacted = true;
+                      //           userReaction = 'add';
+                      //         });
+
+                      //       }, 
+                      //     ),
+                      //   ],
+                      // )
                     ],
                   ),
                 ),
@@ -747,5 +869,8 @@ class _PostState extends State<Post> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
   
 }
