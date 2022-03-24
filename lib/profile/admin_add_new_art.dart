@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:anime_fanarts/main.dart';
 import 'package:anime_fanarts/services/firestore_service.dart';
 import 'package:anime_fanarts/services/get_create_posts.dart';
 import 'package:anime_fanarts/settings/guidelines.dart';
@@ -32,6 +33,7 @@ class _AdminAddNewArtState extends State<AdminAddNewArt> {
 
   final picker = ImagePicker();
   List? _postImages = [];
+  bool isLoading = false;
 
   final FirestoreService _firestireService = FirestoreService();
 
@@ -143,6 +145,7 @@ class _AdminAddNewArtState extends State<AdminAddNewArt> {
     );
   }
 
+
   // post add confirmation Alert Dialog
   Future<void> _addPostAlert(BuildContext context) async {
 
@@ -150,58 +153,82 @@ class _AdminAddNewArtState extends State<AdminAddNewArt> {
       context: context,
       builder: (BuildContext context) {
 
-        var isNewPostAdded = Provider.of<NewPostFresher>(context);
-
-        return AlertDialog(
-          title: const Text('Are you sure want to add this post ?'),
-          actions: <Widget>[
-            TextButton(
-              child: Text(
-                'CANCEL',
-                style: TextStyle(
-                  color: ColorTheme.primary,
-                  fontSize: 18.0
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: const Text('Are you sure want to add this post ?'),
+              actions: <Widget>[
+                TextButton(
+                  child: Text(
+                    isLoading ? '' : 'CANCEL',
+                    style: TextStyle(
+                      color: ColorTheme.primary,
+                      fontSize: 18.0
+                    ),
+                  ),
+                  style: ButtonStyle(
+                    overlayColor: MaterialStateProperty.all(Colors.blue[50]),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  }
                 ),
-              ),
-              style: ButtonStyle(
-                overlayColor: MaterialStateProperty.all(Colors.blue[50]),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              }
-            ),
-            TextButton(
-              child: Text(
-                'YES',
-                style: TextStyle(
-                  color: ColorTheme.primary,
-                  fontSize: 18.0
+                TextButton(
+                  child: Text(
+                    isLoading ? 'Loading...' : 'YES',
+                    style: TextStyle(
+                      color: ColorTheme.primary,
+                      fontSize: 18.0
+                    ),
+                  ),
+                  style: ButtonStyle(
+                    overlayColor: MaterialStateProperty.all(Colors.blue[50]),
+                  ),
+                  onPressed: () {
+
+                    setState(() {
+                      isLoading = true;
+                    });
+
+                      try {
+
+                        _getCreatePosts.createPost(
+                          postImageFile: _postImages,
+                          desc: '${descTextController.text}adminFeature@${userNameTextController.text}adminFeature@${userIdTextController.text}',
+                          tags: tagList,
+                        ).whenComplete(() {
+
+                          Navigator.pop(context);
+
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (context) => MyApp(selectedPage: 1)),
+                            (Route<dynamic> route) => false,
+                          );
+
+                        });
+                        
+
+                      } catch(e) {
+
+                        Fluttertoast.showToast(
+                          msg: "Error $e",
+                          toastLength: Toast.LENGTH_SHORT,
+                        );
+
+                      }
+
+                  },  
                 ),
-              ),
-              style: ButtonStyle(
-                overlayColor: MaterialStateProperty.all(Colors.blue[50]),
-              ),
-              onPressed: () {
-
-                _getCreatePosts.createPost(
-                  postImageFile: _postImages,
-                  desc: '${descTextController.text}',
-                  tags: tagList,
-                ).whenComplete(() {
-                
-                  Navigator.pop(context);
-  
-                  isNewPostAdded.updateIsPostAdded(true);
-  
-                });
-
-              },  
-            ),
-          ],
+              ],
+            );
+          }
         );
       },
     );
   }
+
+
   
   @override
   Widget build(BuildContext context) {
@@ -592,52 +619,68 @@ class _AdminAddNewArtState extends State<AdminAddNewArt> {
                           ),
                           onPressed: () {
 
-                            if(_postImages!.length > 3) {
+                           if(_postImages!.length > 3) {
                               Fluttertoast.showToast(
-                                msg: "Maximum image limit exceeds",
+                                msg: "Maximum image limit exceeds!",
                                 toastLength: Toast.LENGTH_SHORT,
                               );
                             } else if(tagList.isEmpty) {
                               Fluttertoast.showToast(
-                                msg: "please at least add one tag!",
+                                msg: "Please at least add one tag!",
                                 toastLength: Toast.LENGTH_SHORT,
                               );
                             } else {
 
-                              if(_postImages!.isNotEmpty) {
-
-                                if(userNameTextController.text.isEmpty && userIdTextController.text.isEmpty) {
-
-                                  _addPostAlert(context);
-
-                                } else {
-
-                                  // String descText = '${descTextController.text}adminFeature@${userNameTextController.text}adminFeature@${userIdTextController.text}';
-
-                                  _getCreatePosts.createPost(
-                                    postImageFile: _postImages,
-                                    desc: '${descTextController.text}adminFeature@${userNameTextController.text}adminFeature@${userIdTextController.text}',
-                                    tags: tagList,
-                                  ).whenComplete(() {
-
-                                    Navigator.pop(context);
-
-                                    isNewPostAdded.updateIsPostAdded(true);
-
-                                  });
-
-                                }
-
-                              } else {
-                                
-                                Fluttertoast.showToast(
-                                  msg: "please select your artwork!",
-                                  toastLength: Toast.LENGTH_SHORT,
-                                );
-
-                              }
+                                _addPostAlert(context);
 
                             }
+
+                            // if(_postImages!.length > 3) {
+                            //   Fluttertoast.showToast(
+                            //     msg: "Maximum image limit exceeds",
+                            //     toastLength: Toast.LENGTH_SHORT,
+                            //   );
+                            // } else if(tagList.isEmpty) {
+                            //   Fluttertoast.showToast(
+                            //     msg: "please at least add one tag!",
+                            //     toastLength: Toast.LENGTH_SHORT,
+                            //   );
+                            // } else {
+
+                            //   if(_postImages!.isNotEmpty) {
+
+                            //     if(userNameTextController.text.isEmpty && userIdTextController.text.isEmpty) {
+
+                            //       _addPostAlert(context);
+
+                            //     } else {
+
+                            //       // String descText = '${descTextController.text}adminFeature@${userNameTextController.text}adminFeature@${userIdTextController.text}';
+
+                            //       _getCreatePosts.createPost(
+                            //         postImageFile: _postImages,
+                            //         desc: '${descTextController.text}adminFeature@${userNameTextController.text}adminFeature@${userIdTextController.text}',
+                            //         tags: tagList,
+                            //       ).whenComplete(() {
+
+                            //         Navigator.pop(context);
+
+                            //         isNewPostAdded.updateIsPostAdded(true);
+
+                            //       });
+
+                            //     }
+
+                            //   } else {
+                                
+                            //     Fluttertoast.showToast(
+                            //       msg: "please select your artwork!",
+                            //       toastLength: Toast.LENGTH_SHORT,
+                            //     );
+
+                            //   }
+
+                            // }
     
                           }, 
                         ),

@@ -31,7 +31,7 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Profile> {
 
-  static const IMGURL = Urls.IMGURL;
+  static const animuzuId = Urls.animuzuUserId;
 
   final picker = ImagePicker();
   var _profileImage;
@@ -414,35 +414,12 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                                   //     ),
 
                                     if(userInfo['coverPic'] == 'default-cover-pic.png')
-                                      ConstrainedBox(
-                                        constraints: const BoxConstraints(
-                                          minHeight: 120,
-                                          maxHeight: 150,
-                                          maxWidth: double.infinity
-                                        ),
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(6), 
-                                            topRight: Radius.circular(6)
-                                          ),
-                                          child: 
-                                          _coverImage == null ? Image.asset(
-                                            'assets/images/cover-img-placeholder.jpg',
-                                            width: double.infinity,
-                                            fit: BoxFit.cover,
-                                          ) : Image.file(
-                                            _coverImage,
-                                            width: double.infinity,
-                                            fit: BoxFit.cover
-                                          ),
-                                        ),
-                                      ),
-
-                                      if(userInfo['coverPic'] != 'default-cover-pic.png')
-                                        ConstrainedBox(
+                                      AspectRatio(
+                                        aspectRatio: 5 / 2,
+                                        child: ConstrainedBox(
                                           constraints: const BoxConstraints(
-                                            minHeight: 120,
-                                            maxHeight: 150,
+                                            // minHeight: 120,
+                                            // maxHeight: 150,
                                             maxWidth: double.infinity
                                           ),
                                           child: ClipRRect(
@@ -451,14 +428,43 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                                               topRight: Radius.circular(6)
                                             ),
                                             child: 
-                                            _coverImage == null ? Image.network(
-                                              '${userInfo['coverPic']}',
+                                            _coverImage == null ? Image.asset(
+                                              'assets/images/cover-img-placeholder.jpg',
                                               width: double.infinity,
                                               fit: BoxFit.cover,
                                             ) : Image.file(
                                               _coverImage,
                                               width: double.infinity,
                                               fit: BoxFit.cover
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+
+                                      if(userInfo['coverPic'] != 'default-cover-pic.png')
+                                        AspectRatio(
+                                          aspectRatio: 5 / 2,
+                                          child: ConstrainedBox(
+                                            constraints: const BoxConstraints(
+                                              // minHeight: 120,
+                                              // maxHeight: 150,
+                                              maxWidth: double.infinity
+                                            ),
+                                            child: ClipRRect(
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(6), 
+                                                topRight: Radius.circular(6)
+                                              ),
+                                              child: 
+                                              _coverImage == null ? Image.network(
+                                                '${userInfo['coverPic']}',
+                                                width: double.infinity,
+                                                fit: BoxFit.cover,
+                                              ) : Image.file(
+                                                _coverImage,
+                                                width: double.infinity,
+                                                fit: BoxFit.cover
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -737,7 +743,7 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                                   Navigator.of(context).push(
                                     RouteTransAnim().createRoute(
                                       1.0, 1.0, 
-                                      user_id == '621283374da8dc7d72b975bd' ? AdminAddNewArt() : AddNewArt()
+                                      user_id == animuzuId ? AdminAddNewArt() : AddNewArt()
                                     )
                                   );
 

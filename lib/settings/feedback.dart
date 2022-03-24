@@ -34,7 +34,7 @@ class GiveFeedback extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                'Your feedback is precious to us. It helps us to make Anime fanarts even better',
+                'Your feedback is precious to us. It helps us to make Animizu even better',
                 style: TextStyle(
                   fontSize: 18.0, 
                   color: Colors.black,

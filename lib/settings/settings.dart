@@ -12,6 +12,7 @@ import 'package:anime_fanarts/settings/what_is.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/route_trans_anim.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class Settings extends StatefulWidget {
 
@@ -24,6 +25,78 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
+
+  // logout confirmation Alert Dialog
+  Future<void> _confirmLogoutAlert(BuildContext context) async {
+
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: const Text('Are you sure you want to Logout?'),
+              actions: <Widget>[
+                TextButton(
+                  child: Text(
+                    'CANCEL',
+                    style: TextStyle(
+                      color: ColorTheme.primary,
+                      fontSize: 18.0
+                    ),
+                  ),
+                  style: ButtonStyle(
+                    overlayColor: MaterialStateProperty.all(Colors.blue[50]),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  }
+                ),
+                TextButton(
+                  child: Text(
+                    'YES',
+                    style: TextStyle(
+                      color: ColorTheme.primary,
+                      fontSize: 18.0
+                    ),
+                  ),
+                  style: ButtonStyle(
+                    overlayColor: MaterialStateProperty.all(Colors.blue[50]),
+                  ),
+                  onPressed: () async {
+
+                      try {
+
+                         await SecureStorage.deleteToken().whenComplete(() {
+
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(builder: (context) => Login()),
+                              (Route<dynamic> route) => false,
+                            );
+
+                          });                        
+
+                      } catch(e) {
+
+                        Fluttertoast.showToast(
+                          msg: "Error $e",
+                          toastLength: Toast.LENGTH_SHORT,
+                        );
+
+                      } 
+
+                  },  
+                ),
+              ],
+            );
+          }
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -46,6 +119,18 @@ class _SettingsState extends State<Settings> {
           padding: const EdgeInsets.all(8.0),
           child: ListView(
             children: [
+               CustomeListTile(
+                Icons.info_outline_rounded,
+                'What is Animizu?',
+                () {
+                  Navigator.of(context).push(
+                    RouteTransAnim().createRoute(
+                      1.0, 0.0, 
+                      WhatIs()
+                    )
+                  );
+                }
+              ),
               CustomeListTile(
                 Icons.feedback_outlined,
                 'Give feedback',
@@ -107,18 +192,6 @@ class _SettingsState extends State<Settings> {
                 }
               ),
               CustomeListTile(
-                Icons.info_outline_rounded,
-                'What is Anime Fanarts?',
-                () {
-                  Navigator.of(context).push(
-                    RouteTransAnim().createRoute(
-                      1.0, 0.0, 
-                      WhatIs()
-                    )
-                  );
-                }
-              ),
-              CustomeListTile(
                 Icons.contact_support_outlined,
                 'Contact us',
                 () {
@@ -131,43 +204,11 @@ class _SettingsState extends State<Settings> {
                 }
               ),
               CustomeListTile(
-                Icons.login_rounded,
-                'Sign up',
-                () {
-                  Navigator.of(context).push(
-                    RouteTransAnim().createRoute(
-                      1.0, 0.0, 
-                      SignUp()
-                    )
-                  );
-                }
-              ),
-              CustomeListTile(
-                Icons.login_rounded,
-                'Admin add art',
-                () {
-                  Navigator.of(context).push(
-                    RouteTransAnim().createRoute(
-                      1.0, 0.0, 
-                      AdminAddNewArt()
-                    )
-                  );
-                }
-              ),
-              CustomeListTile(
                 Icons.logout_rounded,
                 'Logout',
                 () async {
 
-                  await SecureStorage.deleteToken().whenComplete(() {
-
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => Login()),
-                      (Route<dynamic> route) => false,
-                    );
-
-                  });
+                  await _confirmLogoutAlert(context);
 
                 }
               ),

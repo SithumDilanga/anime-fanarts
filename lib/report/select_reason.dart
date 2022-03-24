@@ -15,7 +15,7 @@ class SelectReason extends StatefulWidget {
 
 class _SelectReasonState extends State<SelectReason> {
 
-  List<String> reasonList = ['Violence', 'Excessively sexual', 'Copyright infringement', 'Spam', 'Advertisement, promotion', 'Excessive grotesque content', 'Redistributed without permission', 'Something else'];
+  List<String> reasonList = ['Not a relevant content', 'Violence', 'Excessively sexual', 'Copyright infringement', 'Spam', 'Advertisement, promotion', 'Excessive grotesque content', 'Redistributed without permission', 'Something else'];
 
   @override
   Widget build(BuildContext context) {

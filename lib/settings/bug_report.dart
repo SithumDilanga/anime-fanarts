@@ -41,7 +41,7 @@ class BugReport extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'We appreciate you for taking your time to report bugs. It helps us to make Anime fanarts even better',
+                'We appreciate you for taking your time to report bugs. It helps us to make Animizu even better',
                 style: TextStyle(
                   fontSize: 18.0, 
                   color: Colors.black,
@@ -213,7 +213,7 @@ class BugReport extends StatelessWidget {
                     throw 'Could not launch $link';
                   }
                 },
-                text: 'If you would like to give us more info about the issue please be kind enough to send us an email girtie.contact@gmail.com',
+                text: 'If you would like to give us more info about the issue please be kind enough to send us an email animizu.contact@gmail.com',
                 style: TextStyle(
                   fontSize: 16.0, 
                   color: Colors.black,

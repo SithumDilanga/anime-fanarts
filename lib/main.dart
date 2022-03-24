@@ -106,14 +106,20 @@ class _MyAppState extends State<MyApp> {
             automaticallyImplyLeading: false,
             title: Text(
               'Animizu',
-              style: GoogleFonts.signikaNegative(
-                textStyle: TextStyle(
-                  color: ColorTheme.primary,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold, 
-                  letterSpacing: 1
-                ),
+              style: TextStyle(
+                fontFamily: 'Forte',
+                color: ColorTheme.primary,
+                fontSize: 28,
+                letterSpacing: 1
               ),
+              // style: GoogleFonts.signikaNegative(
+              //   textStyle: TextStyle(
+              //     color: ColorTheme.primary,
+              //     fontSize: 24,
+              //     fontWeight: FontWeight.bold, 
+              //     letterSpacing: 1
+              //   ),
+              // ),
 
             ),
             actions: <Widget> [

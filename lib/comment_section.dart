@@ -27,8 +27,6 @@ class CommentSecion extends StatefulWidget {
 class _CommentSecionState extends State<CommentSecion> {
 
   Interactions _interactionsReq = Interactions();
-  // static const IMGURL = 'http://10.0.2.2:3000/img/users/';
-  static const IMGURL = Urls.IMGURL;
   DateTimeFormatter _dateTimeFormatter = DateTimeFormatter();
 
   final commentTextController = TextEditingController();

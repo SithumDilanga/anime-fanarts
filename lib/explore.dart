@@ -6,7 +6,6 @@ import 'package:anime_fanarts/services/get_create_posts.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/error_loading.dart';
 import 'package:anime_fanarts/utils/loading_animation.dart';
-import 'package:anime_fanarts/utils/urls.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -25,8 +24,6 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin<Ex
   List reactedPosts = [];
   List allPosts = [];
 
-  // static const IMGURL = 'http://10.0.2.2:3000/img/users/';
-  static const IMGURL = Urls.IMGURL;
   GetCreatePosts _getCreatePosts = GetCreatePosts();
 
   Future<void> _loadData() async {

@@ -85,7 +85,7 @@ class _LoginState extends State<Login> {
                             borderRadius: BorderRadius.circular(16)
                           ),
                           child: Text(
-                            'Anime Fanarts',
+                            'Animizu',
                             style: GoogleFonts.alegreyaSans(
                               color: Colors.white,
                               fontSize: 38,

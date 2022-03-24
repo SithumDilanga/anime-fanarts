@@ -22,7 +22,7 @@ class DownloadShare {
       final path = '${temp.path}/image.jpg';
       File(path).writeAsBytesSync(bytes);
 
-      await Share.shareFiles([path], text: ' art by $username');
+      await Share.shareFiles([path], text: ' Artwork by $username. Uploaded in Animizu');
 
    } catch (e) {
       print('error: $e');

@@ -47,7 +47,7 @@ class ContactUs extends StatelessWidget {
                     throw 'Could not launch $link';
                   }
                 },
-                text: 'Feel free to contact us at gritie.contact@gmail.com',
+                text: 'Feel free to contact us at animizu.contact@gmail.com',
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 18,

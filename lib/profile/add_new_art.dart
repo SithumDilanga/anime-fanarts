@@ -9,6 +9,7 @@ import 'package:anime_fanarts/utils/loading_animation.dart';
 import 'package:anime_fanarts/utils/route_trans_anim.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
@@ -152,8 +153,6 @@ class _AddNewArtState extends State<AddNewArt> {
       context: context,
       builder: (BuildContext context) {
 
-        var isNewPostAdded = Provider.of<NewPostFresher>(context);
-
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
@@ -204,12 +203,6 @@ class _AddNewArtState extends State<AddNewArt> {
                             MaterialPageRoute(builder: (context) => MyApp(selectedPage: 1)),
                             (Route<dynamic> route) => false,
                           );
-
-                          isNewPostAdded.updateIsPostAdded(true);
-
-                          // setState(() {
-                          //   isLoading = false;
-                          // });
 
                         });
                         
@@ -322,7 +315,7 @@ class _AddNewArtState extends State<AddNewArt> {
                   Image.asset(
                     'assets/images/placeholder-image.png'
                   ),
-                SizedBox(height: 4.0,),
+                SizedBox(height: 4.0,), 
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 12.0
@@ -391,10 +384,7 @@ class _AddNewArtState extends State<AddNewArt> {
                           fontSize: 16
                         ),
                         // validation
-                        validator: (val) => val!.isEmpty ? 'Enter an Email' : null,
-                        onChanged: (val) {
-                          
-                        },
+                        validator: (val) => val!.isEmpty ? 'Enter Description' : null,
                       ),
                       SizedBox(height: 16.0,),
                       Text(
@@ -424,10 +414,17 @@ class _AddNewArtState extends State<AddNewArt> {
                                     fontSize: 16
                                   ),
                                   // validation
-                                  validator: (val) => val!.isEmpty ? 'Enter an Email' : null,
-                                  onChanged: (val) {
-                                  
-                                  },
+                                  validator: (val) => val!.isEmpty ? 'Enter Tags' : null,
+                                  inputFormatters: [
+                                    // not letting user add # symbol
+                                    FilteringTextInputFormatter.deny(
+                                      RegExp("#")
+                                    ),
+                                    // not letting user add white spaces
+                                    FilteringTextInputFormatter.deny(
+                                      RegExp(r'\s')
+                                    ),
+                                  ],
                                 ),
                               ),
                               SizedBox(width: 8.0,),
@@ -596,7 +593,21 @@ class _AddNewArtState extends State<AddNewArt> {
 
                               if(_postImages!.isNotEmpty) {
 
-                                _addPostAlert(context);
+                                 if(_postImages!.length > 3) {
+                                    Fluttertoast.showToast(
+                                      msg: "Maximum image limit exceeds!",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                    );
+                                  } else if(tagList.isEmpty) {
+                                    Fluttertoast.showToast(
+                                      msg: "Please at least add one tag!",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                    );
+                                  } else {
+
+                                    _addPostAlert(context);
+
+                                  }
 
 
                                 // try {

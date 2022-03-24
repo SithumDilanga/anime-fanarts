@@ -22,6 +22,8 @@ class UsersProfile extends StatefulWidget {
 
 class UsersProfileState extends State<UsersProfile> with AutomaticKeepAliveClientMixin<UsersProfile> {
 
+  static const animuzuId = Urls.animuzuUserId;
+
   static const _pageSize = 8;
    List reactedPosts = [];
    dynamic userInfo = {
@@ -33,8 +35,6 @@ class UsersProfileState extends State<UsersProfile> with AutomaticKeepAliveClien
   final PagingController<int, dynamic> _pagingController = PagingController(firstPageKey: 1);
 
   ProfileReq _profileReq = ProfileReq();
-  // static const IMGURL = 'http://10.0.2.2:3000/img/users/';
-  static const IMGURL = Urls.IMGURL;
 
   Future<void> _loadData() async {
     await Future.delayed(Duration(milliseconds: 1000));
@@ -154,28 +154,31 @@ class UsersProfileState extends State<UsersProfile> with AutomaticKeepAliveClien
                             clipBehavior: Clip.none,
                             alignment: AlignmentDirectional.bottomCenter,
                             children: [
-                              ConstrainedBox(
-                                constraints: const BoxConstraints(
-                                  minHeight: 120,
-                                  maxHeight: 150,
-                                  maxWidth: double.infinity
-                                ),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(6), 
-                                    topRight: Radius.circular(6)
+                              AspectRatio(
+                                aspectRatio: 5 / 2,
+                                child: ConstrainedBox(
+                                  constraints: const BoxConstraints(
+                                    minHeight: 120,
+                                    maxHeight: 150,
+                                    maxWidth: double.infinity
                                   ),
-                                  child:    
-                                  userInfo['coverPic'] == 'default-cover-pic.png' ? Image.asset(
-                                    'assets/images/cover-img-placeholder.jpg',
-                                    width: double.infinity,
-                                    fit: BoxFit.cover,
-                                  ) :                                  
-                                  Image.network(
-                                    '${userInfo['coverPic']}',
-                                    width: double.infinity,
-                                    fit: BoxFit.cover,
-                                  )
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(6), 
+                                      topRight: Radius.circular(6)
+                                    ),
+                                    child:    
+                                    userInfo['coverPic'] == 'default-cover-pic.png' ? Image.asset(
+                                      'assets/images/cover-img-placeholder.jpg',
+                                      width: double.infinity,
+                                      fit: BoxFit.cover,
+                                    ) :                                  
+                                    Image.network(
+                                      '${userInfo['coverPic']}',
+                                      width: double.infinity,
+                                      fit: BoxFit.cover,
+                                    )
+                                  ),
                                 ),
                               ),
                               Positioned(
@@ -203,7 +206,7 @@ class UsersProfileState extends State<UsersProfile> with AutomaticKeepAliveClien
                                         ),
                                       ),
                                       SizedBox(height: 4.0,),
-                                      if(widget.userId == '621283374da8dc7d72b975bd')
+                                      if(widget.userId == animuzuId)
                                         Row(
                                           children: [
                                             Text(
@@ -221,7 +224,7 @@ class UsersProfileState extends State<UsersProfile> with AutomaticKeepAliveClien
                                             )
                                           ],
                                         ),
-                                      if(widget.userId != '621283374da8dc7d72b975bd')
+                                      if(widget.userId != animuzuId)
                                         Text(
                                           '${userInfo['name']}',
                                           style: TextStyle(
@@ -237,7 +240,7 @@ class UsersProfileState extends State<UsersProfile> with AutomaticKeepAliveClien
                           ),
                           //TODO: find some other way to make a margin here
                           SizedBox(height: 92.0,),
-                          if(widget.userId == '621283374da8dc7d72b975bd') 
+                          if(widget.userId == animuzuId) 
                             Padding(
                               padding: const EdgeInsets.only(left: 16.0, right: 8.0),
                               child: Linkify(
@@ -261,7 +264,7 @@ class UsersProfileState extends State<UsersProfile> with AutomaticKeepAliveClien
                                 ),
                               ),
                             ),
-                          if(widget.userId != '621283374da8dc7d72b975bd')
+                          if(widget.userId != animuzuId)
                             Padding(
                               padding: const EdgeInsets.only(left: 16.0, right: 8.0),
                               child: Text(
