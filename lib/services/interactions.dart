@@ -27,11 +27,6 @@ class Interactions {
         headers: {'Authorization': 'Bearer $bearerToken'},
       ));
 
-      print('create reaction: ${userReaction.data}');
-      print(userReaction.statusCode);
-      print(userReaction.statusMessage);
-      print(userReaction.headers);
-
       return userReaction.data['data'];
 
     } on DioError catch (e) {
@@ -39,11 +34,6 @@ class Interactions {
       print('Error creating reaction : $e');
 
       if (e.response != null) {
-
-        print('Dio error!');
-        print('STATUS: ${e.response?.statusCode}');
-        print('DATA: ${e.response?.data}');
-        print('HEADERS: ${e.response?.headers}');
 
         // return e.response!.statusCode;
 
@@ -58,12 +48,10 @@ class Interactions {
       } else {
 
         Fluttertoast.showToast(
-          msg: e.message,
+          msg: 'Error sending request!',
           toastLength: Toast.LENGTH_LONG,
         );
 
-        print('Error sending request!');
-        print(e.message);
       }
 
       }
@@ -84,12 +72,7 @@ class Interactions {
       Response allComments = await _dio.get('$URL/comments?page=$pageKey&limit=$pageSize&postId=$postId', options: Options(
         headers: {'Authorization': 'Bearer $bearerToken'},
       ));
-      print('All comments: ${allComments.data}');
-      print(allComments.statusCode);
-      print(allComments.statusMessage);
-      print(allComments.headers);
-
-      print('shit ${allComments.data['data']['comments']}');
+  
 
       return allComments.data;
 
@@ -98,13 +81,6 @@ class Interactions {
       print('Error getting comments : $e');
 
       if (e.response != null) {
-
-        print('Dio error!');
-        print('STATUS: ${e.response?.statusCode}');
-        print('DATA: ${e.response?.data}');
-        print('HEADERS: ${e.response?.headers}');
-
-        // return e.response!.statusCode;
 
         Fluttertoast.showToast(
           msg: e.response!.data['message'],
@@ -117,12 +93,10 @@ class Interactions {
       } else {
 
         Fluttertoast.showToast(
-          msg: e.message,
+          msg: 'Error loading comments!',
           toastLength: Toast.LENGTH_LONG,
         );
 
-        print('Error sending request!');
-        print(e.message);
       }
 
     }
@@ -143,7 +117,6 @@ class Interactions {
       // });
 
       final bearerToken = await SecureStorage.getToken() ?? '';
-      print('bearer $bearerToken');
       
       Response addComment = await _dio.post('$URL/comments?page=1&limit=20&postId=$postId', data: {
         'comment': commentText,
@@ -151,12 +124,6 @@ class Interactions {
       } , options: Options(
         headers: {'Authorization': 'Bearer $bearerToken'},
       ));
-      print('add a comment: ${addComment.data}');
-      print(addComment.statusCode);
-      print(addComment.statusMessage);
-      print(addComment.headers);
-
-      print('shit ${addComment.data['data']['comment']}');
 
       return addComment.data['data']['comment'];
 
@@ -165,13 +132,6 @@ class Interactions {
       print('Error getting comments : $e');
 
       if (e.response != null) {
-
-        print('Dio error!');
-        print('STATUS: ${e.response?.statusCode}');
-        print('DATA: ${e.response?.data}');
-        print('HEADERS: ${e.response?.headers}');
-
-        // return e.response!.statusCode;
 
         Fluttertoast.showToast(
           msg: e.response!.data['message'],
@@ -184,18 +144,15 @@ class Interactions {
       } else {
 
         Fluttertoast.showToast(
-          msg: e.message,
+          msg: 'Error sending request!',
           toastLength: Toast.LENGTH_LONG,
         );
-
-        print('Error sending request!');
-        print(e.message);
       }
 
     }
 
   }
 
-  // ------------ End get comments ----------------
+  // ------------ End add a new comment ----------------
 
 }

@@ -80,7 +80,7 @@ class _IntroScreenState extends State<IntroScreen> {
         ),
         PageViewModel(
           title: "For Artists",
-          body: "You can showcase your artworks and manage a profile of your own",
+          body: "You can showcase your artworks and manage your own portfolio",
           // image: Center(
           //   child: Image.asset(
           //     'assets/images/paint-brush.png',
@@ -172,10 +172,11 @@ class _IntroScreenState extends State<IntroScreen> {
             child: Center(
               child: Text(
                 'Animizu',
-                style: GoogleFonts.alegreyaSans(
+                style: TextStyle(
+                  fontFamily: 'Forte',
                   color: Colors.white,
                   fontSize: 48,
-                  fontWeight: FontWeight.bold
+                  letterSpacing: 1
                 ),
               ),
             ),

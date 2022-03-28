@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class ImgFullScreen extends StatelessWidget {
-
-  //TODO: edit these parameter properly
   
   final String? imgLink;
   final int selectedimageIndex;

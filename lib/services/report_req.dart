@@ -26,11 +26,6 @@ class ReportReq {
         headers: {'Authorization': 'Bearer $bearerToken'},
       ));
 
-      print('create post: ${userPosts.data}');
-      print(userPosts.statusCode);
-      print(userPosts.statusMessage);
-      print(userPosts.headers);
-
       Fluttertoast.showToast(
         msg: 'your report has been submitted!',
         toastLength: Toast.LENGTH_LONG,
@@ -40,16 +35,7 @@ class ReportReq {
 
     } on DioError catch (e) {
 
-      print('Error creating post : $e');
-
       if (e.response != null) {
-
-        print('Dio error!');
-        print('STATUS: ${e.response?.statusCode}');
-        print('DATA: ${e.response?.data}');
-        print('HEADERS: ${e.response?.headers}');
-
-        // return e.response!.statusCode;
 
         Fluttertoast.showToast(
           msg: e.response!.data['message'],
@@ -62,12 +48,10 @@ class ReportReq {
       } else {
 
         Fluttertoast.showToast(
-          msg: e.message,
+          msg: 'Error reporting post!',
           toastLength: Toast.LENGTH_LONG,
         );
 
-        print('Error sending request!');
-        print(e.message);
       }
 
       }

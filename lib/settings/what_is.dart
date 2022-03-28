@@ -53,7 +53,7 @@ class WhatIs extends StatelessWidget {
               SizedBox(height: 16,),
                 RichText(
                   text: TextSpan(
-                    text: "Animizu is an artwork platform specified for Anime & Manga. Artists can showcase their artworks and manage their own portfolio. Fans can find fanarts of their favorite Anime/Manga character and so many other original artworks as well. Fans can also share their Anime/Manga cosplays. You don’t have to be a professional artist. Even if your skills are in the initial stage feel free to share and ask for suggestions from others. Don’t forget to appreciate others' artworks as well.",
+                    text: "Animizu is an artwork platform specified for Anime & Manga. Artists can showcase their artworks and manage their own portfolio. Fans can find fanarts of their favorite Anime/Manga character and so many other original artworks as well. You can share your own digital arts, pencil drawings, glow arts, pixel arts, sketches, 3-D designs, cosplays, and any kind of related art. You don’t have to be a professional artist. Even if your skills are in the initial stage feel free to share and ask for suggestions from others. Don’t forget to appreciate others' artworks as well.",
                     style: GoogleFonts.share(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
@@ -77,18 +77,12 @@ class WhatIs extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 12.0,),
-              // Text(
-              //   'Mauris semper eros a placerat pharetra. Nam vitae urna et mauris tristique mollis in nec dui. Sed congue purus non tincidunt imperdiet. Aenean rutrum tincidunt sapien',
-              //   style: GoogleFonts.share(
-              //     fontSize: 18,
-              //     fontWeight: FontWeight.w600,
-              //     color: Colors.grey[800],
-              //     height: 1.2
-              //   ),
-              // ),
               SizedBox(height: 16.0,),
-              Image.network(
-                'https://cdn140.picsart.com/315531393000211.png'
+              // Image.network(
+              //   'https://cdn140.picsart.com/315531393000211.png'
+              // )
+              Image.asset(
+                'assets/images/whatis-page-img.png'
               )
             ],
           ),

@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:anime_fanarts/main.dart';
-import 'package:anime_fanarts/profile/profile.dart';
 import 'package:anime_fanarts/services/firestore_service.dart';
 import 'package:anime_fanarts/services/get_create_posts.dart';
 import 'package:anime_fanarts/settings/guidelines.dart';
@@ -13,12 +12,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
-
-import '../models/new_post_refresher.dart';
 
 class AddNewArt extends StatefulWidget {
-  const AddNewArt({ Key? key }) : super(key: key);
+
+  final userId;
+
+  const AddNewArt({ Key? key, required this.userId }) : super(key: key);
 
   @override
   _AddNewArtState createState() => _AddNewArtState();
@@ -147,7 +146,7 @@ class _AddNewArtState extends State<AddNewArt> {
   }
 
   // post add confirmation Alert Dialog
-  Future<void> _addPostAlert(BuildContext context) async {
+  Future<void> _addPostAlert(BuildContext context, isRateAvailable) async {
 
     return showDialog<void>(
       context: context,
@@ -198,6 +197,10 @@ class _AddNewArtState extends State<AddNewArt> {
                           tags: tagList
                         ).whenComplete(() {
 
+                          if(isRateAvailable) {
+                            _rateAlert(widget.userId);
+                          }
+
                           Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(builder: (context) => MyApp(selectedPage: 1)),
@@ -229,7 +232,7 @@ class _AddNewArtState extends State<AddNewArt> {
   @override
   Widget build(BuildContext context) {
 
-    var isNewPostAdded = Provider.of<NewPostFresher>(context);
+    // var isNewPostAdded = Provider.of<NewPostFresher>(context);
 
     return FutureBuilder(
       future: _firestireService.readIsRateAvailable(),
@@ -605,7 +608,10 @@ class _AddNewArtState extends State<AddNewArt> {
                                     );
                                   } else {
 
-                                    _addPostAlert(context);
+                                    _addPostAlert(
+                                      context, 
+                                      snapshot.data!['isRateAvailable']
+                                    );
 
                                   }
 

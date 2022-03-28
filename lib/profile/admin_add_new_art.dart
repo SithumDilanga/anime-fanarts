@@ -13,8 +13,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-import '../models/new_post_refresher.dart';
-
 class AdminAddNewArt extends StatefulWidget {
   const AdminAddNewArt({ Key? key }) : super(key: key);
 
@@ -233,7 +231,7 @@ class _AdminAddNewArtState extends State<AdminAddNewArt> {
   @override
   Widget build(BuildContext context) {
 
-    var isNewPostAdded = Provider.of<NewPostFresher>(context);
+    // var isNewPostAdded = Provider.of<NewPostFresher>(context);
 
     return FutureBuilder(
       future: _firestireService.readIsRateAvailable(),

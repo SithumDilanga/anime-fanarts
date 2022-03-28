@@ -1,7 +1,5 @@
 import 'package:anime_fanarts/models/reacted_posts.dart';
-import 'package:anime_fanarts/pagination_files/list_item.dart';
 import 'package:anime_fanarts/post.dart';
-import 'package:anime_fanarts/post_item.dart';
 import 'package:anime_fanarts/services/get_create_posts.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/error_loading.dart';
@@ -47,26 +45,7 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin<Ex
     super.initState();
   }
 
-  void _fetchReactedPosts(int pageKey) async {
-
-    final allPostsData = await _getCreatePosts.getAllPosts(
-      pageKey,
-      3
-    );
-
-    print('nigga ${allPostsData['data']['reacted']}');
-
-    setState(() {
-      reactedPosts = allPostsData['data']['reacted'];
-    });
-
-
-  }
-
   void _fetchPage(int pageKey) async {
-
-    final String currentTimeZone = await FlutterNativeTimezone.getLocalTimezone();
-    print('nativetimezone $currentTimeZone');
 
     print('pageKey $pageKey');
     print('_pageSize $_pageSize');
@@ -90,11 +69,8 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin<Ex
       }
       
       setState(() {
-        //TODO: reaction not updating issue. this line is the issue
         reactedPosts = reactedPosts + allPostsData['data']['reacted'];
         allPosts = allPosts + allPostsData['data']['posts'];
-        print('reactedReal ${reactedPosts.length}');
-        print('reactedPosts2bitch ${allPosts.length}');
       });
 
     } catch (error) {
@@ -112,9 +88,6 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin<Ex
   @override
   Widget build(BuildContext context) {
     super.build(context);  
-    // dynamic reactedNewPosts = reactedPosts; 
-
-    // print('reactedNewPosts $reactedPosts');
 
     final reactedNewPosts = Provider.of<ReactedPosts>(context);
 
@@ -140,19 +113,16 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin<Ex
 
               print('removedReactionList ${reactedNewPosts.removedReactionList}');
 
-              // dynamic reactedPosts = snapshot.data['data']['reacted'];
 
               bool isReacted = false;
               bool isNewReacted = false;
         
-              // print('bitch ${snapshot.data['data']['reacted']}');
               print('reactedPosts $reactedPosts');
 
               for(int j = 0; j < reactedNewPosts.reactedPosts.length; j++) {
                 if(reactedNewPosts.reactedPosts[j] == item['_id']) {
                   isReacted = true;
                   isNewReacted = true;
-                  print('reactedNewPosts.reactedPosts[j] ${reactedNewPosts.reactedPosts[j]}');
                 }
               }
         
@@ -185,45 +155,12 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin<Ex
         
               }
 
-              // for(int j = 0; j < reactedNewPosts.reactedPosts.length; j++) {
-              //   if(reactedNewPosts.reactedPosts[j] == item['_id']) {
-              //     isReacted = true;
-              //     print('reactedNewPosts.reactedPosts[j] ${reactedNewPosts.reactedPosts[j]}');
-              //   }
-              // }
-
-              // return PostItem(
-              //   postData: item,
-              //   reactedPosts: reactedPosts,
-              // );
-
-              // return Container(
-              //   child: ListItem(
-              //     PostData: item, 
-              //     reactedPosts: reactedPosts
-              //   ),
-              // );
-
-              // return KeepAlive(
-              //   postData: item,
-              //   reactedPosts: reactedPosts,
-              //   index: index,
-              //   key: ValueKey<String>(index.toString()),
-              // );
-
-              // return KeepAlive(
-              //   postData: item,
-              //   isReacted: isReacted,
-              //   index: index,
-              //   key: ValueKey<String>(index.toString()),
-              // );
-
               return Post(
                 id: item['_id'],
                 name: item['user']['name'],
-                profilePic: '${item['user']['profilePic']}', //'https://cdna.artstation.com/p/assets/images/images/031/257/402/large/yukisho-art-vector-6.jpg?1603101769&dl=10'
+                profilePic: '${item['user']['profilePic']}', 
                 desc: item['description'],
-                postImg: item['postImages'], //$IMGURL${allPosts[index]['postImages']}
+                postImg: item['postImages'],
                 userId: item['user']['_id'],
                 date: item['createdAt'], //formattedDate,
                 reactionCount: item['reactions'][0]['reactionCount'],
@@ -278,101 +215,3 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin<Ex
   @override
   bool get wantKeepAlive => true;
 }
-
-// class KeepAlive extends StatefulWidget {
-//   const KeepAlive({
-//     required Key key,
-//     required this.postData,
-//     required this.isReacted,
-//     required this.index
-//   }) : super(key: key);
-
-//   final dynamic postData;
-//   final bool isReacted;
-//   final int index;
-
-//   @override
-//   State<KeepAlive> createState() => _KeepAliveState();
-// }
-
-// class _KeepAliveState extends State<KeepAlive> with AutomaticKeepAliveClientMixin{
-//   @override
-//   bool get wantKeepAlive => true;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     super.build(context);
-
-//     return Post(
-//       id: widget.postData['_id'],
-//       name: widget.postData['user']['name'],
-//       profilePic: '${widget.postData['user']['profilePic']}', //'https://cdna.artstation.com/p/assets/images/images/031/257/402/large/yukisho-art-vector-6.jpg?1603101769&dl=10'
-//       desc: widget.postData['description'],
-//       postImg: widget.postData['postImages'], //$IMGURL${allPosts[index]['postImages']}
-//       userId: widget.postData['user']['_id'],
-//       date: widget.postData['createdAt'], //formattedDate,
-//       reactionCount: widget.postData['reactions'][0]['reactionCount'],
-//       commentCount: widget.postData['commentCount'][0]['commentCount'],
-//       isUserPost: false,
-//       isReacted: widget.isReacted,
-//     );
-//   }
-// }
-
-// class KeepAlive extends StatefulWidget {
-//   const KeepAlive({
-//     required Key key,
-//     required this.postData,
-//     required this.reactedPosts,
-//     required this.index
-//   }) : super(key: key);
-
-//   final dynamic postData;
-//   final List reactedPosts;
-//   final int index;
-
-//   @override
-//   State<KeepAlive> createState() => _KeepAliveState();
-// }
-
-// class _KeepAliveState extends State<KeepAlive> with AutomaticKeepAliveClientMixin{
-//   @override
-//   bool get wantKeepAlive => true;
-
-//   bool isReacted = false;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     super.build(context);        
-//               // print('bitch ${snapshot.data['data']['reacted']}');
-//     print('reactedPosts ${widget.reactedPosts}');
-        
-//     for(int i = 0; i < widget.reactedPosts.length; i++) {
-        
-//       // print('reacted posts ${reactedPosts[i]['post']}');
-        
-//       if(widget.reactedPosts[i]['post'] == widget.postData['_id']) {
-        
-//         print('reacted shitNew ${widget.reactedPosts[i]['post']}');
-//         isReacted = true;
-//         // 
-        
-//       }
-        
-//     }
-
-//     return Post(
-//       id: widget.postData['_id'],
-//       name: widget.postData['user']['name'],
-//       profilePic: '${widget.postData['user']['profilePic']}', //'https://cdna.artstation.com/p/assets/images/images/031/257/402/large/yukisho-art-vector-6.jpg?1603101769&dl=10'
-//       desc: widget.postData['description'],
-//       postImg: widget.postData['postImages'], //$IMGURL${allPosts[index]['postImages']}
-//       userId: widget.postData['user']['_id'],
-//       date: widget.postData['createdAt'], //formattedDate,
-//       reactionCount: widget.postData['reactions'][0]['reactionCount'],
-//       commentCount: widget.postData['commentCount'][0]['commentCount'],
-//       isUserPost: false,
-//       reactedPosts: widget.reactedPosts//isReacted,
-//     );
-//   }
-// }

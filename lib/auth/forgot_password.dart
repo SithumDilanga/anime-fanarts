@@ -16,12 +16,13 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   AuthReq _authReq = AuthReq();
 
   String email = '';
+  final emailTextController = TextEditingController();
 
   String? get emailErrorText {
 
-    bool isValid = EmailValidator.validate(email);
+    bool isValid = EmailValidator.validate(emailTextController.text);
 
-    if(email.isEmpty) {
+    if(emailTextController.text.isEmpty) {
       return null;
     }
 
@@ -30,6 +31,14 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     }
 
     return null;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    emailTextController.dispose();
+
   }
 
   @override
@@ -87,6 +96,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 borderRadius: BorderRadius.circular(3)
               ),
               child: TextFormField(
+                controller: emailTextController,
                 cursorColor: ColorTheme.primary,
                 // maxLines: null,
                 keyboardType: TextInputType.multiline,
@@ -107,11 +117,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 ),
                 // validation
                 validator: (val) => val!.isEmpty ? 'Enter an Email' : null,
-                onChanged: (val) {
-                  setState(() {
-                    email = val;
-                  });
-                },
               ),
             ),
             SizedBox(height: 28.0,),
@@ -135,11 +140,13 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   ),
                   onPressed:(emailErrorText == null) ? () async {
 
-                    if(email.isNotEmpty) {
+                    if(emailTextController.text.isNotEmpty) {
 
                       dynamic response = await _authReq.forgotPassword(
-                        email
-                      );
+                        emailTextController.text
+                      ).whenComplete(() {
+                        emailTextController.clear();
+                      });
 
                       print('shitty response $response');
 
@@ -149,7 +156,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => VerificationCode(
-                              email: email,
+                              email: emailTextController.text,
                             )
                           ),
                         );
@@ -168,14 +175,12 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
                       }
 
-                      if(email.isEmpty) {
-                        
-                        Fluttertoast.showToast(
-                          msg: "Please enter your email!",
-                          toastLength: Toast.LENGTH_SHORT,
-                        );
+                    } else {
 
-                      }
+                      Fluttertoast.showToast(
+                        msg: "Please enter your email!",
+                        toastLength: Toast.LENGTH_SHORT,
+                      );
 
                     }
 

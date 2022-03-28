@@ -66,51 +66,81 @@ class _LoginState extends State<Login> {
               child: Stack(
                 children: [
                   Image.asset(
-                    'assets/images/kimi no wa 3.jpg',
+                    'assets/images/animizu cover 4x3.jpeg',
                     height: 300,
                     width: double.infinity,
                     fit: BoxFit.cover,
                   ),
-                  Center(
-                    child: Column(
-                      children: [
-                        SizedBox(height: 28.0,),
-                        Container(
-                          padding: EdgeInsets.all(8.0),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.white,
-                              width: 1.5
-                            ),
-                            borderRadius: BorderRadius.circular(16)
-                          ),
-                          child: Text(
-                            'Animizu',
-                            style: GoogleFonts.alegreyaSans(
-                              color: Colors.white,
-                              fontSize: 38,
-                              fontWeight: FontWeight.bold
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16.0),
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: Stack(
+                        children: [
+                          Text(
+                            "It's all about Anime/Manga artworks",
+                            style: TextStyle(
+                              // color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              foreground: Paint()
+                              ..style = PaintingStyle.stroke
+                              ..strokeWidth = 3
+                              ..color = ColorTheme.primary,
                             ),
                           ),
-                        ),
-                        SizedBox(height: 4.0,),
-                        // Text(
-                        //   'make someone inspire',
-                        //   style: TextStyle(
-                        //     color: Colors.white
-                        //   ),
-                        // ),
-                        SizedBox(height: 16.0,),
-                        Text(
-                          'one place for anime fanarts',
-                          style: GoogleFonts.patrickHand(
-                            color: Colors.white,
-                            fontSize: 24
+                          Text(
+                            "It's all about Anime/Manga artworks",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        )
-                      ],
+                        ],
+                      ),
                     ),
                   ),
+                  // Center(
+                  //   child: Column(
+                  //     children: [
+                  //       SizedBox(height: 28.0,),
+                  //       Container(
+                  //         padding: EdgeInsets.all(8.0),
+                  //         decoration: BoxDecoration(
+                  //           border: Border.all(
+                  //             color: Colors.white,
+                  //             width: 1.5
+                  //           ),
+                  //           borderRadius: BorderRadius.circular(16)
+                  //         ),
+                  //         child: Text(
+                  //           'Animizu',
+                  //           style: GoogleFonts.alegreyaSans(
+                  //             color: Colors.white,
+                  //             fontSize: 38,
+                  //             fontWeight: FontWeight.bold
+                  //           ),
+                  //         ),
+                  //       ),
+                  //       SizedBox(height: 4.0,),
+                  //       // Text(
+                  //       //   'make someone inspire',
+                  //       //   style: TextStyle(
+                  //       //     color: Colors.white
+                  //       //   ),
+                  //       // ),
+                  //       SizedBox(height: 16.0,),
+                  //       Text(
+                  //         'one place for anime fanarts',
+                  //         style: GoogleFonts.patrickHand(
+                  //           color: Colors.white,
+                  //           fontSize: 24
+                  //         ),
+                  //       )
+                  //     ],
+                  //   ),
+                  // ),
                   // Padding(
                   //   padding: const EdgeInsets.fromLTRB(8.0, 16.0, 0, 0),
                   //   child: IconButton(

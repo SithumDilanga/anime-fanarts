@@ -1,7 +1,5 @@
 import 'dart:io';
 import 'package:anime_fanarts/profile/add_new_art.dart';
-import 'package:anime_fanarts/models/new_post_refresher.dart';
-import 'package:anime_fanarts/models/profile_user.dart';
 import 'package:anime_fanarts/post.dart';
 import 'package:anime_fanarts/profile/admin_add_new_art.dart';
 import 'package:anime_fanarts/services/profile_req.dart';
@@ -18,7 +16,6 @@ import 'package:anime_fanarts/utils/route_trans_anim.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:provider/provider.dart';
 import 'edit_bio.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -36,7 +33,7 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
   final picker = ImagePicker();
   var _profileImage;
   var _coverImage;
-  String? user_id;
+  String? userId;
 
   TextEditingController? _changeName;
 
@@ -50,7 +47,7 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
   final PagingController<int, dynamic> _pagingController = PagingController(firstPageKey: 1);
 
   void init() async {
-    user_id = await SecureStorage.getUserId();
+    userId = await SecureStorage.getUserId();
   }
 
 
@@ -312,22 +309,7 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
 
   @override
   Widget build(BuildContext context) {
-
-    var profileData = Provider.of<ProfileUser>(context);
-    
-    var isNewPostAdded = Provider.of<NewPostFresher>(context);
-
-    // dynamic reactedNewPosts = reactedPosts; 
-
-    print('isNewPostAdded ${isNewPostAdded.isPostAdded} ${isNewPostAdded.isPostDeleted}');
-
-    if(isNewPostAdded.isPostDeleted) {
-      // _pagingController.refresh();
-      setState(() {
-        
-      });
-      // isNewPostAdded.updateIsPostDeleted(false);
-    }
+    super.build(context);  
 
     return RefreshIndicator(
       onRefresh: () => Future.sync(
@@ -369,49 +351,6 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                                 clipBehavior: Clip.none,
                                 alignment: AlignmentDirectional.bottomCenter,
                                 children: [
-                                  
-                                  // if(userInfo['coverPic'] == null)
-                                  //   ConstrainedBox(
-                                  //     constraints: const BoxConstraints(
-                                  //       minHeight: 120,
-                                  //       maxHeight: 150,
-                                  //       maxWidth: double.infinity
-                                  //     ),
-                                  //     child: ClipRRect(
-                                  //       borderRadius: BorderRadius.only(
-                                  //         topLeft: Radius.circular(6), 
-                                  //         topRight: Radius.circular(6)
-                                  //       ),
-                                  //       child: Container(
-                                  //         color: Colors.grey[300],
-                                  //       )                                  
-                                  //     ),
-                                  //   ),
-                                                                      
-                                  //   if(userInfo['coverPic'] != null)
-                                  //     ConstrainedBox(
-                                  //       constraints: const BoxConstraints(
-                                  //         minHeight: 120,
-                                  //         maxHeight: 150,
-                                  //         maxWidth: double.infinity
-                                  //       ),
-                                  //       child: ClipRRect(
-                                  //         borderRadius: BorderRadius.only(
-                                  //           topLeft: Radius.circular(6), 
-                                  //           topRight: Radius.circular(6)
-                                  //         ),
-                                  //         child: 
-                                  //         _coverImage == null ? Image.network(
-                                  //           '${userInfo['coverPic']}',
-                                  //           width: double.infinity,
-                                  //           fit: BoxFit.cover,
-                                  //         ) : Image.file(
-                                  //           _coverImage,
-                                  //           width: double.infinity,
-                                  //           fit: BoxFit.cover
-                                  //         ),
-                                  //       ),
-                                  //     ),
 
                                     if(userInfo['coverPic'] == 'default-cover-pic.png')
                                       AspectRatio(
@@ -743,7 +682,9 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                                   Navigator.of(context).push(
                                     RouteTransAnim().createRoute(
                                       1.0, 1.0, 
-                                      user_id == animuzuId ? AdminAddNewArt() : AddNewArt()
+                                      userId == animuzuId ? AdminAddNewArt() : AddNewArt(
+                                        userId: userId,
+                                      )
                                     )
                                   );
 

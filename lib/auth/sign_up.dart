@@ -93,45 +93,45 @@ class _SignUpState extends State<SignUp> {
                 child: Stack(
                   children: [
                     Image.asset(
-                      'assets/images/kimi no wa 3.jpg',
-                      height: 320,
+                      'assets/images/animizu cover 4x3.jpeg',
+                      height: 300,
                       width: double.infinity,
-                      fit: BoxFit.fill,
+                       fit: BoxFit.cover,
                     ),
-                    Center(
-                      child: Column(
-                        children: [
-                          SizedBox(height: 28.0,),
-                          Container(
-                            padding: EdgeInsets.all(8.0),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.white,
-                                width: 1.5
-                              ),
-                              borderRadius: BorderRadius.circular(16)
-                            ),
-                            child: Text(
-                              'Animizu',
-                              style: GoogleFonts.alegreyaSans(
-                                color: Colors.white,
-                                fontSize: 38,
-                                fontWeight: FontWeight.bold
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 4.0,),
-                          SizedBox(height: 16.0,),
-                          Text(
-                            'one place for anime fanarts',
-                            style: GoogleFonts.patrickHand(
-                              color: Colors.white,
-                              fontSize: 24
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
+                    // Center(
+                    //   child: Column(
+                    //     children: [
+                    //       SizedBox(height: 28.0,),
+                    //       Container(
+                    //         padding: EdgeInsets.all(8.0),
+                    //         decoration: BoxDecoration(
+                    //           border: Border.all(
+                    //             color: Colors.white,
+                    //             width: 1.5
+                    //           ),
+                    //           borderRadius: BorderRadius.circular(16)
+                    //         ),
+                    //         child: Text(
+                    //           'Animizu',
+                    //           style: GoogleFonts.alegreyaSans(
+                    //             color: Colors.white,
+                    //             fontSize: 38,
+                    //             fontWeight: FontWeight.bold
+                    //           ),
+                    //         ),
+                    //       ),
+                    //       SizedBox(height: 4.0,),
+                    //       SizedBox(height: 16.0,),
+                    //       Text(
+                    //         'one place for anime fanarts',
+                    //         style: GoogleFonts.patrickHand(
+                    //           color: Colors.white,
+                    //           fontSize: 24
+                    //         ),
+                    //       )
+                    //     ],
+                    //   ),
+                    // ),
                     // Padding(
                     //   padding: const EdgeInsets.fromLTRB(8.0, 32.0, 0, 0),
                     //   child: IconButton(

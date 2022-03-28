@@ -25,12 +25,6 @@ class ProfileReq {
       Response userData = await _dio.get('$URL/users/me', options: Options(
         headers: {'Authorization': 'Bearer $bearerToken'},
       ));
-      print('User Info: ${userData.data}');
-      print(userData.statusCode);
-      print(userData.statusMessage);
-      print(userData.headers);
-
-      print('shit ${userData.data['data']['users']}');
 
       return userData.data['data']['users'];
 
@@ -41,17 +35,17 @@ class ProfileReq {
       }
 
       if (e.response != null) {
-        print('Dio error!');
-        print('STATUS: ${e.response?.statusCode}');
-        print('DATA: ${e.response?.data}');
-        print('HEADERS: ${e.response?.headers}');
 
         // returning error status code
         return e.response!.statusCode;
 
       } else {
-        print('Error sending request!');
-        print(e.message);
+
+        Fluttertoast.showToast(
+          msg: 'Error getting user data!',
+          toastLength: Toast.LENGTH_LONG,
+        );
+
         return e.message;
       }
 
@@ -72,16 +66,6 @@ class ProfileReq {
         headers: {'Authorization': 'Bearer $bearerToken'},
       ));
 
-      print('Users posts: ${userPosts.data}');
-      print(userPosts.statusCode);
-      print(userPosts.statusMessage);
-      print(userPosts.headers);
-
-      // // TODO: check that login again
-      // if(userPosts.data['results'] == 0) {
-      //   return 'empty posts';
-      // }
-
       return userPosts.data;
 
     } on DioError catch (e) {
@@ -91,17 +75,16 @@ class ProfileReq {
       }
 
       if (e.response != null) {
-        print('Dio error!');
-        print('STATUS: ${e.response?.statusCode}');
-        print('DATA: ${e.response?.data}');
-        print('HEADERS: ${e.response?.headers}');
-
         // returning error status code
         return e.response!.statusCode;
 
       } else {
-        print('Error sending request!');
-        print(e.message);
+
+        Fluttertoast.showToast(
+          msg: 'Error getting user posts data!',
+          toastLength: Toast.LENGTH_LONG,
+        );
+
         return e.message;
       }
 
@@ -124,10 +107,6 @@ class ProfileReq {
       Response userData = await _dio.get('$URL/users/$id', options: Options(
         headers: {'Authorization': 'Bearer $bearerToken'},
       ));
-      print('User profile Info: ${userData.data}');
-      print(userData.statusCode);
-      print(userData.statusMessage);
-      print(userData.headers);
 
       return userData.data['data']['users'];
 
@@ -138,17 +117,17 @@ class ProfileReq {
       }
 
       if (e.response != null) {
-        print('Dio error!');
-        print('STATUS: ${e.response?.statusCode}');
-        print('DATA: ${e.response?.data}');
-        print('HEADERS: ${e.response?.headers}');
 
         // returning error status code
         return e.response!.statusCode;
 
       } else {
-        print('Error sending request!');
-        print(e.message);
+
+        Fluttertoast.showToast(
+          msg: 'Error getting user data!',
+          toastLength: Toast.LENGTH_LONG,
+        );
+
         return e.message;
       }
 
@@ -186,21 +165,11 @@ class ProfileReq {
       // .then((response) => print(response));
       // .catchError((error) => print(error));
 
-      print('upload profilePic ' + response.statusCode.toString());
 
 
     } on DioError catch (e) {
 
-    print('Error creating user: $e');
-
     if (e.response != null) {
-
-      print('Dio error!');
-      print('STATUS: ${e.response?.statusCode}');
-      print('DATA: ${e.response?.data}');
-      print('HEADERS: ${e.response?.headers}');
-
-      // return e.response!.statusCode;
 
       Fluttertoast.showToast(
         msg: e.response!.data['message'],
@@ -213,12 +182,10 @@ class ProfileReq {
     } else {
 
       Fluttertoast.showToast(
-        msg: e.message,
+        msg: 'Error uploading profile picture!',
         toastLength: Toast.LENGTH_LONG,
       );
 
-      print('Error sending request!');
-      print(e.message);
     }
 
     }
@@ -232,8 +199,6 @@ class ProfileReq {
   Future uploadCoverPic(File file) async {
 
     String fileName = file.path.split('/').last;
-    print('file $file');
-    print('fileName $fileName');
     
     FormData data = FormData.fromMap({
       'coverPic': await MultipartFile.fromFile(
@@ -265,13 +230,6 @@ class ProfileReq {
 
     if (e.response != null) {
 
-      print('Dio error!');
-      print('STATUS: ${e.response?.statusCode}');
-      print('DATA: ${e.response?.data}');
-      print('HEADERS: ${e.response?.headers}');
-
-      // return e.response!.statusCode;
-
       Fluttertoast.showToast(
         msg: e.response!.data['message'],
         toastLength: Toast.LENGTH_LONG,
@@ -283,12 +241,10 @@ class ProfileReq {
     } else {
 
       Fluttertoast.showToast(
-        msg: e.message,
+        msg: 'Error uploading cover picture!',
         toastLength: Toast.LENGTH_LONG,
       );
 
-      print('Error sending request!');
-      print(e.message);
     }
 
     }
@@ -302,7 +258,6 @@ class ProfileReq {
   Future updateBio(String bio) async {
 
     // String fileName = file.path.split('/').last;
-    print('Bio : $bio');
     
     FormData data = FormData.fromMap({
       'bio': bio,
@@ -321,8 +276,6 @@ class ProfileReq {
       // .then((response) => print(response));
       // .catchError((error) => print(error));
 
-      print(response.statusCode);
-
       Fluttertoast.showToast(
         msg: 'Bio Updated!',
         toastLength: Toast.LENGTH_LONG,
@@ -331,16 +284,7 @@ class ProfileReq {
 
     } on DioError catch (e) {
 
-    print('Error updating bio: $e');
-
     if (e.response != null) {
-
-      print('Dio error!');
-      print('STATUS: ${e.response?.statusCode}');
-      print('DATA: ${e.response?.data}');
-      print('HEADERS: ${e.response?.headers}');
-
-      // return e.response!.statusCode;
 
       Fluttertoast.showToast(
         msg: e.response!.data['message'],
@@ -353,12 +297,10 @@ class ProfileReq {
     } else {
 
       Fluttertoast.showToast(
-        msg: e.message,
+        msg: 'Error updating bio!',
         toastLength: Toast.LENGTH_LONG,
       );
 
-      print('Error sending request!');
-      print(e.message);
     }
 
     }
@@ -372,7 +314,6 @@ class ProfileReq {
   Future updateUsername(String username) async {
 
     // String fileName = file.path.split('/').last;
-    print('Bio : $username');
     
     FormData data = FormData.fromMap({
       'name': username,
@@ -395,16 +336,7 @@ class ProfileReq {
 
     } on DioError catch (e) {
 
-    print('Error updating username: $e');
-
     if (e.response != null) {
-
-      print('Dio error!');
-      print('STATUS: ${e.response?.statusCode}');
-      print('DATA: ${e.response?.data}');
-      print('HEADERS: ${e.response?.headers}');
-
-      // return e.response!.statusCode;
 
       Fluttertoast.showToast(
         msg: e.response!.data['message'],
@@ -417,12 +349,10 @@ class ProfileReq {
     } else {
 
       Fluttertoast.showToast(
-        msg: e.message,
+        msg: 'Error updating username',
         toastLength: Toast.LENGTH_LONG,
       );
 
-      print('Error sending request!');
-      print(e.message);
     }
 
     }
@@ -435,20 +365,13 @@ class ProfileReq {
 
   Future getUserById({required String id, required int pageKey, required int pageSize}) async {
 
-    print('fucking id ' + id.toString());
-
     try {
 
       final bearerToken = await SecureStorage.getToken() ?? '';
-      print('bearer $bearerToken');
       
       Response userData = await _dio.get('$URL/users/$id?page=$pageKey&limit=$pageSize', options: Options(
         headers: {'Authorization': 'Bearer $bearerToken'},
       ));
-      print('UserById info: ${userData.data}');
-      print(userData.statusCode);
-      print(userData.statusMessage);
-      print(userData.headers);
 
       return userData.data;
 
@@ -459,17 +382,17 @@ class ProfileReq {
       }
 
       if (e.response != null) {
-        print('Dio error!');
-        print('STATUS: ${e.response?.statusCode}');
-        print('DATA: ${e.response?.data}');
-        print('HEADERS: ${e.response?.headers}');
-
-        // returning error status code
+    
         return e.response!.statusCode;
 
       } else {
-        print('Error sending request!');
-        print(e.message);
+        
+        Fluttertoast.showToast(
+          msg: 'Error getting user data!',
+          toastLength: Toast.LENGTH_LONG,
+        );
+
+
         return e.message;
       }
 

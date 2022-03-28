@@ -25,12 +25,6 @@ class GetCreatePosts extends ChangeNotifier {
       Response allPostsData = await _dio.get('$URL/posts?page=$pageKey&limit=$pageSize', options: Options(
         headers: {'Authorization': 'Bearer $bearerToken'},
       ));
-      print('All posts: ${allPostsData.data}');
-      print(allPostsData.statusCode);
-      print(allPostsData.statusMessage);
-      print(allPostsData.headers);
-
-      print('shit ${allPostsData.data['data']['reacted']}');
 
       return allPostsData.data;
 
@@ -39,11 +33,6 @@ class GetCreatePosts extends ChangeNotifier {
       print('Error creating post : $e');
 
       if (e.response != null) {
-
-        print('Dio error!');
-        print('STATUS: ${e.response?.statusCode}');
-        print('DATA: ${e.response?.data}');
-        print('HEADERS: ${e.response?.headers}');
 
         // return e.response!.statusCode;
 
@@ -58,12 +47,12 @@ class GetCreatePosts extends ChangeNotifier {
       } else {
 
         Fluttertoast.showToast(
-          msg: e.message,
+          msg: 'Error loading data check your netwrok connection!',
           toastLength: Toast.LENGTH_LONG,
         );
 
-        print('Error sending request!');
-        print(e.message);
+        // print('Error sending request!');
+        // print('e.message ${e.message}');
       }
 
     }
@@ -133,13 +122,8 @@ class GetCreatePosts extends ChangeNotifier {
         headers: {'Authorization': 'Bearer $bearerToken'},
       ));
 
-      print('create post: ${userPosts.data}');
-      print(userPosts.statusCode);
-      print(userPosts.statusMessage);
-      print(userPosts.headers);
-
       Fluttertoast.showToast(
-        msg: 'post added!',
+        msg: 'Post added!',
         toastLength: Toast.LENGTH_LONG,
       );
 
@@ -150,13 +134,6 @@ class GetCreatePosts extends ChangeNotifier {
       print('Error creating post : $e');
 
       if (e.response != null) {
-
-        print('Dio error!');
-        print('STATUS: ${e.response?.statusCode}');
-        print('DATA: ${e.response?.data}');
-        print('HEADERS: ${e.response?.headers}');
-
-        // return e.response!.statusCode;
 
         Fluttertoast.showToast(
           msg: e.response!.data['message'],
@@ -169,7 +146,7 @@ class GetCreatePosts extends ChangeNotifier {
       } else {
 
         Fluttertoast.showToast(
-          msg: e.message,
+          msg: 'Error loading data check your netwrok connection!',
           toastLength: Toast.LENGTH_LONG,
         );
 
@@ -199,13 +176,8 @@ class GetCreatePosts extends ChangeNotifier {
         headers: {'Authorization': 'Bearer $bearerToken'},
       ));
 
-      print('create post: ${userPosts.data}');
-      print(userPosts.statusCode);
-      print(userPosts.statusMessage);
-      print(userPosts.headers);
-
       Fluttertoast.showToast(
-        msg: 'post successfully deleted!',
+        msg: 'Post successfully deleted!',
         toastLength: Toast.LENGTH_LONG,
       );
 
@@ -216,11 +188,6 @@ class GetCreatePosts extends ChangeNotifier {
       print('Error creating post : $e');
 
       if (e.response != null) {
-
-        print('Dio error!');
-        print('STATUS: ${e.response?.statusCode}');
-        print('DATA: ${e.response?.data}');
-        print('HEADERS: ${e.response?.headers}');
 
         // return e.response!.statusCode;
 
@@ -235,12 +202,10 @@ class GetCreatePosts extends ChangeNotifier {
       } else {
 
         Fluttertoast.showToast(
-          msg: e.message,
+          msg: 'Error sending request check your netwrok connection!',
           toastLength: Toast.LENGTH_LONG,
         );
 
-        print('Error sending request!');
-        print(e.message);
       }
 
       }
@@ -264,62 +229,62 @@ class GetCreatePosts extends ChangeNotifier {
 
   // --------------- get all posts -----------------
 
-  Future getAllPostsNew() async {
+  // Future getAllPostsNew() async {
 
-    // int page = pageNum;
+  //   // int page = pageNum;
 
-    try {
+  //   try {
 
-      final bearerToken = await SecureStorage.getToken() ?? '';
-      print('bearer $bearerToken');
+  //     final bearerToken = await SecureStorage.getToken() ?? '';
+  //     print('bearer $bearerToken');
       
-      Response allPostsData = await _dio.get('$URL/posts', options: Options(
-        headers: {'Authorization': 'Bearer $bearerToken'},
-      ));
-      print('All posts: ${allPostsData.data}');
-      print(allPostsData.statusCode);
-      print(allPostsData.statusMessage);
-      print(allPostsData.headers);
+  //     Response allPostsData = await _dio.get('$URL/posts', options: Options(
+  //       headers: {'Authorization': 'Bearer $bearerToken'},
+  //     ));
+  //     print('All posts: ${allPostsData.data}');
+  //     print(allPostsData.statusCode);
+  //     print(allPostsData.statusMessage);
+  //     print(allPostsData.headers);
 
-      print('shit ${allPostsData.data['data']['reacted']}');
+  //     print('shit ${allPostsData.data['data']['reacted']}');
 
-      return allPostsData.data;
+  //     return allPostsData.data;
 
-    } on DioError catch (e) {
+  //   } on DioError catch (e) {
 
-      print('Error creating post : $e');
+  //     print('Error creating post : $e');
 
-      if (e.response != null) {
+  //     if (e.response != null) {
 
-        print('Dio error!');
-        print('STATUS: ${e.response?.statusCode}');
-        print('DATA: ${e.response?.data}');
-        print('HEADERS: ${e.response?.headers}');
+  //       print('Dio error!');
+  //       print('STATUS: ${e.response?.statusCode}');
+  //       print('DATA: ${e.response?.data}');
+  //       print('HEADERS: ${e.response?.headers}');
 
-        // return e.response!.statusCode;
+  //       // return e.response!.statusCode;
 
-        Fluttertoast.showToast(
-          msg: e.response!.data['message'],
-          toastLength: Toast.LENGTH_LONG,
-        );
+  //       Fluttertoast.showToast(
+  //         msg: e.response!.data['message'],
+  //         toastLength: Toast.LENGTH_LONG,
+  //       );
 
-        // throw Error();
-        throw(e.response!.data['message']);
+  //       // throw Error();
+  //       throw(e.response!.data['message']);
 
-      } else {
+  //     } else {
 
-        Fluttertoast.showToast(
-          msg: e.message,
-          toastLength: Toast.LENGTH_LONG,
-        );
+  //       Fluttertoast.showToast(
+  //         msg: e.message,
+  //         toastLength: Toast.LENGTH_LONG,
+  //       );
 
-        print('Error sending request!');
-        print(e.message);
-      }
+  //       print('Error sending request!');
+  //       print(e.message);
+  //     }
 
-    }
+  //   }
 
-  }
+  // }
 
   // --------------- End get all posts -----------------
 
