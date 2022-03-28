@@ -5,6 +5,7 @@ import 'package:anime_fanarts/intro_screen.dart';
 import 'package:anime_fanarts/models/profile_user.dart';
 import 'package:anime_fanarts/models/reacted_posts.dart';
 import 'package:anime_fanarts/profile/profile.dart';
+import 'package:anime_fanarts/profile/users_profile.dart';
 import 'package:anime_fanarts/services/secure_storage.dart';
 import 'package:anime_fanarts/services/shared_pref.dart';
 import 'package:anime_fanarts/settings/settings.dart';
@@ -100,23 +101,29 @@ class _MyAppState extends State<MyApp> {
             backgroundColor: Color(0xffF0F0F0),
             elevation: 0,
             automaticallyImplyLeading: false,
-            title: Text(
-              'Animizu',
-              style: TextStyle(
-                fontFamily: 'Forte',
-                color: ColorTheme.primary,
-                fontSize: 28,
-                letterSpacing: 1
+            title: GestureDetector(
+              child: Text(
+                'Animizu',
+                style: TextStyle(
+                  fontFamily: 'Forte',
+                  color: ColorTheme.primary,
+                  fontSize: 28,
+                  letterSpacing: 1
+                ),
               ),
-              // style: GoogleFonts.signikaNegative(
-              //   textStyle: TextStyle(
-              //     color: ColorTheme.primary,
-              //     fontSize: 24,
-              //     fontWeight: FontWeight.bold, 
-              //     letterSpacing: 1
-              //   ),
-              // ),
+              onTap: () {
 
+                Navigator.of(context).push(
+                  RouteTransAnim().createRoute(
+                    1.0, 0.0, 
+                    UsersProfile(
+                      name: 'Animizu Official', 
+                      userId: '6242217a06e7ba94057a6212'
+                    )
+                  )
+                );
+
+              },
             ),
             actions: <Widget> [
               IconButton(

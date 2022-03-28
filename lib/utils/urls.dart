@@ -6,6 +6,6 @@ class Urls {
 
   static const String apiUrl = 'http://52.72.73.234/api/v1'; // http://3.86.39.253/api/v1
 
-  static const String animuzuUserId = '623c55b2b608e7aca00a74d9';
+  static const String animuzuUserId = '6242217a06e7ba94057a6212';
   
 } 

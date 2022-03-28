@@ -171,9 +171,17 @@ class _AdminAddNewArtState extends State<AdminAddNewArt> {
                     Navigator.of(context).pop();
                   }
                 ),
+                isLoading ? 
+                Text(
+                  'Loading...',
+                  style: TextStyle(
+                    color: ColorTheme.primary,
+                    fontSize: 18.0
+                  ),
+                ) :
                 TextButton(
                   child: Text(
-                    isLoading ? 'Loading...' : 'YES',
+                    'YES',
                     style: TextStyle(
                       color: ColorTheme.primary,
                       fontSize: 18.0

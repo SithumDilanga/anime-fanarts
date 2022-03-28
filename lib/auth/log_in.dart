@@ -71,36 +71,36 @@ class _LoginState extends State<Login> {
                     width: double.infinity,
                     fit: BoxFit.cover,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16.0),
-                    child: Align(
-                      alignment: Alignment.topCenter,
-                      child: Stack(
-                        children: [
-                          Text(
-                            "It's all about Anime/Manga artworks",
-                            style: TextStyle(
-                              // color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              foreground: Paint()
-                              ..style = PaintingStyle.stroke
-                              ..strokeWidth = 3
-                              ..color = ColorTheme.primary,
-                            ),
-                          ),
-                          Text(
-                            "It's all about Anime/Manga artworks",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.only(top: 16.0),
+                  //   child: Align(
+                  //     alignment: Alignment.topCenter,
+                  //     child: Stack(
+                  //       children: [
+                  //         Text(
+                  //           "It's all about Anime/Manga artworks",
+                  //           style: TextStyle(
+                  //             // color: Colors.white,
+                  //             fontSize: 20,
+                  //             fontWeight: FontWeight.bold,
+                  //             foreground: Paint()
+                  //             ..style = PaintingStyle.stroke
+                  //             ..strokeWidth = 3
+                  //             ..color = ColorTheme.primary,
+                  //           ),
+                  //         ),
+                  //         Text(
+                  //           "It's all about Anime/Manga artworks",
+                  //           style: TextStyle(
+                  //             color: Colors.white,
+                  //             fontSize: 20,
+                  //             fontWeight: FontWeight.bold,
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
                   // Center(
                   //   child: Column(
                   //     children: [

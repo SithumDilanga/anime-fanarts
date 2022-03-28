@@ -70,7 +70,7 @@ class _AddNewArtState extends State<AddNewArt> {
         double ratingValue = 0;
 
         return AlertDialog(
-          title: const Text('How statisfied are you with Anime Fanarts?'),
+          title: const Text('How statisfied are you with Animizu?'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -172,9 +172,17 @@ class _AddNewArtState extends State<AddNewArt> {
                     Navigator.of(context).pop();
                   }
                 ),
+                isLoading ? 
+                Text(
+                  'Loading...',
+                  style: TextStyle(
+                    color: ColorTheme.primary,
+                    fontSize: 18.0
+                  ),
+                ) :
                 TextButton(
                   child: Text(
-                    isLoading ? 'Loading...' : 'YES',
+                    'YES',
                     style: TextStyle(
                       color: ColorTheme.primary,
                       fontSize: 18.0
@@ -198,7 +206,11 @@ class _AddNewArtState extends State<AddNewArt> {
                         ).whenComplete(() {
 
                           if(isRateAvailable) {
-                            _rateAlert(widget.userId);
+
+                            Future.delayed(const Duration(milliseconds: 5), () {
+                              _rateAlert(widget.userId);
+                            });
+                              
                           }
 
                           Navigator.pushAndRemoveUntil(

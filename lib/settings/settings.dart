@@ -26,6 +26,20 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
 
+  String? userId;
+
+  void init() async {
+    userId = await SecureStorage.getUserId();
+  }
+
+  @override
+  void initState() {
+    
+    init();
+
+    super.initState();
+  }
+
   // logout confirmation Alert Dialog
   Future<void> _confirmLogoutAlert(BuildContext context) async {
 
@@ -138,7 +152,9 @@ class _SettingsState extends State<Settings> {
                   Navigator.of(context).push(
                     RouteTransAnim().createRoute(
                       1.0, 0.0, 
-                      GiveFeedback()
+                      GiveFeedback(
+                        userId: userId
+                      )
                     )
                   );
                 }

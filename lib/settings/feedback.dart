@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class GiveFeedback extends StatelessWidget {
-  GiveFeedback({ Key? key }) : super(key: key);
+  
+  final userId;
+
+  GiveFeedback({ Key? key, required this.userId }) : super(key: key);
 
   final FirestoreService _firestireService = FirestoreService();
 
@@ -108,13 +111,15 @@ class GiveFeedback extends StatelessWidget {
 
                       _firestireService.sendUserFeedback(
                         _feedbackTextController.text, 
-                        '123'
+                        userId
                       ).whenComplete(() {
 
                         Fluttertoast.showToast(
                           msg: "Thank you for your valuable thoughts!",
                           toastLength: Toast.LENGTH_SHORT,
                         );
+
+                        _feedbackTextController.clear();
 
                         Navigator.of(context).pop();
 
