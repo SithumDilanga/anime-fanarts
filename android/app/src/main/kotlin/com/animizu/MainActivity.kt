@@ -1,4 +1,4 @@
-package com.example.anime_fanarts
+package com.animizu
 
 import io.flutter.embedding.android.FlutterActivity
 
