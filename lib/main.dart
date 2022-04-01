@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:anime_fanarts/auth/sign_up.dart';
 import 'package:anime_fanarts/explore.dart';
 import 'package:anime_fanarts/intro_screen.dart';
@@ -17,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -50,7 +52,6 @@ void main() async {
   // }
 
   runZonedGuarded<Future<void>>(() async {
-    print('isWelcomed $isWelcomed');
     runApp(
       MultiProvider(
       providers: [
@@ -202,10 +203,7 @@ class _MyAppState extends State<MyApp> {
             padding: const EdgeInsets.only(top: 4.0),
             child: TabBarView(
               children: [
-                // ExploreNew(), 
                 Explore(),
-                // ExploreNew2(),
-                // ExplorePage(),
                 Profile()
               ]
             ),

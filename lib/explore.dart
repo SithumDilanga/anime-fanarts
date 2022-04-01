@@ -23,15 +23,8 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin<Ex
   List allPosts = [];
 
   GetCreatePosts _getCreatePosts = GetCreatePosts();
-
-  Future<void> _loadData() async {
-    await Future.delayed(Duration(milliseconds: 1000));
-    setState(() {
-      print('_loadData');
-    });
-  }
   
-  static const _pageSize = 10;
+  static const _pageSize = 20;
 
   final PagingController<int, dynamic> _pagingController =
       PagingController(firstPageKey: 1,);
@@ -47,8 +40,8 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin<Ex
 
   void _fetchPage(int pageKey) async {
 
-    print('pageKey $pageKey');
-    print('_pageSize $_pageSize');
+    // print('pageKey $pageKey');
+    // print('_pageSize $_pageSize');
     
 
     final allPostsData = await _getCreatePosts.getAllPosts(
@@ -106,19 +99,14 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin<Ex
         backgroundColor: ColorTheme.primary,
         child: PagedListView<int, dynamic>.separated(
           pagingController: _pagingController,
-          // addAutomaticKeepAlives: false,
+          addAutomaticKeepAlives: false,
           builderDelegate: PagedChildBuilderDelegate<dynamic>(
             animateTransitions: true,
             itemBuilder: (context, item, index) {
 
-              print('removedReactionList ${reactedNewPosts.removedReactionList}');
-
-
               bool isReacted = false;
               bool isNewReacted = false;
         
-              print('reactedPosts $reactedPosts');
-
               for(int j = 0; j < reactedNewPosts.reactedPosts.length; j++) {
                 if(reactedNewPosts.reactedPosts[j] == item['_id']) {
                   isReacted = true;
@@ -128,27 +116,22 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin<Ex
         
               for(int i = 0; i < reactedPosts.length; i++) {
         
-                // print('reacted posts ${reactedPosts[i]['post']}');
         
                 if(reactedPosts[i]['post'] == item['_id']) {
 
                   if(reactedNewPosts.removedReactionList.isNotEmpty) {
                     for(int j = 0; j < reactedNewPosts.removedReactionList.length; j++) {
-                      print('whatsinthere ${reactedNewPosts.removedReactionList.elementAt(j)}');
                       if(reactedNewPosts.removedReactionList.elementAt(j) != item['_id']) {
                         isReacted = true;
                       }
                     }
                   } else {
-                    print('whaddahell');
                     
                     isReacted = true;
                   }
         
                   // isReacted = true;
-        
-                  print('reacted shit ${item['_id']}');
-        
+                
                 } 
 
                 

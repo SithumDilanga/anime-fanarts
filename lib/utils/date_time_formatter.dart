@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class DateTimeFormatter {
 
@@ -14,8 +15,6 @@ class DateTimeFormatter {
         //server time(UTC)
         dateTime = DateFormat(currentFormat).parse(value, isUtc).toLocal();
 
-        print('timeZoneName ${dateTime.timeZoneOffset}');
-
         // -------- convert UTC time to device time ----------
 
         //get current system local time
@@ -28,8 +27,6 @@ class DateTimeFormatter {
         //adjust the time diff
         var newLocalTime = dateTime.add(timeDiff);
 
-        print('new_local_time $newLocalTime');
-
         formattedDate = DateFormat(desiredFormat).format(newLocalTime);
 
         // -------- End convert UTC time to device time ----------
@@ -37,7 +34,10 @@ class DateTimeFormatter {
         // formattedDate = DateFormat(desiredFormat).format(dateTime);
 
       } catch (e) {
-        print("$e");
+        Fluttertoast.showToast(
+          msg: 'Error Occured!',
+          toastLength: Toast.LENGTH_LONG,
+        );
       }
     }
     return formattedDate;

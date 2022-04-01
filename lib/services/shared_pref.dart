@@ -16,7 +16,6 @@ class SharedPref {
   // ---------------- gritie features -------------------
   
   static Future<bool> setUserName(String userName) async {
-    print('userName ' +  userName.toString());
     return await _preferences!.setString(_keyUserName, userName);
   }
 
@@ -27,7 +26,6 @@ class SharedPref {
   // ---------- profile image -----------------
 
   static Future<bool> setProfilePic(String profileImage) async {
-    print('prifilePic ' +  profileImage.toString());
     return await _preferences!.setString(_keyProfilePic, profileImage);
   }
 

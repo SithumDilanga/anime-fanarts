@@ -20,7 +20,6 @@ class GetCreatePosts extends ChangeNotifier {
     try {
 
       final bearerToken = await SecureStorage.getToken() ?? '';
-      print('bearer $bearerToken');
       
       Response allPostsData = await _dio.get('$URL/posts?page=$pageKey&limit=$pageSize', options: Options(
         headers: {'Authorization': 'Bearer $bearerToken'},
@@ -29,8 +28,6 @@ class GetCreatePosts extends ChangeNotifier {
       return allPostsData.data;
 
     } on DioError catch (e) {
-
-      print('Error creating post : $e');
 
       if (e.response != null) {
 
@@ -50,9 +47,6 @@ class GetCreatePosts extends ChangeNotifier {
           msg: 'Error loading data check your netwrok connection!',
           toastLength: Toast.LENGTH_LONG,
         );
-
-        // print('Error sending request!');
-        // print('e.message ${e.message}');
       }
 
     }
@@ -82,8 +76,6 @@ class GetCreatePosts extends ChangeNotifier {
       } else {
 
         // String fileName = postImageFile!.path.split('/').last;
-        // print('file $postImageFile');
-        // print('fileName $fileName');
 
         // List<String> postImageFiles = ['sdsd', 'sdsd'];
 
@@ -131,8 +123,6 @@ class GetCreatePosts extends ChangeNotifier {
 
     } on DioError catch (e) {
 
-      print('Error creating post : $e');
-
       if (e.response != null) {
 
         Fluttertoast.showToast(
@@ -150,8 +140,6 @@ class GetCreatePosts extends ChangeNotifier {
           toastLength: Toast.LENGTH_LONG,
         );
 
-        print('Error sending request!');
-        print(e.message);
       }
 
       }
@@ -184,8 +172,6 @@ class GetCreatePosts extends ChangeNotifier {
       return userPosts.statusCode;
 
     } on DioError catch (e) {
-
-      print('Error creating post : $e');
 
       if (e.response != null) {
 
@@ -236,15 +222,12 @@ class GetCreatePosts extends ChangeNotifier {
   //   try {
 
   //     final bearerToken = await SecureStorage.getToken() ?? '';
-  //     print('bearer $bearerToken');
+
       
   //     Response allPostsData = await _dio.get('$URL/posts', options: Options(
   //       headers: {'Authorization': 'Bearer $bearerToken'},
   //     ));
-  //     print('All posts: ${allPostsData.data}');
-  //     print(allPostsData.statusCode);
-  //     print(allPostsData.statusMessage);
-  //     print(allPostsData.headers);
+
 
   //     print('shit ${allPostsData.data['data']['reacted']}');
 

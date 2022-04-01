@@ -1,5 +1,6 @@
 import 'package:anime_fanarts/services/download_share.dart';
 import 'package:anime_fanarts/services/permissions_service.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -19,7 +20,6 @@ class ImgFullScreen extends StatelessWidget {
    askPermission(){
     PermissionsService().requestStoragePermission(
       onPermissionDenied: () {
-        print('Permission has been denied');
         Fluttertoast.showToast(
          msg: 'Permission denied! cannot download image',
          toastLength: Toast.LENGTH_SHORT,
@@ -46,8 +46,9 @@ class ImgFullScreen extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: NetworkImage(
+                      image: ExtendedNetworkImageProvider(
                         '$imgLink', // '$imgLink',
+                        cache: true
                       ),
                       fit: BoxFit.contain,
                     )

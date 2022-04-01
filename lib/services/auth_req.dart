@@ -25,9 +25,6 @@ class AuthReq {
         data: userSignUp.toJson(),
       );
 
-      print('User created: ${response.data}');
-      print('token: ${response.data['token']}');
-
       SecureStorage.setToken(response.data['token']);
       SecureStorage.setUserId(response.data['data']['user']['_id']);
       SharedPref.setUserName(response.data['data']['user']['name']);
@@ -40,13 +37,8 @@ class AuthReq {
       );
 
     } on DioError catch (e) {
-      print('Error creating user: $e');
 
       if (e.response != null) {
-        print('Dio error!');
-        print('STATUS: ${e.response?.statusCode}');
-        print('DATA: ${e.response?.data}');
-        print('HEADERS: ${e.response?.headers}');
 
         // return e.response!.statusCode;
 
@@ -72,8 +64,6 @@ class AuthReq {
           toastLength: Toast.LENGTH_LONG,
         );
 
-        print('Error sending request!');
-        print(e.message);
       }
 
     }
@@ -95,10 +85,6 @@ class AuthReq {
       data: userLogin.toJson(),
     );
 
-    print('User created: ${response.statusCode}');
-    print('User Info: ${response.data}');
-    print('token: ${response.data['token']}');
-
     SecureStorage.setToken(response.data['token']);
     SecureStorage.setUserId(response.data['data']['user']['_id']);
     SharedPref.setUserName(response.data['data']['user']['name']);
@@ -112,14 +98,7 @@ class AuthReq {
 
   } on DioError catch (e) {
 
-    print('Error creating user: $e');
-
     if (e.response != null) {
-
-      print('Dio error!');
-      print('STATUS: ${e.response?.statusCode}');
-      print('DATA: ${e.response?.data}');
-      print('HEADERS: ${e.response?.headers}');
 
       // return e.response!.statusCode;
 
@@ -137,9 +116,6 @@ class AuthReq {
         msg: e.message,
         toastLength: Toast.LENGTH_LONG,
       );
-
-      print('Error sending request!');
-      print(e.message);
     }
 
     }
@@ -164,22 +140,12 @@ class AuthReq {
       },
     );
 
-    print('forgot password: ${response.statusCode}');
-    print('forgot password: ${response.data}');
-
     return response.statusCode;
     
 
   } on DioError catch (e) {
 
-    print('Error sending verifcation code: $e');
-
     if (e.response != null) {
-
-      print('Dio error!');
-      print('STATUS: ${e.response?.statusCode}');
-      print('DATA: ${e.response?.data}');
-      print('HEADERS: ${e.response?.headers}');
 
       // return e.response!.statusCode;
 
@@ -198,8 +164,6 @@ class AuthReq {
         toastLength: Toast.LENGTH_LONG,
       );
 
-      print('Error sending request!');
-      print(e.message);
     }
 
     }
@@ -228,9 +192,6 @@ class AuthReq {
       },
     );
 
-    print('reset password: ${response.statusCode}');
-    print('reset password: ${response.data}');
-
     SecureStorage.setToken(response.data['token']);
     SecureStorage.setUserId(response.data['data']['user']['_id']);
 
@@ -239,14 +200,7 @@ class AuthReq {
 
   } on DioError catch (e) {
 
-    print('Error sending verifcation code: $e');
-
     if (e.response != null) {
-
-      print('Dio error!');
-      print('STATUS: ${e.response?.statusCode}');
-      print('DATA: ${e.response?.data}');
-      print('HEADERS: ${e.response?.headers}');
 
       // return e.response!.statusCode;
 
@@ -264,9 +218,6 @@ class AuthReq {
         msg: e.message,
         toastLength: Toast.LENGTH_LONG,
       );
-
-      print('Error sending request!');
-      print(e.message);
     }
 
     }

@@ -64,6 +64,8 @@ dependencies:
   flutter_native_timezone: ^2.0.0
   image_cropper: ^1.4.1
   introduction_screen: ^3.0.0
+  transparent_image: ^2.0.0
+  extended_image: ^6.0.2+1
   
 
 dev_dependencies:

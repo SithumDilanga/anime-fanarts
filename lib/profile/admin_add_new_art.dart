@@ -41,18 +41,14 @@ class _AdminAddNewArtState extends State<AdminAddNewArt> {
     
     List<XFile>? pickedFiles = await picker.pickMultiImage(
       // source: ImageSource.gallery,
-      imageQuality: 50
+      imageQuality: 15
     );
-
-    print('pickedFiles' + pickedFiles.toString());
 
     setState(() {
       // _postImages = File(pickedFiles.path);
       for(int i = 0; i < pickedFiles!.length; i++) {
 
         _postImages!.add(File(pickedFiles[i].path));
-
-        print('_postImages' + _postImages.toString());
 
       }
     });
@@ -246,8 +242,6 @@ class _AdminAddNewArtState extends State<AdminAddNewArt> {
       builder: (BuildContext context, AsyncSnapshot snapshot) {
 
         if(snapshot.hasData) {
-
-          print('shit ${snapshot.data!['isRateAvailable']}');
 
           return Scaffold(
           appBar: AppBar(

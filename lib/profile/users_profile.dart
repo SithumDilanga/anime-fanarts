@@ -36,12 +36,6 @@ class UsersProfileState extends State<UsersProfile> with AutomaticKeepAliveClien
 
   ProfileReq _profileReq = ProfileReq();
 
-  Future<void> _loadData() async {
-    await Future.delayed(Duration(milliseconds: 1000));
-    setState(() {
-      print('_loadData');
-    });
-  }
 
    void _fetchPage(int pageKey) async {
 
@@ -54,7 +48,6 @@ class UsersProfileState extends State<UsersProfile> with AutomaticKeepAliveClien
      try {  
 
       final newItems = await allPostsData['posts']['posts'];
-      print('nativetimezoneProfile ${allPostsData['data']['user']}');
 
       final isLastPage = newItems.length < _pageSize;
 
@@ -67,11 +60,8 @@ class UsersProfileState extends State<UsersProfile> with AutomaticKeepAliveClien
       }
 
       setState(() {
-        print('yoyo! $reactedPosts');
         reactedPosts = reactedPosts + allPostsData['reacted'];
         userInfo = allPostsData['data']['user'];
-        print('yoyo!2 $userInfo');
-        // allPosts = allPostsData;
       });
 
     } catch (error) {
@@ -303,18 +293,14 @@ class UsersProfileState extends State<UsersProfile> with AutomaticKeepAliveClien
 
                             bool isReacted = false;
 
-                            // print('bitch ${snapshot.data['data']['reacted']}');
-                            print('reactedPostsProfile $reactedPosts');
 
                             for(int i = 0; i < reactedPosts.length; i++) {
                             
-                              // print('reacted posts ${reactedPosts[i]['post']}');
 
                               if(reactedPosts[i]['post'] == item['_id']) {
                               
                                 isReacted = true;
 
-                                print('reacted shitProfile ${item['_id']}');
 
                               }
 

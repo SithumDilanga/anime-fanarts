@@ -47,11 +47,8 @@ class _CommentSecionState extends State<CommentSecion> {
 
   void _fetchPage(int pageKey) async {
 
-    final String currentTimeZone = await FlutterNativeTimezone.getLocalTimezone();
-    print('nativetimezone $currentTimeZone');
-
-    print('pageKeyCommenr $pageKey');
-    print('_pageSizeComent $_pageSize');
+    // print('pageKeyCommenr $pageKey');
+    // print('_pageSizeComent $_pageSize');
 
 
     final allPostsData = await _interactionsReq.getComments(
@@ -72,7 +69,6 @@ class _CommentSecionState extends State<CommentSecion> {
         _pagingController.appendPage(newItems, nextPageKey);
       }
 
-      print('reactedPosts1 $allPostsData');
 
     } catch (error) {
       _pagingController.error = error;
@@ -148,7 +144,7 @@ class _CommentSecionState extends State<CommentSecion> {
                               radius: 20,
                               backgroundColor: Colors.blueGrey[700],
                               backgroundImage: AssetImage(
-                                'assets/images/blank-profile-picture.jpg'
+                                'assets/images/profile-img-placeholder.jpg'
                               )
                               // NetworkImage(
                               //   'https://cdna.artstation.com/p/assets/images/images/031/257/402/large/yukisho-art-vector-6.jpg?1603101769&dl=10'

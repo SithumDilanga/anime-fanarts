@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:typed_data';
+
 import 'package:anime_fanarts/comment_section.dart';
 import 'package:anime_fanarts/img_fullscreen.dart';
 import 'package:anime_fanarts/main.dart';
@@ -17,6 +20,9 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:extended_image/extended_image.dart';
+// import 'package:transparent_image/transparent_image.dart';
+
 
 class Post extends StatefulWidget {
 
@@ -57,8 +63,6 @@ class _PostState extends State<Post> with AutomaticKeepAliveClientMixin<Post> {
   Interactions _interactionsReq = Interactions();
   DateTimeFormatter _dateTimeFormatter = DateTimeFormatter();
   DownloadShare _downloadShare = DownloadShare();
-
-  List imageList = ['https://images.alphacoders.com/120/thumb-1920-1203420.png', 'https://i.pinimg.com/originals/44/c3/21/44c321cf6862f22caf3e6b71a0661565.jpg','https://www.nawpic.com/media/2020/levi-ackerman-nawpic-17.jpg' ];
 
   String? firstHalf;
   String? secondHalf;
@@ -150,7 +154,6 @@ class _PostState extends State<Post> with AutomaticKeepAliveClientMixin<Post> {
 
       if(widget.desc!.contains('adminFeature@')) {
         splittedDescText = widget.desc!.split('adminFeature@');
-        print('splittedDescText ${splittedDescText[1]}');
 
         if (splittedDescText[0].length > 150) {
           firstHalf = splittedDescText[0].substring(0, 150);
@@ -176,13 +179,9 @@ class _PostState extends State<Post> with AutomaticKeepAliveClientMixin<Post> {
 
   }
 
-  // bool isReacted = false;
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
-    print('widgt.id ${widget.id} ${animuzuId}');
 
     String formattedDate = _dateTimeFormatter.getFormattedDateFromFormattedString(
       value: widget.date, 
@@ -215,9 +214,13 @@ class _PostState extends State<Post> with AutomaticKeepAliveClientMixin<Post> {
                             backgroundColor: Colors.blueGrey[700],
                             backgroundImage: widget.profilePic == 'default-profile-pic.jpg' ? AssetImage(
                               'assets/images/profile-img-placeholder.jpg'
-                            ) as ImageProvider : NetworkImage(
-                              '${widget.profilePic}'
-                            ),
+                            ) as ImageProvider : ExtendedNetworkImageProvider(
+                                '${widget.profilePic}',
+                                // cache: true,
+                              ),
+                            // NetworkImage(
+                            //   '${widget.profilePic}',
+                            // ),
                           ),
                         if(!widget.isUserPost)
                           GestureDetector(
@@ -225,8 +228,9 @@ class _PostState extends State<Post> with AutomaticKeepAliveClientMixin<Post> {
                               radius: 20,
                               backgroundImage: widget.profilePic == 'default-profile-pic.jpg' ? AssetImage(
                                 'assets/images/profile-img-placeholder.jpg'
-                              ) as ImageProvider : NetworkImage(
-                                '${widget.profilePic}'
+                              ) as ImageProvider : ExtendedNetworkImageProvider(
+                                '${widget.profilePic}',
+                                // cache: true,
                               ),
                             ),
                             onTap: () {
@@ -324,7 +328,7 @@ class _PostState extends State<Post> with AutomaticKeepAliveClientMixin<Post> {
                             ],
                           ),
                       ],
-                    ),
+                    ), 
                   ),
                   if(widget.isUserPost && secureStorageUserId.toString() == widget.userId.toString())
                     IconButton(
@@ -378,7 +382,7 @@ class _PostState extends State<Post> with AutomaticKeepAliveClientMixin<Post> {
                     ]
                     )
                 ],
-              ),
+              ), 
               if(widget.desc!.isNotEmpty && widget.userId == animuzuId)
 
                 Padding(
@@ -545,12 +549,63 @@ class _PostState extends State<Post> with AutomaticKeepAliveClientMixin<Post> {
                                 maxWidth: double.infinity,
                                 maxHeight: 390,
                               ),
-                              child: CachedNetworkImage(
-                                // imageUrl: imageList[itemIndex].toString(),
-                                imageUrl: '${widget.postImg![itemIndex]}',
+                              // child: FadeInImage.memoryNetwork(
+                              //       key: ValueKey('${widget.postImg![itemIndex]}'),
+                              //       placeholder: kTransparentImage,
+                              //       image: '${widget.postImg![itemIndex]}',
+                              //       imageErrorBuilder: (context, error, stacktrace) { // Handle Error for the 1st time
+                              //     return FadeInImage.memoryNetwork(
+                              //       key: ValueKey('${widget.postImg![itemIndex]}'),
+                              //       placeholder: kTransparentImage,
+                              //       image: '${widget.postImg![itemIndex]}',
+                              //       imageErrorBuilder: (context, error, stacktrace) { // Handle Error for the 2nd time
+                              //         return FadeInImage.memoryNetwork(
+                              //           key: ValueKey('${widget.postImg![itemIndex]}'),
+                              //           fit: BoxFit.cover,
+                              //           placeholder: kTransparentImage,
+                              //           image: '${widget.postImg![itemIndex]}',
+                              //           imageErrorBuilder: (context, error, stacktrace) { // Handle Error for the 3rd time to return text
+                              //             return Center(child: Text('Image Not Available'));
+                              //           },
+                              //         );
+                              //       },
+                              //     );}),
+
+                              // child: CachedNetworkImage(
+                              //   key: ValueKey('${widget.postImg![itemIndex]}'),
+                              //   imageUrl: '${widget.postImg![itemIndex]}',
+                              //   width: double.infinity,
+                              //   fit: BoxFit.cover,
+                              //   memCacheHeight: 500,
+                              //   memCacheWidth: 500,
+                              //   maxHeightDiskCache: 500,
+                              //   maxWidthDiskCache: 500,
+                              //   errorWidget: (context, url, error) => Icon(Icons.error),
+                              //   placeholder: (context, url) => imagePlaceholder(),
+                              // ),
+
+                              child: ExtendedImage.network(
+                                '${widget.postImg![itemIndex]}',
                                 width: double.infinity,
                                 fit: BoxFit.cover,
-                                placeholder: (context, url) => imagePlaceholder(),
+                                cache: true,
+                                // cacheHeight: 500,
+                                cacheWidth: 500,
+                                loadStateChanged: (ExtendedImageState state) {
+                                  switch (state.extendedImageLoadState) {
+                                    case LoadState.loading:
+                                      return Image.asset(
+                                        "assets/images/image placeholder 2.jpg",
+                                        fit: BoxFit.cover,
+                                      );
+                                      
+                                      case LoadState.completed:
+                                        return null;
+
+                                      case LoadState.failed:
+                                       return null;
+                                  }
+                                },
                               ),
                             ),
                             Positioned.fill(
@@ -851,5 +906,6 @@ class _PostState extends State<Post> with AutomaticKeepAliveClientMixin<Post> {
 
   @override
   bool get wantKeepAlive => true;
+
   
 }

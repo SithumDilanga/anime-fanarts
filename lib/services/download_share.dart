@@ -25,7 +25,10 @@ class DownloadShare {
       await Share.shareFiles([path], text: ' Artwork by $username. Uploaded in Animizu');
 
    } catch (e) {
-      print('error: $e');
+      Fluttertoast.showToast(
+        msg: 'Error Sharing!',
+        toastLength: Toast.LENGTH_LONG,
+      );
    }
   }
   // --- End share image function ---
@@ -43,7 +46,6 @@ class DownloadShare {
         quality: 60,
         name: "fanartImage"
       );
-      print(result); 
 
         // --- showing toast message ---
         Fluttertoast.showToast(
@@ -61,7 +63,6 @@ class DownloadShare {
         backgroundColor: Colors.grey[800],
       );
 
-      print(e.toString());
 
     }
   

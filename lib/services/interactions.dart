@@ -31,7 +31,6 @@ class Interactions {
 
     } on DioError catch (e) {
 
-      print('Error creating reaction : $e');
 
       if (e.response != null) {
 
@@ -67,7 +66,6 @@ class Interactions {
     try {
 
       final bearerToken = await SecureStorage.getToken() ?? '';
-      print('bearer $bearerToken');
       
       Response allComments = await _dio.get('$URL/comments?page=$pageKey&limit=$pageSize&postId=$postId', options: Options(
         headers: {'Authorization': 'Bearer $bearerToken'},
@@ -78,7 +76,6 @@ class Interactions {
 
     } on DioError catch (e) {
 
-      print('Error getting comments : $e');
 
       if (e.response != null) {
 
@@ -129,7 +126,6 @@ class Interactions {
 
     } on DioError catch (e) {
 
-      print('Error getting comments : $e');
 
       if (e.response != null) {
 

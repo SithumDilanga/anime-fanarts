@@ -95,7 +95,6 @@ class _EditBioState extends State<EditBio> {
                 
                       if(updatedBioText.isEmpty) {
                 
-                        print('Bio not edited');
                         Navigator.pop(context);
                 
                       } else {

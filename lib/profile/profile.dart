@@ -8,6 +8,7 @@ import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/error_loading.dart';
 import 'package:anime_fanarts/utils/loading_animation.dart';
 import 'package:anime_fanarts/utils/urls.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -81,8 +82,6 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
      try {  
 
       final newItems = await allPostsData['data']['posts'];
-      print('nativetimezoneProfile ${allPostsData['data']['reacted']}');
-      print('wtf ${reactedPosts + allPostsData['data']['reacted']}');
 
       final isLastPage = newItems.length < _pageSize;
 
@@ -95,10 +94,7 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
       }
 
       setState(() {
-        print('yoyo! $reactedPosts');
         reactedPosts = reactedPosts + allPostsData['data']['reacted'];
-        print('yoyo!2 $reactedPosts');
-        // allPosts = allPostsData;
       });
 
     } catch (error) {
@@ -116,7 +112,7 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
     
     XFile? pickedFile = await picker.pickImage(
       source: ImageSource.gallery,
-      imageQuality: 50
+      imageQuality: 15
     );
 
     _cropProfileImage(pickedFile!.path);
@@ -178,7 +174,7 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
     
     XFile? pickedFile = await picker.pickImage(
       source: ImageSource.gallery,
-      imageQuality: 50
+      imageQuality: 15
     );
 
     _cropCoverImage(pickedFile!.path);
@@ -395,10 +391,12 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                                                 topRight: Radius.circular(6)
                                               ),
                                               child: 
-                                              _coverImage == null ? Image.network(
+                                              _coverImage == null ? ExtendedImage.network(
                                                 '${userInfo['coverPic']}',
                                                 width: double.infinity,
                                                 fit: BoxFit.cover,
+                                                cache: true,
+                                                cacheWidth: 500,
                                               ) : Image.file(
                                                 _coverImage,
                                                 width: double.infinity,
@@ -480,8 +478,13 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
                                                 child: CircleAvatar(
                                                   radius: 47,
                                                   backgroundImage: 
-                                                  _profileImage == null ? NetworkImage(
-                                                    '${userInfo['profilePic']}'
+                                                  _profileImage == null ? ExtendedNetworkImageProvider(
+                                                    '${userInfo['profilePic']}',
+                                                    //cache: true,
+                                                    retries: 3,
+                                                    timeLimit: Duration(
+                                                      milliseconds: 100
+                                                    ),
                                                   ) as ImageProvider : FileImage(
                                                     _profileImage
                                                   ),
@@ -705,18 +708,14 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
 
                                   bool isReacted = false;
 
-                                  // print('bitch ${snapshot.data['data']['reacted']}');
-                                  print('reactedPostsProfile $reactedPosts');
 
                                   for(int i = 0; i < reactedPosts.length; i++) {
                                   
-                                    // print('reacted posts ${reactedPosts[i]['post']}');
 
                                     if(reactedPosts[i]['post'] == item['_id']) {
                                     
                                       isReacted = true;
 
-                                      print('reacted shitProfile ${item['_id']}');
 
                                     }
 

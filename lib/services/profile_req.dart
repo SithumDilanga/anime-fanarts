@@ -20,7 +20,6 @@ class ProfileReq {
     try {
 
       final bearerToken = await SecureStorage.getToken() ?? '';
-      print('bearer $bearerToken');
       
       Response userData = await _dio.get('$URL/users/me', options: Options(
         headers: {'Authorization': 'Bearer $bearerToken'},
@@ -31,7 +30,6 @@ class ProfileReq {
     } on DioError catch (e) {
 
       if(e.type == DioErrorType.response) {
-        print('bitch catched!');
       }
 
       if (e.response != null) {
@@ -70,10 +68,6 @@ class ProfileReq {
 
     } on DioError catch (e) {
 
-      if(e.type == DioErrorType.response) {
-        print('bitch catched!');
-      }
-
       if (e.response != null) {
         // returning error status code
         return e.response!.statusCode;
@@ -102,7 +96,6 @@ class ProfileReq {
 
 
       final bearerToken = await SecureStorage.getToken() ?? '';
-      print('bearer $bearerToken');
       
       Response userData = await _dio.get('$URL/users/$id', options: Options(
         headers: {'Authorization': 'Bearer $bearerToken'},
@@ -111,10 +104,6 @@ class ProfileReq {
       return userData.data['data']['users'];
 
     } on DioError catch (e) {
-
-      if(e.type == DioErrorType.response) {
-        print('bitch catched!');
-      }
 
       if (e.response != null) {
 
@@ -141,8 +130,7 @@ class ProfileReq {
   Future uploadProfilePic(File file) async {
 
     String fileName = file.path.split('/').last;
-    print('file $file');
-    print('fileName $fileName');
+
     
     FormData data = FormData.fromMap({
       'profilePic': await MultipartFile.fromFile(
@@ -162,9 +150,6 @@ class ProfileReq {
         headers: {'Authorization': 'Bearer $bearerToken'},
         contentType: 'multipart/form-data'
       ));
-      // .then((response) => print(response));
-      // .catchError((error) => print(error));
-
 
 
     } on DioError catch (e) {
@@ -218,15 +203,9 @@ class ProfileReq {
         headers: {'Authorization': 'Bearer $bearerToken'},
         contentType: 'multipart/form-data'
       ));
-      // .then((response) => print(response));
-      // .catchError((error) => print(error));
-
-      print(response.statusCode);
 
 
     } on DioError catch (e) {
-
-    print('Error creating user: $e');
 
     if (e.response != null) {
 
@@ -273,8 +252,6 @@ class ProfileReq {
         headers: {'Authorization': 'Bearer $bearerToken'},
         contentType: 'multipart/form-data'
       ));
-      // .then((response) => print(response));
-      // .catchError((error) => print(error));
 
       Fluttertoast.showToast(
         msg: 'Bio Updated!',
@@ -329,10 +306,6 @@ class ProfileReq {
         headers: {'Authorization': 'Bearer $bearerToken'},
         contentType: 'multipart/form-data'
       ));
-      // .then((response) => print(response));
-      // .catchError((error) => print(error));
-
-      print(response.statusCode);
 
     } on DioError catch (e) {
 
@@ -376,10 +349,6 @@ class ProfileReq {
       return userData.data;
 
     } on DioError catch (e) {
-
-      if(e.type == DioErrorType.response) {
-        print('bitch catched!');
-      }
 
       if (e.response != null) {
     
