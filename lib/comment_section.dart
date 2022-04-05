@@ -258,6 +258,7 @@ class _CommentSecionState extends State<CommentSecion> {
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            // mainAxisSize : MainAxisSize.min,
                             children: [
                               GestureDetector(
                                 child: Row(
@@ -282,21 +283,24 @@ class _CommentSecionState extends State<CommentSecion> {
                                   ],
                                 ),
                                 onTap: () {
-              
+                                          
                                   Navigator.of(context).push(
                                     RouteTransAnim().createRoute(1.0, .0, UsersProfile(
                                       name: '${item['user'][0]['name']}', 
                                       userId: item['user'][0]['_id'],
                                     )),
                                   );
-              
+                                          
                                 },
                               ),
-                              Text(
-                                '$formattedDate',
-                                style: TextStyle(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.normal
+                              SizedBox(width: 8.0,),
+                              Flexible(
+                                child: Text(
+                                  '$formattedDate',
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.normal
+                                  ),
                                 ),
                               )
                             ],

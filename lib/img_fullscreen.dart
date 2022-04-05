@@ -1,5 +1,6 @@
 import 'package:anime_fanarts/services/download_share.dart';
 import 'package:anime_fanarts/services/permissions_service.dart';
+import 'package:anime_fanarts/utils/colors.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -15,6 +16,8 @@ class ImgFullScreen extends StatelessWidget {
   ImgFullScreen({ Key? key, required this.selectedimageIndex, this.imageList, this.imgLink, required this.name, required this.isUserPost }) : super(key: key);
 
   DownloadShare _downloadShare = DownloadShare();
+
+  final PageController controller = PageController();
 
   // --- asking user permission ---
    askPermission(){
@@ -42,18 +45,57 @@ class ImgFullScreen extends StatelessWidget {
           children: [
             Hero(
               tag: '${isUserPost.toString() + imgLink.toString()}',
-              child: InteractiveViewer(
-                child: Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: ExtendedNetworkImageProvider(
-                        '$imgLink', // '$imgLink',
-                        cache: true
+              // child: InteractiveViewer(
+              //   child: Container(
+              //     decoration: BoxDecoration(
+              //       image: DecorationImage(
+              //         image: ExtendedNetworkImageProvider(
+              //           '$imgLink', // '$imgLink',
+              //           cache: true,
+              //         ),
+              //         fit: BoxFit.contain,
+              //       )
+              //     ),
+              //   ),
+              // ),
+              child: PageView(
+                children: [
+                  for(String imageLink in imageList!)
+                    Center(
+                      child: ExtendedImage.network(
+                        imageLink,//'$imgLink',
+                        fit: BoxFit.contain,
+                        mode: ExtendedImageMode.gesture,
+                          initGestureConfigHandler: (state) {
+                            return GestureConfig(
+                              minScale: 0.9,
+                              animationMinScale: 0.7,
+                              maxScale: 3.0,
+                              animationMaxScale: 3.5,
+                              speed: 1.0,
+                              inertialSpeed: 100.0,
+                              initialScale: 1.0,
+                              inPageView: false,
+                              initialAlignment: InitialAlignment.center,
+                            );
+                          },
+                        loadStateChanged: (ExtendedImageState state) {
+                          switch (state.extendedImageLoadState) {
+                            case LoadState.loading:
+                              return CircularProgressIndicator(
+                                backgroundColor: ColorTheme.primary,
+                              );
+                              
+                              case LoadState.completed:
+                                return null;
+                            
+                              case LoadState.failed:
+                               return null;
+                          }
+                        },
                       ),
-                      fit: BoxFit.contain,
-                    )
-                  ),
-                ),
+                    ),
+                ],
               ),
             ),
             Row(

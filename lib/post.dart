@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:anime_fanarts/comment_section.dart';
 import 'package:anime_fanarts/img_fullscreen.dart';
 import 'package:anime_fanarts/main.dart';
+import 'package:anime_fanarts/models/reacted_posts.dart';
 import 'package:anime_fanarts/models/reaction.dart';
 import 'package:anime_fanarts/profile/users_profile.dart';
 import 'package:anime_fanarts/report/select_reason.dart';
@@ -19,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:extended_image/extended_image.dart';
 // import 'package:transparent_image/transparent_image.dart';
@@ -189,6 +191,8 @@ class _PostState extends State<Post> with AutomaticKeepAliveClientMixin<Post> {
       desiredFormat: "yyyy-MM-dd hh:mm a"
     );
 
+    final reactedPosts = Provider.of<ReactedPosts>(context);
+
       return Container(
         padding: EdgeInsets.symmetric(
           horizontal: 4.0,
@@ -199,7 +203,9 @@ class _PostState extends State<Post> with AutomaticKeepAliveClientMixin<Post> {
             borderRadius: BorderRadius.circular(8)
           ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            // crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.max,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -490,7 +496,6 @@ class _PostState extends State<Post> with AutomaticKeepAliveClientMixin<Post> {
                   ),
                   
                 ),
-
               if(widget.desc!.isNotEmpty && widget.userId != animuzuId)
               
                 Padding(
@@ -536,77 +541,34 @@ class _PostState extends State<Post> with AutomaticKeepAliveClientMixin<Post> {
                 CarouselSlider.builder(
                   itemCount: widget.postImg!.length,
                   itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
-
+                
                     return GestureDetector(
                       child: Hero(
                         tag: '${widget.isUserPost.toString() + widget.postImg![itemIndex].toString()}',
                         child: Stack(
                           children: [
-                            ConstrainedBox(
-                              constraints: const BoxConstraints(
-                                minWidth: 70,
-                                minHeight: 70,
-                                maxWidth: double.infinity,
-                                maxHeight: 390,
-                              ),
-                              // child: FadeInImage.memoryNetwork(
-                              //       key: ValueKey('${widget.postImg![itemIndex]}'),
-                              //       placeholder: kTransparentImage,
-                              //       image: '${widget.postImg![itemIndex]}',
-                              //       imageErrorBuilder: (context, error, stacktrace) { // Handle Error for the 1st time
-                              //     return FadeInImage.memoryNetwork(
-                              //       key: ValueKey('${widget.postImg![itemIndex]}'),
-                              //       placeholder: kTransparentImage,
-                              //       image: '${widget.postImg![itemIndex]}',
-                              //       imageErrorBuilder: (context, error, stacktrace) { // Handle Error for the 2nd time
-                              //         return FadeInImage.memoryNetwork(
-                              //           key: ValueKey('${widget.postImg![itemIndex]}'),
-                              //           fit: BoxFit.cover,
-                              //           placeholder: kTransparentImage,
-                              //           image: '${widget.postImg![itemIndex]}',
-                              //           imageErrorBuilder: (context, error, stacktrace) { // Handle Error for the 3rd time to return text
-                              //             return Center(child: Text('Image Not Available'));
-                              //           },
-                              //         );
-                              //       },
-                              //     );}),
-
-                              // child: CachedNetworkImage(
-                              //   key: ValueKey('${widget.postImg![itemIndex]}'),
-                              //   imageUrl: '${widget.postImg![itemIndex]}',
-                              //   width: double.infinity,
-                              //   fit: BoxFit.cover,
-                              //   memCacheHeight: 500,
-                              //   memCacheWidth: 500,
-                              //   maxHeightDiskCache: 500,
-                              //   maxWidthDiskCache: 500,
-                              //   errorWidget: (context, url, error) => Icon(Icons.error),
-                              //   placeholder: (context, url) => imagePlaceholder(),
-                              // ),
-
-                              child: ExtendedImage.network(
-                                '${widget.postImg![itemIndex]}',
-                                width: double.infinity,
-                                fit: BoxFit.cover,
-                                cache: true,
-                                // cacheHeight: 500,
-                                cacheWidth: 500,
-                                loadStateChanged: (ExtendedImageState state) {
-                                  switch (state.extendedImageLoadState) {
-                                    case LoadState.loading:
-                                      return Image.asset(
-                                        "assets/images/image placeholder 2.jpg",
-                                        fit: BoxFit.cover,
-                                      );
-                                      
-                                      case LoadState.completed:
-                                        return null;
-
-                                      case LoadState.failed:
-                                       return null;
-                                  }
-                                },
-                              ),
+                            ExtendedImage.network(
+                              '${widget.postImg![itemIndex]}',
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                              cache: true,
+                              // cacheHeight: 500,
+                              cacheWidth: 500,
+                              loadStateChanged: (ExtendedImageState state) {
+                                switch (state.extendedImageLoadState) {
+                                  case LoadState.loading:
+                                    return Image.asset(
+                                      "assets/images/image placeholder 2.jpg",
+                                      fit: BoxFit.cover,
+                                    );
+                                    
+                                    case LoadState.completed:
+                                      return null;
+                            
+                                    case LoadState.failed:
+                                     return null;
+                                }
+                              },
                             ),
                             Positioned.fill(
                               top: 5,
@@ -677,7 +639,7 @@ class _PostState extends State<Post> with AutomaticKeepAliveClientMixin<Post> {
                     autoPlay: false,
                     viewportFraction: 1,
                     enableInfiniteScroll: false, 
-                    // aspectRatio: 2.0,
+                    aspectRatio: 4/3,
                     // enlargeCenterPage: true,
                   ),
                 ),
@@ -734,97 +696,7 @@ class _PostState extends State<Post> with AutomaticKeepAliveClientMixin<Post> {
 
                         },
                       ),
-                      // --------- implementation without reaction count --------
-                      // Row(
-                      //   children: [
-                      //     Text(
-                      //       '${widget.reactionCount}',
-                      //       style: TextStyle(
-                      //         color: Colors.black,
-                      //         fontSize: 12.0
-                      //       ),
-                      //     ),
-                      //     IconButton(
-                      //       icon: Icon(
-                      //         widget.isReacted ? Icons.favorite_rounded : Icons.favorite_outline_rounded,
-                      //         color: widget.isReacted ? ColorTheme.primary : Colors.black,
-                      //       ),
-                      //       onPressed: () {
-
-                      //         if(!widget.isReacted) {
-                      //           reactedPosts.addPostToReactedList(widget.id);
-                      //           reactedPosts.removeFromRemovedReactionList(widget.id);
-                      //           // setState(() {
-                                  
-                      //           // });
-                      //         } else {
-                      //           reactedPosts.removePostFromReactedList(widget.id);
-                      //           reactedPosts.addToRemovedReactionList(widget.id);
-                      //           // setState(() {
-                                  
-                      //           // });
-                      //         }
-
-
-
-
-                      //         _interactionsReq.createReaction(reaction: Reaction(
-                      //           post: widget.id, 
-                      //           reaction: 1
-                      //         ));
-
-                      //         // setState(() {
-                      //         //   widget.isReacted = !widget.isReacted;
-                      //         //   print('latestIsReacted ${widget.isReacted.toString()}');
-                      //         //   // userReaction = 'remove';
-                      //         // });
-
-
-                      //       }, 
-                      //     )
-
-                      //     // isReacted ?
-                      //     // IconButton(
-                      //     //   icon: Icon(
-                      //     //     Icons.favorite_rounded,
-                      //     //     color: ColorTheme.primary,
-                      //     //   ),
-                      //     //   onPressed: () {
-
-                      //     //     _interactionsReq.createReaction(reaction: Reaction(
-                      //     //       post: widget.id, 
-                      //     //       reaction: 1
-                      //     //     ));
-
-                      //     //     setState(() {
-                      //     //       isReacted = false;
-                      //     //       // userReaction = 'remove';
-                      //     //     });
-
-                      //     //   }, 
-                      //     // ) : 
-                      //     // IconButton(
-                      //     //   icon: Icon(
-                      //     //     Icons.favorite_outline_rounded,
-                      //     //     color: Colors.black,
-                      //     //   ),
-                      //     //   onPressed: () {
-
-                      //     //     _interactionsReq.createReaction(reaction: Reaction(
-                      //     //       post: widget.id, 
-                      //     //       reaction: 1
-                      //     //     ));
-
-                      //     //     setState(() {
-                      //     //       isReacted = false;
-                      //     //       // userReaction = 'remove';
-                      //     //     });
-
-                      //     //   }, 
-                      //     // )
-                      //   ],
-                      // )
-                      // --------- End implementation without reaction count --------
+                      // --------- implementation with reaction count --------
                       Row(
                         children: [
                           if(userReaction == 'default')
@@ -844,47 +716,115 @@ class _PostState extends State<Post> with AutomaticKeepAliveClientMixin<Post> {
                                 fontSize: 12.0
                               ),
                             ),
-                          widget.isReacted ? 
+                          
                           IconButton(
                             icon: Icon(
-                              Icons.favorite_rounded,
-                              color: ColorTheme.primary,
+                              widget.isReacted ? Icons.favorite_rounded : Icons.favorite_outline_rounded,
+                              color: widget.isReacted ? ColorTheme.primary : Colors.black,
                             ),
                             onPressed: () {
+
+                              if(!widget.isReacted) {
+                                reactedPosts.addPostToReactedList(widget.id);
+                                reactedPosts.removeFromRemovedReactionList(widget.id);
+
+                                setState(() {
+                                  widget.isReacted = true;
+                                  userReaction = 'add';
+                                });
+
+                              } else {
+                                reactedPosts.removePostFromReactedList(widget.id);
+                                reactedPosts.addToRemovedReactionList(widget.id);
+                                
+                                setState(() {
+                                  widget.isReacted = false;
+                                  userReaction = 'remove';
+                                });
+
+                              }
+
+
+
 
                               _interactionsReq.createReaction(reaction: Reaction(
                                 post: widget.id, 
                                 reaction: 1
                               ));
 
-                              setState(() {
-                                widget.isReacted = false;
-                                userReaction = 'remove';
-                              });
+                              // setState(() {
+                              //   widget.isReacted = !widget.isReacted;
+                              //   print('latestIsReacted ${widget.isReacted.toString()}');
+                              //   // userReaction = 'remove';
+                              // });
+
 
                             }, 
-                          ) : 
-                          IconButton(
-                            icon: Icon(
-                              Icons.favorite_border_rounded,
-                              color: Colors.black,
-                            ),
-                            onPressed: () {
-
-                              _interactionsReq.createReaction(reaction: Reaction(
-                                post: widget.id, 
-                                reaction: 1
-                              ));
-
-                              setState(() {
-                                widget.isReacted = true;
-                                userReaction = 'add';
-                              });
-
-                            }, 
-                          ),
+                          )
                         ],
                       )
+                      // --------- End implementation with reaction count --------
+                      // ---------------
+                      // Row(
+                      //   children: [
+                      //     if(userReaction == 'default')
+                      //       Text(
+                      //         '${widget.reactionCount}',
+                      //         style: TextStyle(
+                      //           color: Colors.black,
+                      //           fontSize: 12.0
+                      //         ),
+                      //       ),
+                      //     if(userReaction != 'default')
+                      //       Text(
+                      //         '${userReaction == 'add' ? widget.reactionCount! + 1 : 
+                      //         widget.reactionCount}',
+                      //         style: TextStyle(
+                      //           color: Colors.black,
+                      //           fontSize: 12.0
+                      //         ),
+                      //       ),
+                      //     widget.isReacted ? 
+                      //     IconButton(
+                      //       icon: Icon(
+                      //         Icons.favorite_rounded,
+                      //         color: ColorTheme.primary,
+                      //       ),
+                      //       onPressed: () {
+
+                      //         _interactionsReq.createReaction(reaction: Reaction(
+                      //           post: widget.id, 
+                      //           reaction: 1
+                      //         ));
+
+                      //         setState(() {
+                      //           widget.isReacted = false;
+                      //           userReaction = 'remove';
+                      //         });
+
+                      //       }, 
+                      //     ) : 
+                      //     IconButton(
+                      //       icon: Icon(
+                      //         Icons.favorite_border_rounded,
+                      //         color: Colors.black,
+                      //       ),
+                      //       onPressed: () {
+
+                      //         _interactionsReq.createReaction(reaction: Reaction(
+                      //           post: widget.id, 
+                      //           reaction: 1
+                      //         ));
+
+                      //         setState(() {
+                      //           widget.isReacted = true;
+                      //           userReaction = 'add';
+                      //         });
+
+                      //       }, 
+                      //     ),
+                      //   ],
+                      // )
                     ],
                   ),
                 ),

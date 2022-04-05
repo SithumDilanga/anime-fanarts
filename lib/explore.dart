@@ -23,7 +23,7 @@ class _ExploreState extends State<Explore> with AutomaticKeepAliveClientMixin<Ex
 
   GetCreatePosts _getCreatePosts = GetCreatePosts();
   
-  static const _pageSize = 20;
+  static const _pageSize = 15;
 
   final PagingController<int, dynamic> _pagingController =
       PagingController(firstPageKey: 1,);
