@@ -546,6 +546,7 @@ class _PostState extends State<Post> with AutomaticKeepAliveClientMixin<Post> {
                       child: Hero(
                         tag: '${widget.isUserPost.toString() + widget.postImg![itemIndex].toString()}',
                         child: Stack(
+                          fit: StackFit.expand,
                           children: [
                             ExtendedImage.network(
                               '${widget.postImg![itemIndex]}',

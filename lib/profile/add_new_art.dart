@@ -13,8 +13,6 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:flutter_luban/flutter_luban.dart';
-import 'package:flutter_native_image/flutter_native_image.dart';
 
 class AddNewArt extends StatefulWidget {
 
@@ -46,18 +44,30 @@ class _AddNewArtState extends State<AddNewArt> {
     
     List<XFile>? pickedFiles = await picker.pickMultiImage(
       // source: ImageSource.gallery,
-      // imageQuality: 50
+      imageQuality: 75
     );
+    
 
     setState(() {
       // _postImages = File(pickedFiles.path);
       for(int i = 0; i < pickedFiles!.length; i++) {
 
-        // _postImages!.add(File(pickedFiles[i].path));
-
         File selectedImage = File(pickedFiles[i].path);
 
-        testCompressAndGetFile(selectedImage, pickedFiles[i].path);
+        print('imgLength ${selectedImage.lengthSync()/1024} KB');
+
+        if(selectedImage.lengthSync()/1024 > 1331) {
+          testCompressAndGetFile(selectedImage, pickedFiles[i].path);
+        } else {
+
+          _postImages!.add(File(pickedFiles[i].path));
+
+        }
+
+
+        // print('imgLength ${selectedImage.readAsBytesSync().lengthInBytes/1024}');
+
+        // testCompressAndGetFile(selectedImage, pickedFiles[i].path);
 
         // lubanImgCompression(selectedImage);
 
@@ -87,7 +97,7 @@ class _AddNewArtState extends State<AddNewArt> {
     var result = await FlutterImageCompress.compressAndGetFile(
       file.absolute.path, 
       outPath,
-      quality: 80,
+      quality: 95,
     );
 
     print('path $outPath');
@@ -117,7 +127,7 @@ class _AddNewArtState extends State<AddNewArt> {
   //   CompressObject compressObject = CompressObject(
   //        imageFile: imgFile, //image
   //        path: path, //compress to path
-  //        quality: 90,//first compress quality, default 80
+  //        quality: 80,//first compress quality, default 80
   //        step: 2,//compress quality step, The bigger the fast, Smaller is more accurate, default 6
   //        mode: CompressMode.LARGE2SMALL,//default AUTO
   //      );
