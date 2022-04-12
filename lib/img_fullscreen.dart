@@ -5,7 +5,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class ImgFullScreen extends StatelessWidget {
+class ImgFullScreen extends StatefulWidget {
   
   final String? imgLink;
   final int selectedimageIndex;
@@ -15,9 +15,24 @@ class ImgFullScreen extends StatelessWidget {
 
   ImgFullScreen({ Key? key, required this.selectedimageIndex, this.imageList, this.imgLink, required this.name, required this.isUserPost }) : super(key: key);
 
+  @override
+  State<ImgFullScreen> createState() => _ImgFullScreenState();
+}
+
+class _ImgFullScreenState extends State<ImgFullScreen> {
   DownloadShare _downloadShare = DownloadShare();
 
-  final PageController controller = PageController();
+  late PageController controller;
+  
+  @override
+  void initState() {
+    super.initState();
+
+    controller = PageController(
+      initialPage: widget.selectedimageIndex
+    );
+
+  }
 
   // --- asking user permission ---
    askPermission(){
@@ -31,8 +46,8 @@ class ImgFullScreen extends StatelessWidget {
  
     });
    }
-  // --- End asking user permission ---
 
+  // --- End asking user permission ---
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -44,7 +59,7 @@ class ImgFullScreen extends StatelessWidget {
         body: Stack(
           children: [
             Hero(
-              tag: '${isUserPost.toString() + imgLink.toString()}',
+              tag: '${widget.isUserPost.toString() + widget.imgLink.toString()}',
               // child: InteractiveViewer(
               //   child: Container(
               //     decoration: BoxDecoration(
@@ -59,8 +74,9 @@ class ImgFullScreen extends StatelessWidget {
               //   ),
               // ),
               child: PageView(
+                controller: controller,
                 children: [
-                  for(String imageLink in imageList!)
+                  for(String imageLink in widget.imageList!)
                     Center(
                       child: ExtendedImage.network(
                         imageLink,//'$imgLink',
@@ -125,8 +141,8 @@ class ImgFullScreen extends StatelessWidget {
                         onPressed: () {
 
                           _downloadShare.shareImage(
-                            '$imgLink',
-                            name
+                            '${widget.imgLink}',
+                            widget.name
                           );
                           
                         }, 
@@ -141,7 +157,7 @@ class ImgFullScreen extends StatelessWidget {
                           askPermission();
                       
                           _downloadShare.downloadImage(
-                            '$imgLink'
+                            '${widget.imgLink}'
                           );
                           
                         }, 

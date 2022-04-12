@@ -398,6 +398,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.3.0"
+  flutter_image_compress:
+    dependency: "direct main"
+    description:
+      name: flutter_image_compress
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.0"
   flutter_linkify:
     dependency: "direct main"
     description:
@@ -405,6 +412,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.0.2"
+  flutter_luban:
+    dependency: "direct main"
+    description:
+      name: flutter_luban
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.13"
+  flutter_native_image:
+    dependency: "direct main"
+    description:
+      name: flutter_native_image
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.6+1"
   flutter_native_splash:
     dependency: "direct dev"
     description:

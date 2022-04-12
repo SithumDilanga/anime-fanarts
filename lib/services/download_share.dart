@@ -43,8 +43,8 @@ class DownloadShare {
       options: Options(responseType: ResponseType.bytes));
       final result = await ImageGallerySaver.saveImage(
         Uint8List.fromList(response.data),
-        quality: 60,
-        name: "fanartImage"
+        quality: 80,
+        name: "Animizu${DateTime.now().millisecondsSinceEpoch}"
       );
 
         // --- showing toast message ---
@@ -56,6 +56,8 @@ class DownloadShare {
         // --- End showing toast message ---
 
     } catch(e) {
+
+      print('download Error $e');
 
       Fluttertoast.showToast(
         msg: 'Download failed! error occured',

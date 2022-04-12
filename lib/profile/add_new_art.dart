@@ -12,6 +12,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:flutter_luban/flutter_luban.dart';
+import 'package:flutter_native_image/flutter_native_image.dart';
 
 class AddNewArt extends StatefulWidget {
 
@@ -43,19 +46,115 @@ class _AddNewArtState extends State<AddNewArt> {
     
     List<XFile>? pickedFiles = await picker.pickMultiImage(
       // source: ImageSource.gallery,
-      imageQuality: 15
+      // imageQuality: 50
     );
 
     setState(() {
       // _postImages = File(pickedFiles.path);
       for(int i = 0; i < pickedFiles!.length; i++) {
 
-        _postImages!.add(File(pickedFiles[i].path));
+        // _postImages!.add(File(pickedFiles[i].path));
+
+        File selectedImage = File(pickedFiles[i].path);
+
+        testCompressAndGetFile(selectedImage, pickedFiles[i].path);
+
+        // lubanImgCompression(selectedImage);
+
+        // nativeImgCompress(selectedImage);
 
       }
     });
 
   }
+
+  // ---------- flutter_image_compress image compression package -----------
+
+  Future<File> testCompressAndGetFile(File file, String targetPath) async {
+
+    final filePath = file.absolute.path;
+
+    // Create output file path
+    // eg:- "Volume/VM/abcd_out.jpeg"
+    final lastIndex = filePath.lastIndexOf(new RegExp(r'(.png|.jp)'));
+    final splitted = filePath.substring(0, (lastIndex));
+    final outPath = "${splitted}_out${filePath.substring(lastIndex)}";
+
+    print('outPath $outPath');
+
+    FlutterImageCompress.validator.ignoreCheckExtName = true;
+
+    var result = await FlutterImageCompress.compressAndGetFile(
+      file.absolute.path, 
+      outPath,
+      quality: 80,
+    );
+
+    print('path $outPath');
+
+    print('lengthSync() ${file.readAsBytesSync().lengthInBytes/1024}');
+    print('result!.lengthSync() ${result!.readAsBytesSync().lengthInBytes/1024}');
+    
+    _postImages!.add(result);
+
+    return result;
+  }
+
+  // ---------- End flutter_image_compress image compression package -----------
+
+  // ---------- lubam image compression package -----------
+
+  // Future lubanImgCompression(File imgFile) async {
+
+  //   final filePath = imgFile.absolute.path;
+
+  //   final lastIndex = filePath.lastIndexOf(new RegExp(r'.jp'));
+  //   final splitted = filePath.substring(0, (lastIndex));
+  //   final outPath = "${splitted}_out${filePath.substring(lastIndex)}";
+
+  //   String path = '/data/user/0/com.animizu/cache';
+
+  //   CompressObject compressObject = CompressObject(
+  //        imageFile: imgFile, //image
+  //        path: path, //compress to path
+  //        quality: 90,//first compress quality, default 80
+  //        step: 2,//compress quality step, The bigger the fast, Smaller is more accurate, default 6
+  //        mode: CompressMode.LARGE2SMALL,//default AUTO
+  //      );
+
+  //   Luban.compressImage(compressObject).then((_path) {
+  //       // setState(() {
+  //         print('_path $_path');
+  //       // });
+  //       print('compressObject ${compressObject.imageFile}');
+
+
+  //       setState(() {
+  //         File selectedImage = File(_path!);
+  //         _postImages!.add(selectedImage);
+  //       });
+  //   });
+
+  // }
+
+  // ---------- End lubam image compression package -----------
+
+  // ---------- nativeImageCompress image compression package -----------
+
+  // Future nativeImgCompress(File imgFile) async {
+
+  //   File compressedFile = await FlutterNativeImage.compressImage(imgFile.path,
+  //   quality: 100, percentage: 70);
+
+  //   print('compressedFile $compressedFile');
+
+  //   setState(() {
+  //     _postImages!.add(compressedFile);
+  //   });
+
+  // }
+
+  // ---------- End nativeImageCompress image compression package -----------
 
   // Rate Alert Dialog
   Future<void> _rateAlert(String uid) async {
