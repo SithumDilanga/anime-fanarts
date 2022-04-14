@@ -7,6 +7,7 @@ import 'package:anime_fanarts/models/profile_user.dart';
 import 'package:anime_fanarts/models/reacted_posts.dart';
 import 'package:anime_fanarts/profile/profile.dart';
 import 'package:anime_fanarts/profile/users_profile.dart';
+import 'package:anime_fanarts/services/fcm.dart';
 // import 'package:anime_fanarts/search/search-2.dart';
 // import 'package:anime_fanarts/search/search.dart';
 import 'package:anime_fanarts/services/secure_storage.dart';
@@ -20,6 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 
 void main() async {
@@ -92,6 +94,22 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
+  late FirebaseMessaging messaging;
+
+  @override
+  void initState() {
+    super.initState();
+
+
+    messaging = FirebaseMessaging.instance;
+    messaging.getToken().then((value){
+        print('token ' + value.toString());
+    });
+
+    FirebaseCloudMessaging().subscribeToEvent();
+    FirebaseCloudMessaging().configureCallbacks();
+  }
 
   @override
   Widget build(BuildContext context) {

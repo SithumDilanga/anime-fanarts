@@ -3,19 +3,28 @@ import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/route_trans_anim.dart';
 import 'package:flutter/material.dart';
 
-class SelectReason extends StatefulWidget {
+class SelectUserReportReason extends StatefulWidget {
 
-  final String? postId;
+  final String? userId;
 
-  const SelectReason({ Key? key, required this.postId }) : super(key: key);
+  const SelectUserReportReason({ Key? key, required this.userId }) : super(key: key);
 
   @override
-  _SelectReasonState createState() => _SelectReasonState();
+  _SelectUserReportReasonState createState() => _SelectUserReportReasonState();
 }
 
-class _SelectReasonState extends State<SelectReason> {
+class _SelectUserReportReasonState extends State<SelectUserReportReason> {
 
-  List<String> reasonList = ['Not a relevant content', 'Violence', 'Excessively sexual', 'Copyright infringement', 'Spam', 'Advertisement, promotion', 'Excessive grotesque content', 'Redistributed without permission', 'Something else'];
+  List<String> reasonList = [
+    'Copyright infringement', 
+    'Inappropriate works',
+    'Inappropriate profile',
+    'Guidance to Inappropriate websites',
+    'Harassment',
+    'Privacy infringement',
+    'Posts equivalent to child abuse',
+    'Something else'
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +40,7 @@ class _SelectReasonState extends State<SelectReason> {
           }, 
         ),
         title: Text(
-          'Report this art'
+          'Report this user'
         ),
       ),
       body: Padding(
@@ -85,8 +94,8 @@ class _SelectReasonState extends State<SelectReason> {
                         1.0, 0.0, 
                         DescribeReason(
                           reason: '$reason',
-                          postId: widget.postId,
-                          reportType: 'postReport',
+                          postId: widget.userId,
+                          reportType: 'userReport',
                         )
                       )
                     );

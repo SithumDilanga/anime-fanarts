@@ -344,7 +344,8 @@ class _LoginState extends State<Login> {
                                     text: "Don't have an account ? ",
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: 16.0
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold
                                     ),
                                     children: [
                                       TextSpan(
@@ -352,7 +353,7 @@ class _LoginState extends State<Login> {
                                         style: TextStyle(
                                           color: ColorTheme.primary,
                                           fontWeight: FontWeight.bold,
-                                          decoration: TextDecoration.underline
+                                          decoration: TextDecoration.underline,
                                         ),
                                         recognizer: TapGestureRecognizer()..onTap = (){
                                           Navigator.of(context).push(

@@ -4,6 +4,7 @@ import 'package:anime_fanarts/profile/admin_add_new_art.dart';
 import 'package:anime_fanarts/services/secure_storage.dart';
 import 'package:anime_fanarts/settings/bug_report.dart';
 import 'package:anime_fanarts/settings/contact_us.dart';
+import 'package:anime_fanarts/settings/fcm_test.dart';
 import 'package:anime_fanarts/settings/feedback.dart';
 import 'package:anime_fanarts/settings/guidelines.dart';
 import 'package:anime_fanarts/settings/privacy_policy.dart';
@@ -219,6 +220,18 @@ class _SettingsState extends State<Settings> {
                   );
                 }
               ),
+              // CustomeListTile(
+              //   Icons.contact_support_outlined,
+              //   'FCM',
+              //   () {
+              //     Navigator.of(context).push(
+              //       RouteTransAnim().createRoute(
+              //         1.0, 0.0, 
+              //         FCMTesting()
+              //       )
+              //     );
+              //   }
+              // ),
               CustomeListTile(
                 Icons.logout_rounded,
                 'Logout',

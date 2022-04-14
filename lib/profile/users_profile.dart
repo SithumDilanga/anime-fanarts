@@ -1,8 +1,10 @@
 import 'package:anime_fanarts/post.dart';
+import 'package:anime_fanarts/report/reasons_user_report.dart';
 import 'package:anime_fanarts/services/profile_req.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/error_loading.dart';
 import 'package:anime_fanarts/utils/loading_animation.dart';
+import 'package:anime_fanarts/utils/route_trans_anim.dart';
 import 'package:anime_fanarts/utils/urls.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
@@ -113,6 +115,46 @@ class UsersProfileState extends State<UsersProfile> with AutomaticKeepAliveClien
             title: Text(
               '${widget.name}'
             ),
+            actions: [
+              PopupMenuButton(
+                color: Colors.grey[200],
+                icon: Icon(
+                  Icons.more_vert_rounded,
+                  color: Colors.white,
+                ),
+                onSelected: (selection) async {
+                
+                  if(selection == 0) {
+                  
+                    Navigator.of(context).push(
+                      RouteTransAnim().createRoute(
+                        1.0, 0.0, 
+                        SelectUserReportReason(
+                          userId: widget.userId,
+                        )
+                      )
+                    );
+                  } 
+                },
+                itemBuilder: (context) => [
+                  PopupMenuItem(
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.report_gmailerrorred_rounded,
+                          color: Colors.black,
+                        ),
+                        SizedBox(width: 8.0,),
+                        Text(
+                          'Report inappropriate user',
+                        ),
+                      ],
+                    ),
+                    value: 0
+                  ),
+                ]
+              )
+            ],
           ),
           body: FutureBuilder(
             future: _profileReq.getUserById(

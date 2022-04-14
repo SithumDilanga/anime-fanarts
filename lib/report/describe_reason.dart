@@ -1,4 +1,5 @@
 import 'package:anime_fanarts/main.dart';
+import 'package:anime_fanarts/services/firestore_service.dart';
 import 'package:anime_fanarts/services/report_req.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +10,9 @@ class DescribeReason extends StatefulWidget {
 
   final String reason;
   final String? postId;
+  final String reportType;
 
-  const DescribeReason({ Key? key, required this.reason, required this.postId }) : super(key: key);
+  const DescribeReason({ Key? key, required this.reason, required this.postId, required this.reportType }) : super(key: key);
 
   @override
   _DescribeReasonState createState() => _DescribeReasonState();
@@ -20,6 +22,7 @@ class _DescribeReasonState extends State<DescribeReason> {
 
   ReportReq _reportReq = ReportReq();
   final _descTextController = TextEditingController();
+  final FirestoreService _firestireService = FirestoreService();
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +38,7 @@ class _DescribeReasonState extends State<DescribeReason> {
           }, 
         ),
         title: Text(
-          'Report this art'
+          widget.reportType == 'postReport' ? 'Report this art' : 'Report this user'
         ),
       ),
       body: SingleChildScrollView(
@@ -161,10 +164,10 @@ class _DescribeReasonState extends State<DescribeReason> {
                       ),
                       onPressed: () {
                         
-                        _reportReq.reportPost(
+                        _firestireService.sendUserReport(
                           reason: widget.reason,
                           description: _descTextController.text,
-                          postId: widget.postId
+                          userId: widget.postId
                         ).whenComplete(() {
 
                           Navigator.push(

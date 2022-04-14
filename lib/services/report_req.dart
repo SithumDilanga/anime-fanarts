@@ -9,7 +9,7 @@ class ReportReq {
   // static const URL = 'http://10.0.2.2:3000/api/v1';
   static const URL = Urls.apiUrl;
 
-  // -------------- create post ----------------
+  // -------------- report post ----------------
 
   Future reportPost({String? reason, String? description, String? postId}) async {
 
@@ -38,7 +38,7 @@ class ReportReq {
       if (e.response != null) {
 
         Fluttertoast.showToast(
-          msg: e.response!.data['message'],
+          msg: 'Error reporting post!',
           toastLength: Toast.LENGTH_LONG,
         );
 
@@ -58,6 +58,6 @@ class ReportReq {
 
   }
 
-  // -------------- End create post ----------------
+  // -------------- End report post ----------------
 
 }

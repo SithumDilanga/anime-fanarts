@@ -2,6 +2,8 @@ import 'package:anime_fanarts/auth/log_in.dart';
 import 'package:anime_fanarts/main.dart';
 import 'package:anime_fanarts/models/user_sign_up.dart';
 import 'package:anime_fanarts/services/auth_req.dart';
+import 'package:anime_fanarts/settings/privacy_policy.dart';
+import 'package:anime_fanarts/settings/terms_of_use.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/route_trans_anim.dart';
 import 'package:email_validator/email_validator.dart';
@@ -379,7 +381,8 @@ class _SignUpState extends State<SignUp> {
                                     text: 'Already have an account? ',
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: 16.0
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold
                                     ),
                                     children: [
                                       TextSpan(
@@ -395,6 +398,60 @@ class _SignUpState extends State<SignUp> {
                                             RouteTransAnim().createRoute(
                                               1.0, 0.0, 
                                               Login()
+                                            )
+                                          );
+                                        }
+                                      )
+                                    ]
+                                  ), 
+                                ),
+                              ),
+                              SizedBox(height: 16.0,),
+                              Center(
+                                child: RichText(
+                                  text: TextSpan(
+                                    text: 'By signing in you confirm agree to our ',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14.0
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        text: 'privacy policy',
+                                        style: TextStyle(
+                                          color: ColorTheme.primary,
+                                          fontWeight: FontWeight.bold,
+                                          decoration: TextDecoration.underline
+                                        ),
+                                        recognizer: TapGestureRecognizer()..onTap = (){
+                                          print('tapped');
+                                          Navigator.of(context).push(
+                                            RouteTransAnim().createRoute(
+                                              1.0, 0.0, 
+                                              PrivacyPolicy()
+                                            )
+                                          );
+                                        }
+                                      ),
+                                      TextSpan(
+                                        text: ' & ',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: 'Terms of use',
+                                        style: TextStyle(
+                                          color: ColorTheme.primary,
+                                          fontWeight: FontWeight.bold,
+                                          decoration: TextDecoration.underline
+                                        ),
+                                        recognizer: TapGestureRecognizer()..onTap = (){
+                                          print('tapped');
+                                          Navigator.of(context).push(
+                                            RouteTransAnim().createRoute(
+                                              1.0, 0.0, 
+                                              TermsOfUse()
                                             )
                                           );
                                         }

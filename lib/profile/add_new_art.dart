@@ -56,8 +56,10 @@ class _AddNewArtState extends State<AddNewArt> {
 
         print('imgLength ${selectedImage.lengthSync()/1024} KB');
 
-        if(selectedImage.lengthSync()/1024 > 1331) {
-          testCompressAndGetFile(selectedImage, pickedFiles[i].path);
+        if(selectedImage.lengthSync()/1024 > 1024) {
+
+          secondImgCompression(selectedImage, pickedFiles[i].path);
+          
         } else {
 
           _postImages!.add(File(pickedFiles[i].path));
@@ -80,7 +82,7 @@ class _AddNewArtState extends State<AddNewArt> {
 
   // ---------- flutter_image_compress image compression package -----------
 
-  Future<File> testCompressAndGetFile(File file, String targetPath) async {
+  Future<File> secondImgCompression(File file, String targetPath) async {
 
     final filePath = file.absolute.path;
 

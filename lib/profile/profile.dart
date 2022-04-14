@@ -112,7 +112,7 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
     
     XFile? pickedFile = await picker.pickImage(
       source: ImageSource.gallery,
-      imageQuality: 15
+      imageQuality: 25
     );
 
     _cropProfileImage(pickedFile!.path);
@@ -174,7 +174,7 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
     
     XFile? pickedFile = await picker.pickImage(
       source: ImageSource.gallery,
-      imageQuality: 15
+      imageQuality: 25
     );
 
     _cropCoverImage(pickedFile!.path);
