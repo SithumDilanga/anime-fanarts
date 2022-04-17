@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:anime_fanarts/auth/sign_up.dart';
+import 'package:anime_fanarts/comment_section.dart';
 import 'package:anime_fanarts/explore.dart';
 import 'package:anime_fanarts/intro_screen.dart';
 import 'package:anime_fanarts/models/profile_user.dart';
@@ -12,6 +13,7 @@ import 'package:anime_fanarts/services/fcm.dart';
 // import 'package:anime_fanarts/search/search.dart';
 import 'package:anime_fanarts/services/secure_storage.dart';
 import 'package:anime_fanarts/services/shared_pref.dart';
+import 'package:anime_fanarts/settings/contact_us.dart';
 import 'package:anime_fanarts/settings/settings.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/route_trans_anim.dart';
@@ -101,14 +103,65 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
 
+    bool isDevTokenSent = SharedPref.getIsDevTokenSent();
 
-    messaging = FirebaseMessaging.instance;
-    messaging.getToken().then((value){
+    if(!isDevTokenSent) {
+
+      messaging = FirebaseMessaging.instance;
+
+      messaging.getToken().then((value){
         print('token ' + value.toString());
-    });
 
-    FirebaseCloudMessaging().subscribeToEvent();
-    FirebaseCloudMessaging().configureCallbacks();
+        FirebaseCloudMessaging().sendDevToken(
+          devToken: value.toString()
+        );
+
+      });
+
+      SharedPref.setIsDevTokenSent(true);
+
+    } 
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) { 
+        print('onMessageOpenedApp ${message.data['userId']}');
+
+        if(message.data['screen'] == 'comment_section') {
+
+          print('open comment section');
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CommentSecion(
+              userId: message.data['userId'].toString(), 
+              postId: message.data['postId'].toString()
+            )),
+          );
+
+        }
+        
+      });
+
+      FirebaseMessaging.instance.getInitialMessage().then((message) async {
+
+        print('getInitialMessage ${message!.data}');
+
+        if(message.data['screen'] == 'comment_section') {
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CommentSecion(
+              userId: message.data['userId'], 
+              postId: message.data['postId']
+            )),
+          );
+
+        }
+
+      });
+
+    // FirebaseCloudMessaging().subscribeToEvent();
+    // FirebaseCloudMessaging().configureCallbacks();
+
   }
 
   @override

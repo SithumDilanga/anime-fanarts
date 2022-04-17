@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:anime_fanarts/profile/users_profile.dart';
+import 'package:anime_fanarts/services/fcm.dart';
 import 'package:anime_fanarts/services/interactions.dart';
 import 'package:anime_fanarts/services/shared_pref.dart';
 import 'package:anime_fanarts/utils/colors.dart';
@@ -210,6 +211,11 @@ class _CommentSecionState extends State<CommentSecion> {
                                       commentTextController.clear();
                                       _pagingController.refresh();
                                     });
+
+                                    FirebaseCloudMessaging().sendCommentPushNotification(
+                                      userId: widget.userId,
+                                      postId: widget.postId
+                                    );
                     
                                   } else {
                     

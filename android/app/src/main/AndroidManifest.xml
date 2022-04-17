@@ -9,7 +9,7 @@
         android:label="Animizu"
         android:icon="@mipmap/ic_launcher">
 
-        <meta-data android:name="firebase_analytics_collection_enabled" android:value="true " />
+        <meta-data android:name="firebase_analytics_collection_enabled" android:value="false " />
 
         <activity
           android:name="com.yalantis.ucrop.UCropActivity"
@@ -41,6 +41,7 @@
               android:resource="@drawable/launch_background"
               />
             <intent-filter>
+                <action android:name="FLUTTER_NOTIFICATION_CLICK" />
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>

@@ -1,3 +1,4 @@
+import 'package:anime_fanarts/services/secure_storage.dart';
 import 'package:anime_fanarts/utils/urls.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -7,6 +8,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 class FirebaseCloudMessaging {
   
   static const URL = Urls.apiUrl;
+
+  var _dio = Dio();
 
   final FirebaseMessaging _fc = FirebaseMessaging.instance;
 
@@ -91,5 +94,102 @@ class FirebaseCloudMessaging {
   }
 
   // ------------ End send daily quote ---------------
+
+  // -------------- send device token ----------------
+
+  Future sendDevToken({String? devToken}) async {
+
+    try {
+
+      final bearerToken = await SecureStorage.getToken() ?? '';    
+      
+      
+      Response userPosts = await _dio.post('$URL/daily/saveDeviceToken', data: {
+        'deviceToken': devToken,
+      }, options: Options(
+        headers: {'Authorization': 'Bearer $bearerToken'},
+      ));
+
+      print('response ${userPosts.data}');
+
+      Fluttertoast.showToast(
+        msg: 'dev token has been sent!',
+        toastLength: Toast.LENGTH_LONG,
+      );
+
+    } on DioError catch (e) {
+
+      if (e.response != null) {
+
+        Fluttertoast.showToast(
+          msg: 'Error sending token!',
+          toastLength: Toast.LENGTH_LONG,
+        );
+
+        // throw Error();
+        throw(e.response!.data['message']);
+
+      } else {
+
+        Fluttertoast.showToast(
+          msg: 'Error sending token!',
+          toastLength: Toast.LENGTH_LONG,
+        );
+
+      }
+
+      }
+
+  }
+
+  // -------------- End send device token ----------------
+
+  // -------------- send commented push notification -------------
+
+  Future sendCommentPushNotification({String? userId, String? postId}) async {
+
+    try {
+
+      final bearerToken = await SecureStorage.getToken() ?? '';    
+      
+      
+      Response userNotification = await _dio.post('$URL/daily/sendMsgToDevice/$userId', data: {
+        'userId': userId,
+        'postId': postId
+      }, options: Options(
+        headers: {'Authorization': 'Bearer $bearerToken'},
+      ));
+
+      Fluttertoast.showToast(
+        msg: 'comment notification has been sent!',
+        toastLength: Toast.LENGTH_LONG,
+      );
+
+
+    } on DioError catch (e) {
+
+      if (e.response != null) {
+
+        Fluttertoast.showToast(
+          msg: 'Error sending notification!',
+          toastLength: Toast.LENGTH_LONG,
+        );
+
+        // throw Error();
+        throw(e.response!.data['message']);
+
+      } else {
+
+        Fluttertoast.showToast(
+          msg: 'Error sending notification!',
+          toastLength: Toast.LENGTH_LONG,
+        );
+
+      }
+
+    }
+  }
+
+  // -------------- End send commented push notification -------------
 
 }

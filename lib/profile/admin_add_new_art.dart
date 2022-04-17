@@ -8,6 +8,7 @@ import 'package:anime_fanarts/utils/loading_animation.dart';
 import 'package:anime_fanarts/utils/route_trans_anim.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
@@ -41,19 +42,75 @@ class _AdminAddNewArtState extends State<AdminAddNewArt> {
     
     List<XFile>? pickedFiles = await picker.pickMultiImage(
       // source: ImageSource.gallery,
-      imageQuality: 15
+      imageQuality: 75
     );
+    
 
     setState(() {
       // _postImages = File(pickedFiles.path);
       for(int i = 0; i < pickedFiles!.length; i++) {
 
-        _postImages!.add(File(pickedFiles[i].path));
+        File selectedImage = File(pickedFiles[i].path);
+
+        print('imgLength ${selectedImage.lengthSync()/1024} KB');
+
+        if(selectedImage.lengthSync()/1024 > 1024) {
+
+          secondImgCompression(selectedImage, pickedFiles[i].path);
+          
+        } else {
+
+          _postImages!.add(File(pickedFiles[i].path));
+
+        }
+
+
+        // print('imgLength ${selectedImage.readAsBytesSync().lengthInBytes/1024}');
+
+        // testCompressAndGetFile(selectedImage, pickedFiles[i].path);
+
+        // lubanImgCompression(selectedImage);
+
+        // nativeImgCompress(selectedImage);
 
       }
     });
 
   }
+
+  // ---------- flutter_image_compress image compression package -----------
+
+  Future<File> secondImgCompression(File file, String targetPath) async {
+
+    final filePath = file.absolute.path;
+
+    // Create output file path
+    // eg:- "Volume/VM/abcd_out.jpeg"
+    final lastIndex = filePath.lastIndexOf(new RegExp(r'(.png|.jp)'));
+    final splitted = filePath.substring(0, (lastIndex));
+    final outPath = "${splitted}_out${filePath.substring(lastIndex)}";
+
+    print('outPath $outPath');
+
+    FlutterImageCompress.validator.ignoreCheckExtName = true;
+
+    var result = await FlutterImageCompress.compressAndGetFile(
+      file.absolute.path, 
+      outPath,
+      quality: 95,
+    );
+
+    print('path $outPath');
+
+    print('lengthSync() ${file.readAsBytesSync().lengthInBytes/1024}');
+    print('result!.lengthSync() ${result!.readAsBytesSync().lengthInBytes/1024}');
+    
+    _postImages!.add(result);
+
+    return result;
+  }
+
+  // ---------- End flutter_image_compress image compression package -----------
 
   // Rate Alert Dialog
   Future<void> _rateAlert(String uid) async {

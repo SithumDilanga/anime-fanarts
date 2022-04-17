@@ -8,6 +8,7 @@ class SharedPref {
   static const _keyIsWelcomed = 'welcome';
   static const _keyUserName = 'userName';
   static const _keyProfilePic = 'profileImage';
+  static const _keyIsDevTokenSent = 'deviceToken';
 
   static Future init() async {
     return _preferences = await SharedPreferences.getInstance();
@@ -46,5 +47,17 @@ class SharedPref {
   }
 
   // ---------- End is welcomed -----------------
+
+  // ---------- is device token sent -----------------
+
+  static Future<bool> setIsDevTokenSent(bool isWelcomed) async {
+    return await _preferences!.setBool(_keyIsDevTokenSent, isWelcomed);
+  }
+
+  static bool getIsDevTokenSent() {
+    return _preferences!.getBool(_keyIsDevTokenSent) ?? false;
+  }
+
+  // ---------- End device token sent -----------------
 
 }
