@@ -9,6 +9,7 @@ import 'package:anime_fanarts/utils/error_loading.dart';
 import 'package:anime_fanarts/utils/loading_animation.dart';
 import 'package:anime_fanarts/utils/route_trans_anim.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
@@ -34,6 +35,17 @@ class _CommentSecionState extends State<CommentSecion> {
 
   final PagingController<int, dynamic> _pagingController =
       PagingController(firstPageKey: 1);
+
+  final List<String> replyCommentsList = ['comment 1', 'comment 2', 'comment 3'];
+  String commentReplyMention = '';
+
+  final FocusNode _focusNode = FocusNode();
+
+  // final _firebaseCloudMessaging = FirebaseCloudMessaging();
+
+  String replyingComment = '';
+  int replyCommentIndex = 0;
+  int subReplyCommentIndex = 0;
 
   @override
   void initState() {
@@ -77,11 +89,15 @@ class _CommentSecionState extends State<CommentSecion> {
   @override
   void dispose() {
     _pagingController.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+
+    FocusScope.of(context).requestFocus(_focusNode);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -114,6 +130,32 @@ class _CommentSecionState extends State<CommentSecion> {
             color: ColorTheme.primary
           ),
         ),
+        actions: [
+          commentReplyMention.isNotEmpty ?
+          Row(
+            children: [
+              Text(
+                'replying',
+                style: TextStyle(
+                  color: Colors.black
+                ),
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.close_rounded,
+                  color: Colors.black,
+                  size: 20,
+                ),
+                onPressed: () {
+                  setState(() {
+                    commentReplyMention = '';
+                    replyingComment = '';
+                  });
+                }, 
+              )
+            ],
+          ) : Text('')
+        ],
       ),
       body: RefreshIndicator(
         onRefresh: () => Future.sync(
@@ -125,56 +167,88 @@ class _CommentSecionState extends State<CommentSecion> {
         padding: const EdgeInsets.only(
           left: 4.0, right: 4.0, top: 4.0
         ),
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),//ScrollPhysics(),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Row(
-                        children: [
-                          if(SharedPref.getProfilePic() == null)
-                            CircleAvatar(
-                              radius: 20,
-                              backgroundColor: Colors.blueGrey[700],
-                              backgroundImage: AssetImage(
-                                'assets/images/profile-img-placeholder.jpg'
-                              )
-                              // NetworkImage(
-                              //   'https://cdna.artstation.com/p/assets/images/images/031/257/402/large/yukisho-art-vector-6.jpg?1603101769&dl=10'
-                              // ),
-                            ),
-                          if(SharedPref.getProfilePic() != null)
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Row(
+                      children: [
+                        if(SharedPref.getProfilePic() == null)
                           CircleAvatar(
                             radius: 20,
                             backgroundColor: Colors.blueGrey[700],
-                            backgroundImage: FileImage(
-                              File(SharedPref.getProfilePic()!)
-                            ),
+                            backgroundImage: AssetImage(
+                              'assets/images/profile-img-placeholder.jpg'
+                            )
                             // NetworkImage(
                             //   'https://cdna.artstation.com/p/assets/images/images/031/257/402/large/yukisho-art-vector-6.jpg?1603101769&dl=10'
                             // ),
                           ),
-                          SizedBox(width: 12.0,),
-                          // Text(
-                          //   'Levi Ackerman',
-                          //   style: TextStyle(
-                          //     fontSize: 16,
-                          //     fontWeight: FontWeight.w500
-                          //   ),
-                          // )
-                          Expanded(
-                            child: Row(
-                            children: [
-                              Expanded(
+                        if(SharedPref.getProfilePic() != null)
+                        CircleAvatar(
+                          radius: 20,
+                          backgroundColor: Colors.blueGrey[700],
+                          backgroundImage: FileImage(
+                            File(SharedPref.getProfilePic()!)
+                          ),
+                          // NetworkImage(
+                          //   'https://cdna.artstation.com/p/assets/images/images/031/257/402/large/yukisho-art-vector-6.jpg?1603101769&dl=10'
+                          // ),
+                        ),
+                        SizedBox(width: 12.0,),
+                        // Text(
+                        //   'Levi Ackerman',
+                        //   style: TextStyle(
+                        //     fontSize: 16,
+                        //     fontWeight: FontWeight.w500
+                        //   ),
+                        // )
+                        Expanded(
+                          child: Row(
+                          children: [
+                            Text(
+                              '$commentReplyMention',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: ColorTheme.primary
+                              ),
+                            ),
+                            SizedBox(width: 4.0,),
+                            Expanded(
+                              child: RawKeyboardListener(
+                                autofocus: true,
+                                focusNode: FocusNode(),
+                                onKey: (event) {
+                                  print('event $event');
+
+                                  if(event.logicalKey == LogicalKeyboardKey.keyQ) {
+                                    print('backspace clicked');
+                                  }
+
+                                  if (event.isKeyPressed(LogicalKeyboardKey.keyQ)) {
+                                    print('q key pressed'); // <--- works!
+                                  }
+
+                                  if(event.physicalKey == PhysicalKeyboardKey(0x0007002a)) {
+                                    print('backspace clicked');
+                                  }
+
+                                },
                                 child: TextFormField(
                                   controller: commentTextController,
+                                  // initialValue: commentReplyMention.isNotEmpty ? commentReplyMention : null,
                                   cursorColor: ColorTheme.primary,
+                                  maxLines: null,
+                                  keyboardType: TextInputType.multiline,
                                   decoration: InputDecoration(
                                     focusedBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(color: ColorTheme.primary)
@@ -188,187 +262,570 @@ class _CommentSecionState extends State<CommentSecion> {
                                   // validation
                                   validator: (val) => val!.isEmpty ? 'Enter an Email' : null,
                                   onChanged: (val) {
-                                    
                                   },
                                 ),
                               ),
-                              IconButton(
-                                icon: Icon(
-                                  Icons.send_rounded,
-                                  size: 28,
-                                  color: ColorTheme.primary,
-                                ),
-                                onPressed: () {
-                    
-                                  if(commentTextController.text.isNotEmpty) {
-                    
-                                    _interactionsReq.addNewComment(
-                                      commentTextController.text, 
-                                      widget.postId
-                                    );
-                            
-                                    setState(() {
-                                      commentTextController.clear();
-                                      _pagingController.refresh();
-                                    });
+                            ),
+                            IconButton(
+                              icon: Icon(
+                                Icons.send_rounded,
+                                size: 28,
+                                color: ColorTheme.primary,
+                              ),
+                              onPressed: () {
+                  
+                                if(commentTextController.text.isNotEmpty) {
+                  
+                                  _interactionsReq.addNewComment(
+                                    commentTextController.text, 
+                                    widget.postId
+                                  );
+                          
+                                  setState(() {
+                                    commentTextController.clear();
+                                    _pagingController.refresh();
+                                  });
 
-                                    FirebaseCloudMessaging().sendCommentPushNotification(
-                                      userId: widget.userId,
-                                      postId: widget.postId
-                                    );
-                    
-                                  } else {
-                    
-                                    Fluttertoast.showToast(
-                                      msg: "comment text is empty",
-                                      toastLength: Toast.LENGTH_SHORT,
-                                      gravity: ToastGravity.BOTTOM,
-                                      fontSize: 16.0
-                                    );
-                    
-                                  }
-                                                                
-                                }, 
-                              )
-                            ],
-                                                    ),
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 20.0),
-                      ),
-                    ],
-                  ),
+                                  // -------- for FCM -----------
+
+                                  // FirebaseCloudMessaging().sendCommentPushNotification(
+                                  //   userId: widget.userId,
+                                  //   postId: widget.postId
+                                  // );
+
+                                  // -------- End for FCM -----------
+                  
+                                } else {
+                  
+                                  Fluttertoast.showToast(
+                                    msg: "comment text is empty",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    fontSize: 16.0
+                                  );
+                  
+                                }
+                                                              
+                              }, 
+                            )
+                          ],
+                        ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20.0),
+                    ),
+                  ],
                 ),
               ),
-              PagedListView<int, dynamic>.separated(
-                pagingController: _pagingController,
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                builderDelegate: PagedChildBuilderDelegate<dynamic>(
-                  animateTransitions: true,
-                  itemBuilder: (context, item, index) {
-        
-                    String formattedDate = _dateTimeFormatter.getFormattedDateFromFormattedString(
-                      value: item['createdAt'].toString(), 
-                      currentFormat: "yyyy-MM-ddTHH:mm:ssZ", 
-                      desiredFormat: "yyyy-MM-dd hh:mm a"
-                    );
-                    
-        
-                    return Card(  
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                child: PagedListView<int, dynamic>.separated(
+                  pagingController: _pagingController,
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  builderDelegate: PagedChildBuilderDelegate<dynamic>(
+                    animateTransitions: true,
+                    itemBuilder: (context, item, index) {
+                      
+                      String formattedDate = _dateTimeFormatter.getFormattedDateFromFormattedString(
+                        value: item['createdAt'].toString(), 
+                        currentFormat: "yyyy-MM-ddTHH:mm:ssZ", 
+                        desiredFormat: "yyyy-MM-dd hh:mm a"
+                      );
+                      
+                      bool isReplying = false;
+              
+                      if(replyingComment == 'main_comment' && replyCommentIndex == index) {
+                        isReplying = true;
+                      }
+                      
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            // mainAxisSize : MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              GestureDetector(
-                                child: Row(
-                                  children: [
-                                    CircleAvatar(
-                                      radius: 18,
-                                      backgroundColor: Colors.blueGrey[700],
-                                      backgroundImage: item['user'][0]['profilePic'] == 'default-profile-pic.jpg' ? AssetImage(
-                                        'assets/images/profile-img-placeholder.jpg'
-                                      ) as ImageProvider : NetworkImage(
-                                        '${item['user'][0]['profilePic']}'
+                              Padding(
+                                padding: const EdgeInsets.only(top: 4.0),
+                                child: GestureDetector(
+                                  child: Row(
+                                    children: [
+                                      CircleAvatar(
+                                        radius: 18,
+                                        backgroundColor: Colors.blueGrey[700],
+                                        backgroundImage: item['user'][0]['profilePic'] == 'default-profile-pic.jpg' ? AssetImage(
+                                          'assets/images/profile-img-placeholder.jpg'
+                                        ) as ImageProvider : NetworkImage(
+                                          '${item['user'][0]['profilePic']}'
+                                        ),
                                       ),
-                                    ),
-                                    SizedBox(width: 8.0,),
-                                    Text(
-                                      '${item['user'][0]['name']}',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500
-                                      ),
-                                    )
-                                  ],
+                                    ],
+                                  ),
+                                  onTap: () {
+                                            
+                                    Navigator.of(context).push(
+                                      RouteTransAnim().createRoute(1.0, .0, UsersProfile(
+                                        name: '${item['user'][0]['name']}', 
+                                        userId: item['user'][0]['_id'],
+                                      )),
+                                    );
+                                  },
                                 ),
-                                onTap: () {
-                                          
-                                  Navigator.of(context).push(
-                                    RouteTransAnim().createRoute(1.0, .0, UsersProfile(
-                                      name: '${item['user'][0]['name']}', 
-                                      userId: item['user'][0]['_id'],
-                                    )),
-                                  );
-                                          
-                                },
                               ),
-                              SizedBox(width: 8.0,),
-                              Flexible(
-                                child: Text(
-                                  '$formattedDate',
-                                  style: TextStyle(
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.normal
+                              Expanded(
+                                child: Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                ),  
+                                child: Padding(
+                                  padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 12.0),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        // mainAxisSize : MainAxisSize.min,
+                                        children: [
+                                          GestureDetector(
+                                            child: Row(
+                                              children: [
+                                                // CircleAvatar(
+                                                //   radius: 18,
+                                                //   backgroundColor: Colors.blueGrey[700],
+                                                //   backgroundImage: item['user'][0]['profilePic'] == 'default-profile-pic.jpg' ? AssetImage(
+                                                //     'assets/images/profile-img-placeholder.jpg'
+                                                //   ) as ImageProvider : NetworkImage(
+                                                //     '${item['user'][0]['profilePic']}'
+                                                //   ),
+                                                // ),
+                                                SizedBox(width: 8.0,),
+                                                Text(
+                                                  '${item['user'][0]['name']}',
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w500
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                            onTap: () {
+                                                      
+                                              Navigator.of(context).push(
+                                                RouteTransAnim().createRoute(1.0, .0, UsersProfile(
+                                                  name: '${item['user'][0]['name']}', 
+                                                  userId: item['user'][0]['_id'],
+                                                )),
+                                              );
+                                                      
+                                            },
+                                          ),
+                                          SizedBox(width: 8.0,),
+                                          Flexible(
+                                            child: Text(
+                                              '$formattedDate',
+                                              style: TextStyle(
+                                                fontSize: 11,
+                                                fontWeight: FontWeight.normal
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      SizedBox(height: 8.0,),
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 8.0),
+                                        child: Align(
+                                          alignment: Alignment.topLeft,
+                                          child: Text(
+                                            '${item['comment']}',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              letterSpacing: 0.5,
+                                              height: 1.2,
+                                              fontWeight: FontWeight.w400
+                                            ),
+                                          ),
+                                        ),
+                                      ),                          
+                                    ],
                                   ),
                                 ),
-                              )
+                              ),
+                              ),
                             ],
                           ),
-                          SizedBox(height: 8.0,),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 20.0),
-                            child: Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                '${item['comment']}',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ),
-                          ),
+
+                        // --------- reply comment feature ---------
+
+                        // SizedBox(height: 2.0,),
+                        // GestureDetector(
+                        //   child: Padding(
+                        //     padding: EdgeInsets.only(right: 16.0, bottom: 8.0),
+                        //     child: Text(
+                        //       'Reply',
+                        //       style: TextStyle(
+                        //         color: isReplying == true ? ColorTheme.primary : Colors.black
+                        //       ),
+                        //     ),
+                        //   ),
+                        //   onTap: () {
+                        //     setState(() {
+                        //       commentReplyMention = item['user'][0]['name'];
+                        //       replyingComment = 'main_comment';
+                        //       replyCommentIndex = index;
+                        //     });
+              
+                        //     // _firebaseCloudMessaging.sendCommentPushNotification(
+                        //     //   userId: item['user'][0]['_id'],
+                        //     //   postId: widget.postId
+                        //     // );
+              
+                        //   },
+                        // ),
+                        // Flexible(
+                        //   fit: FlexFit.loose,
+                        //   child: ListView.builder(
+                        //     itemCount: replyCommentsList.length,
+                        //     shrinkWrap: true,
+                        //     physics: NeverScrollableScrollPhysics(),
+                        //     itemBuilder: (context, itemIndex) {
+              
+                        //       bool isSubReplying = false;
+              
+                        //       if(replyingComment == 'sub_main_comment${item['_id']}' && subReplyCommentIndex == itemIndex) {
+              
+                        //         isSubReplying = true;
+              
+                        //       }
+              
+                        //       return Align(
+                        //         alignment: Alignment.bottomRight,
+                        //         child: Column(
+                        //           crossAxisAlignment: CrossAxisAlignment.end,
+                        //           children: [
+                        //             Row(
+                        //               crossAxisAlignment: CrossAxisAlignment.start,
+                        //               children: [
+                        //                 SizedBox(width: 28.0,),
+                        //                 Padding(
+                        //                   padding: const EdgeInsets.only(top: 4.0),
+                        //                   child: GestureDetector(
+                        //                     child: CircleAvatar(
+                        //                       radius: 14,
+                        //                       backgroundColor: Colors.blueGrey[700],
+                        //                       backgroundImage: item['user'][0]['profilePic'] == 'default-profile-pic.jpg' ? AssetImage(
+                        //                         'assets/images/profile-img-placeholder.jpg'
+                        //                       ) as ImageProvider : NetworkImage(
+                        //                         '${item['user'][0]['profilePic']}'
+                        //                       ),
+                        //                     ),
+                        //                     onTap: () {
+              
+                        //                       Navigator.of(context).push(
+                        //                         RouteTransAnim().createRoute(1.0, .0, UsersProfile(
+                        //                           name: '${item['user'][0]['name']}', 
+                        //                           userId: item['user'][0]['_id'],
+                        //                         )),
+                        //                       );
+                        //                     },
+                        //                   ),
+                        //                 ),
+                        //                 Expanded(
+                        //                   child: Card(
+                        //                   shape: RoundedRectangleBorder(
+                        //                     borderRadius: BorderRadius.circular(15.0),
+                        //                   ),  
+                        //                   child: Padding(
+                        //                     padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 12.0),
+                        //                     child: Column(
+                        //                       children: [
+                        //                         Row(
+                        //                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //                           // mainAxisSize : MainAxisSize.min,
+                        //                           children: [
+                        //                             GestureDetector(
+                        //                               child: Row(
+                        //                                 children: [
+                        //                                   SizedBox(width: 8.0,),
+                        //                                   Text(
+                        //                                     '${item['user'][0]['name']}',
+                        //                                     style: TextStyle(
+                        //                                       fontSize: 16,
+                        //                                       fontWeight: FontWeight.w500
+                        //                                     ),
+                        //                                   )
+                        //                                 ],
+                        //                               ),
+                        //                               onTap: () {
+                                                                
+                        //                                 Navigator.of(context).push(
+                        //                                   RouteTransAnim().createRoute(1.0, .0, UsersProfile(
+                        //                                     name: '${item['user'][0]['name']}', 
+                        //                                     userId: item['user'][0]['_id'],
+                        //                                   )),
+                        //                                 );
+                                                                
+                        //                               },
+                        //                             ),
+                        //                             SizedBox(width: 8.0,),
+                        //                             Flexible(
+                        //                               child: Text(
+                        //                                 '$formattedDate',
+                        //                                 style: TextStyle(
+                        //                                   fontSize: 11,
+                        //                                   fontWeight: FontWeight.normal
+                        //                                 ),
+                        //                               ),
+                        //                             )
+                        //                           ],
+                        //                         ),
+                        //                         SizedBox(height: 8.0,),
+                        //                         Padding(
+                        //                           padding: const EdgeInsets.only(left: 8.0),
+                        //                           child: Align(
+                        //                             alignment: Alignment.topLeft,
+                        //                             child: Text(
+                        //                               '${replyCommentsList[itemIndex]}',
+                        //                               style: TextStyle(
+                        //                                 fontSize: 16,
+                        //                                 letterSpacing: 0.5,
+                        //                                 height: 1.2,
+                        //                                 fontWeight: FontWeight.w400
+                        //                               ),
+                        //                             ),
+                        //                           ),
+                        //                         ),                          
+                        //                       ],
+                        //                     ),
+                        //                   ),
+                        //                 ),
+                        //                 ),
+                        //               ],
+                        //             ),
+                        //             SizedBox(height: 2.0,),
+                        //             Padding(
+                        //               padding: EdgeInsets.only(right: 16.0, bottom: 8.0),
+                        //               child: GestureDetector(
+                        //                 child: Text(
+                        //                   'Reply',
+                        //                   style: TextStyle(
+                        //                     color: isSubReplying == true ? ColorTheme.primary : Colors.black
+                        //                   ),
+                        //                 ),
+                        //                 onTap: () {
+              
+                        //                   setState(() {
+                        //                     // TODO: this should changed to reply comment name
+                        //                     commentReplyMention = item['user'][0]['name'];
+                        //                     replyingComment = 'sub_main_comment${item['_id']}';
+                        //                     subReplyCommentIndex = itemIndex;
+                        //                   });
+              
+                        //                 },
+                        //               ),
+                        //             ),
+                        //           ],
+                        //         ),
+                        //       );
+                        //     },
+                        //   ),
+                        // )
+
+                        // --------- End reply comment feature ---------
                         ],
-                      ),
-                    ),
-                  );
-        
-                  },
-                  firstPageErrorIndicatorBuilder: (context) => ErrorLoading(
-                    errorMsg: 'Error loading comments: code #003', 
-                    onTryAgain: _pagingController.refresh
-                  ) 
-                  ,
-                  noItemsFoundIndicatorBuilder: (context) => Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Center(
-                      child: Text(
-                        'No comments yet!',
-                        style: TextStyle(
-                          fontSize: 16.0
+                      );
+                      
+                    },
+                    firstPageErrorIndicatorBuilder: (context) => ErrorLoading(
+                      errorMsg: 'Error loading comments: code #003', 
+                      onTryAgain: _pagingController.refresh
+                    ) 
+                    ,
+                    noItemsFoundIndicatorBuilder: (context) => Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Center(
+                        child: Text(
+                          'No comments yet!',
+                          style: TextStyle(
+                            fontSize: 16.0
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  newPageErrorIndicatorBuilder: (context) => ErrorLoading(
-                    errorMsg: 'Error loading comments: code #004', 
-                    onTryAgain: _pagingController.refresh
-                  ),
-                  firstPageProgressIndicatorBuilder: (context) => LoadingAnimation(),
-                  newPageProgressIndicatorBuilder: (context) => LoadingAnimation(),
-                  noMoreItemsIndicatorBuilder: (context) => 
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Center(
-                      child: Text(
-                        '...',
-                        style: TextStyle(
-                          fontSize: 16.0
+                    newPageErrorIndicatorBuilder: (context) => ErrorLoading(
+                      errorMsg: 'Error loading comments: code #004', 
+                      onTryAgain: _pagingController.refresh
+                    ),
+                    firstPageProgressIndicatorBuilder: (context) => LoadingAnimation(),
+                    newPageProgressIndicatorBuilder: (context) => LoadingAnimation(),
+                    noMoreItemsIndicatorBuilder: (context) => 
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Center(
+                        child: Text(
+                          '...',
+                          style: TextStyle(
+                            fontSize: 16.0
+                          ),
                         ),
                       ),
-                    ),
-                  )
+                    )
+                  ),
+                  separatorBuilder: (context, index) => const Divider(height: 0,),
                 ),
-                separatorBuilder: (context, index) => const Divider(height: 0,),
               ),
-            ],
-          ),
+            ),
+            // Card(
+            //   shape: RoundedRectangleBorder(
+            //     borderRadius: BorderRadius.circular(15.0),
+            //   ),
+            //   child: Padding(
+            //     padding: const EdgeInsets.all(8.0),
+            //     child: Column(
+            //       mainAxisSize: MainAxisSize.min,
+            //       children: [
+            //         Row(
+            //           children: [
+            //             if(SharedPref.getProfilePic() == null)
+            //               CircleAvatar(
+            //                 radius: 20,
+            //                 backgroundColor: Colors.blueGrey[700],
+            //                 backgroundImage: AssetImage(
+            //                   'assets/images/profile-img-placeholder.jpg'
+            //                 )
+            //                 // NetworkImage(
+            //                 //   'https://cdna.artstation.com/p/assets/images/images/031/257/402/large/yukisho-art-vector-6.jpg?1603101769&dl=10'
+            //                 // ),
+            //               ),
+            //             if(SharedPref.getProfilePic() != null)
+            //             CircleAvatar(
+            //               radius: 20,
+            //               backgroundColor: Colors.blueGrey[700],
+            //               backgroundImage: FileImage(
+            //                 File(SharedPref.getProfilePic()!)
+            //               ),
+            //               // NetworkImage(
+            //               //   'https://cdna.artstation.com/p/assets/images/images/031/257/402/large/yukisho-art-vector-6.jpg?1603101769&dl=10'
+            //               // ),
+            //             ),
+            //             SizedBox(width: 12.0,),
+            //             // Text(
+            //             //   'Levi Ackerman',
+            //             //   style: TextStyle(
+            //             //     fontSize: 16,
+            //             //     fontWeight: FontWeight.w500
+            //             //   ),
+            //             // )
+            //             Expanded(
+            //               child: Row(
+            //               children: [
+            //                 Text(
+            //                   '$commentReplyMention',
+            //                   style: TextStyle(
+            //                     fontSize: 16,
+            //                     fontWeight: FontWeight.bold,
+            //                     color: ColorTheme.primary
+            //                   ),
+            //                 ),
+            //                 SizedBox(width: 4.0,),
+            //                 Expanded(
+            //                   child: RawKeyboardListener(
+            //                     autofocus: true,
+            //                     focusNode: FocusNode(),
+            //                     onKey: (event) {
+            //                       print('event $event');
+
+            //                       if(event.logicalKey == LogicalKeyboardKey.keyQ) {
+            //                         print('backspace clicked');
+            //                       }
+
+            //                       if (event.isKeyPressed(LogicalKeyboardKey.keyQ)) {
+            //                         print('q key pressed'); // <--- works!
+            //                       }
+
+            //                       if(event.physicalKey == PhysicalKeyboardKey(0x0007002a)) {
+            //                         print('backspace clicked');
+            //                       }
+
+            //                     },
+            //                     child: TextFormField(
+            //                       controller: commentTextController,
+            //                       // initialValue: commentReplyMention.isNotEmpty ? commentReplyMention : null,
+            //                       cursorColor: ColorTheme.primary,
+            //                       maxLines: null,
+            //                       keyboardType: TextInputType.multiline,
+            //                       decoration: InputDecoration(
+            //                         focusedBorder: UnderlineInputBorder(
+            //                           borderSide: BorderSide(color: ColorTheme.primary)
+            //                         ),
+            //                         // errorText: emailErrorText
+            //                         hintText: 'Leave a comment...'
+            //                       ),
+            //                       style: TextStyle(
+            //                         fontSize: 16
+            //                       ),
+            //                       // validation
+            //                       validator: (val) => val!.isEmpty ? 'Enter an Email' : null,
+            //                       onChanged: (val) {
+            //                       },
+            //                     ),
+            //                   ),
+            //                 ),
+            //                 IconButton(
+            //                   icon: Icon(
+            //                     Icons.send_rounded,
+            //                     size: 28,
+            //                     color: ColorTheme.primary,
+            //                   ),
+            //                   onPressed: () {
+                  
+            //                     if(commentTextController.text.isNotEmpty) {
+                  
+            //                       _interactionsReq.addNewComment(
+            //                         commentTextController.text, 
+            //                         widget.postId
+            //                       );
+                          
+            //                       setState(() {
+            //                         commentTextController.clear();
+            //                         _pagingController.refresh();
+            //                       });
+
+            //                       FirebaseCloudMessaging().sendCommentPushNotification(
+            //                         userId: widget.userId,
+            //                         postId: widget.postId
+            //                       );
+                  
+            //                     } else {
+                  
+            //                       Fluttertoast.showToast(
+            //                         msg: "comment text is empty",
+            //                         toastLength: Toast.LENGTH_SHORT,
+            //                         gravity: ToastGravity.BOTTOM,
+            //                         fontSize: 16.0
+            //                       );
+                  
+            //                     }
+                                                              
+            //                   }, 
+            //                 )
+            //               ],
+            //                                       ),
+            //             ),
+            //           ],
+            //         ),
+            //         Padding(
+            //           padding: const EdgeInsets.only(left: 20.0),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
+          ],
         ),
                 ),
       )

@@ -2,13 +2,13 @@ import 'package:anime_fanarts/auth/forgot_password.dart';
 import 'package:anime_fanarts/main.dart';
 import 'package:anime_fanarts/models/user_login.dart';
 import 'package:anime_fanarts/services/auth_req.dart';
+import 'package:anime_fanarts/services/block_user_req.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/route_trans_anim.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:anime_fanarts/auth/sign_up.dart';
 
 class Login extends StatefulWidget {
@@ -28,6 +28,7 @@ class _LoginState extends State<Login> {
   String password = '';
 
   AuthReq _authReq = AuthReq();
+  BlockUserReq _blockUserReq = BlockUserReq();
 
   // ---------- validation functions --------------
 
@@ -308,11 +309,18 @@ class _LoginState extends State<Login> {
 
                                       ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
-                                      Navigator.pushAndRemoveUntil(
-                                        context,
-                                        MaterialPageRoute(builder: (context) => MyApp(selectedPage: 0,)),
-                                        (Route<dynamic> route) => false,
-                                      );
+                                      _blockUserReq.getBlockedUsers(
+                                        isWhenLogin: true
+                                      ).whenComplete(() {
+
+                                        Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => MyApp(selectedPage: 0,)),
+                                          (Route<dynamic> route) => false,
+                                        );
+
+                                      });
+
 
                                     }).onError((error, stackTrace) {
 

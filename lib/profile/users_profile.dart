@@ -1,6 +1,9 @@
+import 'package:anime_fanarts/main.dart';
 import 'package:anime_fanarts/post.dart';
 import 'package:anime_fanarts/report/reasons_user_report.dart';
+import 'package:anime_fanarts/services/block_user_req.dart';
 import 'package:anime_fanarts/services/profile_req.dart';
+import 'package:anime_fanarts/services/shared_pref.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/error_loading.dart';
 import 'package:anime_fanarts/utils/loading_animation.dart';
@@ -37,6 +40,7 @@ class UsersProfileState extends State<UsersProfile> with AutomaticKeepAliveClien
   final PagingController<int, dynamic> _pagingController = PagingController(firstPageKey: 1);
 
   ProfileReq _profileReq = ProfileReq();
+  BlockUserReq _blockUserReq = BlockUserReq();
 
 
    void _fetchPage(int pageKey) async {
@@ -69,6 +73,80 @@ class UsersProfileState extends State<UsersProfile> with AutomaticKeepAliveClien
     } catch (error) {
       _pagingController.error = error;
     }
+  }
+
+  // block user confirmation Alert Dialog
+  Future<void> _blockUserConfirmAlert(BuildContext context, String? userId, String? name) async {
+
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: const Text("Are you sure you want to block this user ? You won't see any artworks from this user if you block."),
+              actions: <Widget>[
+                TextButton(
+                  child: Text(
+                    'CANCEL',
+                    style: TextStyle(
+                      color: ColorTheme.primary,
+                      fontSize: 18.0
+                    ),
+                  ),
+                  style: ButtonStyle(
+                    overlayColor: MaterialStateProperty.all(Colors.blue[50]),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  }
+                ),
+                TextButton(
+                  child: Text(
+                    'YES',
+                    style: TextStyle(
+                      color: ColorTheme.primary,
+                      fontSize: 18.0
+                    ),
+                  ),
+                  style: ButtonStyle(
+                    overlayColor: MaterialStateProperty.all(Colors.blue[50]),
+                  ),
+                  onPressed: () {
+
+                    SharedPref.setBlockedUserIdsList(
+                     blockedUserId: userId!,
+                    ).then((value) {
+
+                      SharedPref.setBlockedUserNamesList(name!).whenComplete(() {
+
+                        _blockUserReq.sendBlockedUser(
+                          widget.userId,
+                          widget.name
+                        );
+
+                        print('blockedUserIds ${SharedPref.getBlockedUserIdsList()}');
+                        print('blockedUserNames ${SharedPref.getBlockedUserNamesList()}');
+                        
+                        Navigator.of(context).pushAndRemoveUntil(
+                         MaterialPageRoute(
+                             builder: (context) => MyApp(selectedPage: 0)),
+                             (route) => false
+                        );
+
+                      });
+
+                    });
+
+                  },  
+                ),
+              ],
+            );
+          }
+        );
+      },
+    );
   }
 
   @override
@@ -134,6 +212,10 @@ class UsersProfileState extends State<UsersProfile> with AutomaticKeepAliveClien
                         )
                       )
                     );
+                  } else if(selection == 1) {
+
+                    _blockUserConfirmAlert(context, widget.userId, widget.name);
+
                   } 
                 },
                 itemBuilder: (context) => [
@@ -151,6 +233,21 @@ class UsersProfileState extends State<UsersProfile> with AutomaticKeepAliveClien
                       ],
                     ),
                     value: 0
+                  ),
+                  PopupMenuItem(
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.block_rounded,
+                          color: Colors.black,
+                        ),
+                        SizedBox(width: 8.0,),
+                        Text(
+                          'Block this user',
+                        ),
+                      ],
+                    ),
+                    value: 1
                   ),
                 ]
               )

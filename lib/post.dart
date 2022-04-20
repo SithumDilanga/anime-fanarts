@@ -554,7 +554,7 @@ class _PostState extends State<Post> with AutomaticKeepAliveClientMixin<Post> {
                               fit: BoxFit.cover,
                               cache: true,
                               // cacheHeight: 500,
-                              cacheWidth: 500,
+                              cacheWidth: 600,
                               loadStateChanged: (ExtendedImageState state) {
                                 switch (state.extendedImageLoadState) {
                                   case LoadState.loading:

@@ -1,4 +1,5 @@
 import 'package:anime_fanarts/services/secure_storage.dart';
+import 'package:anime_fanarts/services/shared_pref.dart';
 import 'package:anime_fanarts/utils/urls.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,8 +21,14 @@ class GetCreatePosts extends ChangeNotifier {
     try {
 
       final bearerToken = await SecureStorage.getToken() ?? '';
+
+      final blockedUsersList = SharedPref.getBlockedUserIdsList() ?? [];
       
-      Response allPostsData = await _dio.get('$URL/posts?page=$pageKey&limit=$pageSize', options: Options(
+      Response allPostsData = await _dio.get('$URL/posts?page=$pageKey&limit=$pageSize',
+      // data: {
+      //   'blocklist': blockedUsersList 
+      // },
+      options: Options(
         headers: {'Authorization': 'Bearer $bearerToken'},
       ));
 
@@ -104,13 +111,13 @@ class GetCreatePosts extends ChangeNotifier {
           // ],
           'postimg': imageList,
           'description': desc,
-          'tags': tags
+          'tags': tags,
         });
 
       }
       
       
-      Response userPosts = await _dio.post('$URL/posts', data: formData, options: Options(
+      Response userPosts = await _dio.post('$URL/posts/createPost', data: formData, options: Options(
         headers: {'Authorization': 'Bearer $bearerToken'},
       ));
 

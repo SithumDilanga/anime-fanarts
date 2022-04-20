@@ -2,6 +2,7 @@ import 'package:anime_fanarts/auth/log_in.dart';
 import 'package:anime_fanarts/auth/sign_up.dart';
 import 'package:anime_fanarts/profile/admin_add_new_art.dart';
 import 'package:anime_fanarts/services/secure_storage.dart';
+import 'package:anime_fanarts/settings/blocked_users.dart';
 import 'package:anime_fanarts/settings/bug_report.dart';
 import 'package:anime_fanarts/settings/contact_us.dart';
 import 'package:anime_fanarts/settings/fcm_test.dart';
@@ -220,18 +221,18 @@ class _SettingsState extends State<Settings> {
                   );
                 }
               ),
-              // CustomeListTile(
-              //   Icons.contact_support_outlined,
-              //   'FCM',
-              //   () {
-              //     Navigator.of(context).push(
-              //       RouteTransAnim().createRoute(
-              //         1.0, 0.0, 
-              //         FCMTesting()
-              //       )
-              //     );
-              //   }
-              // ),
+              CustomeListTile(
+                Icons.block_rounded,
+                'Blocked users',
+                () {
+                  Navigator.of(context).push(
+                    RouteTransAnim().createRoute(
+                      1.0, 0.0, 
+                      BlockedUsers()
+                    )
+                  );
+                }
+              ),
               CustomeListTile(
                 Icons.logout_rounded,
                 'Logout',
