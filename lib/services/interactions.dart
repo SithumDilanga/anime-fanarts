@@ -117,7 +117,7 @@ class Interactions {
       
       Response addComment = await _dio.post('$URL/comments?page=1&limit=20&postId=$postId', data: {
         'comment': commentText,
-        'post': postId
+        'post': postId,
       } , options: Options(
         headers: {'Authorization': 'Bearer $bearerToken'},
       ));
@@ -150,5 +150,56 @@ class Interactions {
   }
 
   // ------------ End add a new comment ----------------
+
+
+  // ------------ add a new comment reply ----------------
+
+  Future addNewReplyComment(String? commentText, String? commentId, String? replyMention) async {
+
+    try {
+
+      // FormData data = FormData.fromMap({
+      //   'comment':  commentText,
+      //   'post': postId
+      // });
+
+      final bearerToken = await SecureStorage.getToken() ?? '';
+      
+      Response addComment = await _dio.post('$URL/comments/replyComment', data: {
+        'comment': commentText,
+        'commentId': commentId,
+        'replyMention': replyMention
+      } , options: Options(
+        headers: {'Authorization': 'Bearer $bearerToken'},
+      ));
+
+      return addComment.data['status'];
+
+    } on DioError catch (e) {
+
+
+      if (e.response != null) {
+
+        Fluttertoast.showToast(
+          msg: 'Error replying to the comment!',
+          toastLength: Toast.LENGTH_LONG,
+        );
+
+        // throw Error();
+        throw(e.response!.data['message']);
+
+      } else {
+
+        Fluttertoast.showToast(
+          msg: 'Error sending request!',
+          toastLength: Toast.LENGTH_LONG,
+        );
+      }
+
+    }
+
+  }
+
+  // ------------ End add a new comment reply ----------------
 
 }

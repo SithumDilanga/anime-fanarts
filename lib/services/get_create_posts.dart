@@ -16,22 +16,43 @@ class GetCreatePosts extends ChangeNotifier {
 
   Future getAllPosts(int pageKey, int pageSize) async {
 
-    // int page = pageNum;
+    Response allPostsData;
 
     try {
 
       final bearerToken = await SecureStorage.getToken() ?? '';
 
       final blockedUsersList = SharedPref.getBlockedUserIdsList() ?? [];
-      
-      Response allPostsData = await _dio.get('$URL/posts?page=$pageKey&limit=$pageSize',
-      // data: {
-      //   'blocklist': blockedUsersList 
-      // },
-      options: Options(
-        headers: {'Authorization': 'Bearer $bearerToken'},
-      ));
 
+      String blockedList = blockedUsersList.toString()
+      .replaceAll('[', '')
+      .replaceAll(']','')
+      .replaceAll(' ', '');
+
+      print('stringedList ' + blockedList);
+
+      if(blockedList.isEmpty) {
+
+        // print('no blocked users');
+
+        allPostsData = await _dio.get(
+          '$URL/posts?page=$pageKey&limit=$pageSize',
+          options: Options(
+            headers: {'Authorization': 'Bearer $bearerToken'},
+        ));
+
+      } else {
+
+        // print('have blocked users');
+
+        allPostsData = await _dio.get(
+          '$URL/posts?page=$pageKey&limit=${pageSize + 8}&blockedList=$blockedList',
+        options: Options(
+          headers: {'Authorization': 'Bearer $bearerToken'},
+        ));
+
+      }
+      
       return allPostsData.data;
 
     } on DioError catch (e) {
@@ -117,7 +138,7 @@ class GetCreatePosts extends ChangeNotifier {
       }
       
       
-      Response userPosts = await _dio.post('$URL/posts/createPost', data: formData, options: Options(
+      Response userPosts = await _dio.post('$URL/posts', data: formData, options: Options(
         headers: {'Authorization': 'Bearer $bearerToken'},
       ));
 

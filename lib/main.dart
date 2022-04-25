@@ -101,70 +101,70 @@ class _MyAppState extends State<MyApp> {
 
   // ---------- FCM : COMMENTED FOR FOR LATER USE ----------
 
-  // @override
-  // void initState() {
-  //   super.initState();
+  @override
+  void initState() {
+    super.initState();
 
-  //   bool isDevTokenSent = SharedPref.getIsDevTokenSent();
+    bool isDevTokenSent = SharedPref.getIsDevTokenSent();
 
-  //   if(!isDevTokenSent) {
+    if(!isDevTokenSent) {
 
-  //     messaging = FirebaseMessaging.instance;
+      messaging = FirebaseMessaging.instance;
 
-  //     messaging.getToken().then((value){
-  //       print('token ' + value.toString());
+      messaging.getToken().then((value){
+        print('token ' + value.toString());
 
-  //       FirebaseCloudMessaging().sendDevToken(
-  //         devToken: value.toString()
-  //       );
+        FirebaseCloudMessaging().sendDevToken(
+          devToken: value.toString()
+        );
 
-  //     });
+      });
 
-  //     SharedPref.setIsDevTokenSent(true);
+      SharedPref.setIsDevTokenSent(true);
 
-  //   } 
+    } 
 
-  //   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) { 
-  //       print('onMessageOpenedApp ${message.data['userId']}');
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) { 
+        print('onMessageOpenedApp ${message.data['userId']}');
 
-  //       if(message.data['screen'] == 'comment_section') {
+        if(message.data['screen'] == 'comment_section') {
 
-  //         print('open comment section');
+          print('open comment section');
 
-  //         Navigator.push(
-  //           context,
-  //           MaterialPageRoute(builder: (context) => CommentSecion(
-  //             userId: message.data['userId'].toString(), 
-  //             postId: message.data['postId'].toString()
-  //           )),
-  //         );
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CommentSecion(
+              userId: message.data['userId'].toString(), 
+              postId: message.data['postId'].toString()
+            )),
+          );
 
-  //       }
+        }
         
-  //     });
+      });
 
-  //     FirebaseMessaging.instance.getInitialMessage().then((message) async {
+      FirebaseMessaging.instance.getInitialMessage().then((message) async {
 
-  //       // print('getInitialMessage ${message!.data}');
+        // print('getInitialMessage ${message!.data}');
 
-  //       if(message?.data['screen'] == 'comment_section') {
+        if(message?.data['screen'] == 'comment_section') {
 
-  //         Navigator.push(
-  //           context,
-  //           MaterialPageRoute(builder: (context) => CommentSecion(
-  //             userId: message?.data['userId'], 
-  //             postId: message?.data['postId']
-  //           )),
-  //         );
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CommentSecion(
+              userId: message?.data['userId'], 
+              postId: message?.data['postId']
+            )),
+          );
 
-  //       }
+        }
 
-  //     });
+      });
 
-  //   // FirebaseCloudMessaging().subscribeToEvent();
-  //   // FirebaseCloudMessaging().configureCallbacks();
+    // FirebaseCloudMessaging().subscribeToEvent();
+    // FirebaseCloudMessaging().configureCallbacks();
 
-  // }
+  }
 
   // ---------- End FCM : COMMENTED FOR FOR LATER USE ----------
 

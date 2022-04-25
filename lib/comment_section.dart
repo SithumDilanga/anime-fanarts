@@ -37,15 +37,17 @@ class _CommentSecionState extends State<CommentSecion> {
       PagingController(firstPageKey: 1);
 
   final List<String> replyCommentsList = ['comment 1', 'comment 2', 'comment 3'];
+  
   String commentReplyMention = '';
 
   final FocusNode _focusNode = FocusNode();
 
-  // final _firebaseCloudMessaging = FirebaseCloudMessaging();
+  final _firebaseCloudMessaging = FirebaseCloudMessaging();
 
   String replyingComment = '';
   int replyCommentIndex = 0;
   int subReplyCommentIndex = 0;
+  String commentId = '';
 
   @override
   void initState() {
@@ -97,6 +99,8 @@ class _CommentSecionState extends State<CommentSecion> {
   Widget build(BuildContext context) {
 
     FocusScope.of(context).requestFocus(_focusNode);
+
+    print('replyingComment $replyingComment');
 
     return Scaffold(
       appBar: AppBar(
@@ -274,11 +278,73 @@ class _CommentSecionState extends State<CommentSecion> {
                               ),
                               onPressed: () {
                   
-                                if(commentTextController.text.isNotEmpty) {
+                                // if(commentTextController.text.isNotEmpty && replyingComment.contains('main_comment_reply')) {
+
+                                //   print('main comment');
+                                //   print('replyingCommentInside $replyingComment');
                   
+                                //   _interactionsReq.addNewComment(
+                                //     commentTextController.text, 
+                                //     widget.postId
+                                //   );
+                          
+                                //   setState(() {
+                                //     commentTextController.clear();
+                                //     _pagingController.refresh();
+                                //   });
+
+                                //   // -------- for FCM -----------
+
+                                //   // FirebaseCloudMessaging().sendCommentPushNotification(
+                                //   //   userId: widget.userId,
+                                //   //   postId: widget.postId
+                                //   // );
+
+
+                                //   // // TODO: fix logic for all occations
+                                //   // if(replyingComment.contains('sub_comment')) {
+
+                                //   //   print('sub_comment notification');
+
+                                //   //   _firebaseCloudMessaging.sendCommentPushNotification(
+                                //   //     userId: '625c2c4c4d883585a02d12c8',//item['user'][0]['_id'],
+                                //   //     postId: widget.postId
+                                //   //   );
+
+                                //   // }
+
+                                //   // -------- End for FCM -----------
+                  
+                                // } else 
+                                if(commentTextController.text.isNotEmpty && replyingComment.contains('sub_comment') || replyingComment.contains('main_comment_reply')) {
+
+                                  print('sub main comment');
+                                  print('replyingCommentInside $replyingComment');
+
+                                  if(commentId.isNotEmpty) {
+
+                                    _interactionsReq.addNewReplyComment(
+                                      commentTextController.text, 
+                                      commentId,
+                                      commentReplyMention
+                                    ).whenComplete(() {
+
+                                      setState(() {
+                                        commentTextController.clear();
+                                        _pagingController.refresh();
+                                      });
+
+                                    });
+
+                                  }
+                                    
+                                } else if(commentReplyMention.isEmpty) {
+
+                                  print('adding main comment');
+
                                   _interactionsReq.addNewComment(
                                     commentTextController.text, 
-                                    widget.postId
+                                    widget.postId,
                                   );
                           
                                   setState(() {
@@ -286,24 +352,15 @@ class _CommentSecionState extends State<CommentSecion> {
                                     _pagingController.refresh();
                                   });
 
-                                  // -------- for FCM -----------
-
-                                  // FirebaseCloudMessaging().sendCommentPushNotification(
-                                  //   userId: widget.userId,
-                                  //   postId: widget.postId
-                                  // );
-
-                                  // -------- End for FCM -----------
-                  
                                 } else {
-                  
+
                                   Fluttertoast.showToast(
                                     msg: "comment text is empty",
                                     toastLength: Toast.LENGTH_SHORT,
                                     gravity: ToastGravity.BOTTOM,
                                     fontSize: 16.0
                                   );
-                  
+
                                 }
                                                               
                               }, 
@@ -339,7 +396,7 @@ class _CommentSecionState extends State<CommentSecion> {
                       
                       bool isReplying = false;
               
-                      if(replyingComment == 'main_comment' && replyCommentIndex == index) {
+                      if(replyingComment == 'main_comment_reply' && replyCommentIndex == index) {
                         isReplying = true;
                       }
                       
@@ -358,10 +415,10 @@ class _CommentSecionState extends State<CommentSecion> {
                                       CircleAvatar(
                                         radius: 18,
                                         backgroundColor: Colors.blueGrey[700],
-                                        backgroundImage: item['user'][0]['profilePic'] == 'default-profile-pic.jpg' ? AssetImage(
+                                        backgroundImage: item['user']['profilePic'] == 'default-profile-pic.jpg' ? AssetImage(
                                           'assets/images/profile-img-placeholder.jpg'
                                         ) as ImageProvider : NetworkImage(
-                                          '${item['user'][0]['profilePic']}'
+                                          '${item['user']['profilePic']}'
                                         ),
                                       ),
                                     ],
@@ -370,8 +427,8 @@ class _CommentSecionState extends State<CommentSecion> {
                                             
                                     Navigator.of(context).push(
                                       RouteTransAnim().createRoute(1.0, .0, UsersProfile(
-                                        name: '${item['user'][0]['name']}', 
-                                        userId: item['user'][0]['_id'],
+                                        name: '${item['user']['name']}', 
+                                        userId: item['user']['_id'],
                                       )),
                                     );
                                   },
@@ -404,7 +461,7 @@ class _CommentSecionState extends State<CommentSecion> {
                                                 // ),
                                                 SizedBox(width: 8.0,),
                                                 Text(
-                                                  '${item['user'][0]['name']}',
+                                                  '${item['user']['name']}',
                                                   style: TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.w500
@@ -416,8 +473,8 @@ class _CommentSecionState extends State<CommentSecion> {
                                                       
                                               Navigator.of(context).push(
                                                 RouteTransAnim().createRoute(1.0, .0, UsersProfile(
-                                                  name: '${item['user'][0]['name']}', 
-                                                  userId: item['user'][0]['_id'],
+                                                  name: '${item['user']['name']}', 
+                                                  userId: item['user']['_id'],
                                                 )),
                                               );
                                                       
@@ -461,179 +518,206 @@ class _CommentSecionState extends State<CommentSecion> {
 
                         // --------- reply comment feature ---------
 
-                        // SizedBox(height: 2.0,),
-                        // GestureDetector(
-                        //   child: Padding(
-                        //     padding: EdgeInsets.only(right: 16.0, bottom: 8.0),
-                        //     child: Text(
-                        //       'Reply',
-                        //       style: TextStyle(
-                        //         color: isReplying == true ? ColorTheme.primary : Colors.black
-                        //       ),
-                        //     ),
-                        //   ),
-                        //   onTap: () {
-                        //     setState(() {
-                        //       commentReplyMention = item['user'][0]['name'];
-                        //       replyingComment = 'main_comment';
-                        //       replyCommentIndex = index;
-                        //     });
+                        SizedBox(height: 2.0,),
+                        GestureDetector(
+                          child: Padding(
+                            padding: EdgeInsets.only(right: 16.0, bottom: 8.0),
+                            child: Text(
+                              'Reply',
+                              style: TextStyle(
+                                color: isReplying == true ? ColorTheme.primary : Colors.black
+                              ),
+                            ),
+                          ),
+                          onTap: () {
+                            setState(() {
+                              commentReplyMention = item['user']['name'];
+                              replyingComment = 'main_comment_reply';
+                              replyCommentIndex = index;
+                              commentId = item['_id'];
+                            });
               
-                        //     // _firebaseCloudMessaging.sendCommentPushNotification(
-                        //     //   userId: item['user'][0]['_id'],
-                        //     //   postId: widget.postId
-                        //     // );
+                            // _firebaseCloudMessaging.sendCommentPushNotification(
+                            //   userId: item['user'][0]['_id'],
+                            //   postId: widget.postId
+                            // );
               
-                        //   },
-                        // ),
-                        // Flexible(
-                        //   fit: FlexFit.loose,
-                        //   child: ListView.builder(
-                        //     itemCount: replyCommentsList.length,
-                        //     shrinkWrap: true,
-                        //     physics: NeverScrollableScrollPhysics(),
-                        //     itemBuilder: (context, itemIndex) {
+                          },
+                        ),
+
+                        if(item['replyComments'].isNotEmpty)
+
+                        Flexible(
+                          fit: FlexFit.loose,
+                          child: ListView.builder(
+                            itemCount: item['replyComments'].length,
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemBuilder: (context, itemIndex) {
               
-                        //       bool isSubReplying = false;
+                              bool isSubReplying = false;
               
-                        //       if(replyingComment == 'sub_main_comment${item['_id']}' && subReplyCommentIndex == itemIndex) {
+                              if(replyingComment == 'sub_comment${item['replyComments'][itemIndex]['user']['_id']}' && subReplyCommentIndex == itemIndex) {
               
-                        //         isSubReplying = true;
+                                isSubReplying = true;
               
-                        //       }
+                              }
               
-                        //       return Align(
-                        //         alignment: Alignment.bottomRight,
-                        //         child: Column(
-                        //           crossAxisAlignment: CrossAxisAlignment.end,
-                        //           children: [
-                        //             Row(
-                        //               crossAxisAlignment: CrossAxisAlignment.start,
-                        //               children: [
-                        //                 SizedBox(width: 28.0,),
-                        //                 Padding(
-                        //                   padding: const EdgeInsets.only(top: 4.0),
-                        //                   child: GestureDetector(
-                        //                     child: CircleAvatar(
-                        //                       radius: 14,
-                        //                       backgroundColor: Colors.blueGrey[700],
-                        //                       backgroundImage: item['user'][0]['profilePic'] == 'default-profile-pic.jpg' ? AssetImage(
-                        //                         'assets/images/profile-img-placeholder.jpg'
-                        //                       ) as ImageProvider : NetworkImage(
-                        //                         '${item['user'][0]['profilePic']}'
-                        //                       ),
-                        //                     ),
-                        //                     onTap: () {
+                              return Align(
+                                alignment: Alignment.bottomRight,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(width: 28.0,),
+                                        Padding(
+                                          padding: const EdgeInsets.only(top: 4.0),
+                                          child: GestureDetector(
+                                            child: CircleAvatar(
+                                              radius: 14,
+                                              backgroundColor: Colors.blueGrey[700],
+                                              backgroundImage: item['replyComments'][itemIndex]['user']['profilePic'] == 'default-profile-pic.jpg' ? AssetImage(
+                                                'assets/images/profile-img-placeholder.jpg'
+                                              ) as ImageProvider : NetworkImage(
+                                                '${item['replyComments'][itemIndex]['user']['profilePic']}'
+                                              ),
+                                            ),
+                                            onTap: () {
               
-                        //                       Navigator.of(context).push(
-                        //                         RouteTransAnim().createRoute(1.0, .0, UsersProfile(
-                        //                           name: '${item['user'][0]['name']}', 
-                        //                           userId: item['user'][0]['_id'],
-                        //                         )),
-                        //                       );
-                        //                     },
-                        //                   ),
-                        //                 ),
-                        //                 Expanded(
-                        //                   child: Card(
-                        //                   shape: RoundedRectangleBorder(
-                        //                     borderRadius: BorderRadius.circular(15.0),
-                        //                   ),  
-                        //                   child: Padding(
-                        //                     padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 12.0),
-                        //                     child: Column(
-                        //                       children: [
-                        //                         Row(
-                        //                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //                           // mainAxisSize : MainAxisSize.min,
-                        //                           children: [
-                        //                             GestureDetector(
-                        //                               child: Row(
-                        //                                 children: [
-                        //                                   SizedBox(width: 8.0,),
-                        //                                   Text(
-                        //                                     '${item['user'][0]['name']}',
-                        //                                     style: TextStyle(
-                        //                                       fontSize: 16,
-                        //                                       fontWeight: FontWeight.w500
-                        //                                     ),
-                        //                                   )
-                        //                                 ],
-                        //                               ),
-                        //                               onTap: () {
+                                              Navigator.of(context).push(
+                                                RouteTransAnim().createRoute(1.0, .0, UsersProfile(
+                                                  name: '${item['replyComments'][itemIndex]['user']['name']}', 
+                                                  userId: item['replyComments'][itemIndex]['user']['_id'],
+                                                )),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Card(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(15.0),
+                                          ),  
+                                          child: Padding(
+                                            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 16.0, 12.0),
+                                            child: Column(
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  // mainAxisSize : MainAxisSize.min,
+                                                  children: [
+                                                    GestureDetector(
+                                                      child: Row(
+                                                        children: [
+                                                          SizedBox(width: 8.0,),
+                                                          Text(
+                                                            '${item['replyComments'][itemIndex]['user']['name']}',
+                                                            style: TextStyle(
+                                                              fontSize: 16,
+                                                              fontWeight: FontWeight.w500
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                      onTap: () {
                                                                 
-                        //                                 Navigator.of(context).push(
-                        //                                   RouteTransAnim().createRoute(1.0, .0, UsersProfile(
-                        //                                     name: '${item['user'][0]['name']}', 
-                        //                                     userId: item['user'][0]['_id'],
-                        //                                   )),
-                        //                                 );
+                                                        Navigator.of(context).push(
+                                                          RouteTransAnim().createRoute(1.0, .0, UsersProfile(
+                                                            name: '${item['replyComments'][itemIndex]['user']['name']}', 
+                                                            userId: item['replyComments'][itemIndex]['user']['_id'],
+                                                          )),
+                                                        );
                                                                 
-                        //                               },
-                        //                             ),
-                        //                             SizedBox(width: 8.0,),
-                        //                             Flexible(
-                        //                               child: Text(
-                        //                                 '$formattedDate',
-                        //                                 style: TextStyle(
-                        //                                   fontSize: 11,
-                        //                                   fontWeight: FontWeight.normal
-                        //                                 ),
-                        //                               ),
-                        //                             )
-                        //                           ],
-                        //                         ),
-                        //                         SizedBox(height: 8.0,),
-                        //                         Padding(
-                        //                           padding: const EdgeInsets.only(left: 8.0),
-                        //                           child: Align(
-                        //                             alignment: Alignment.topLeft,
-                        //                             child: Text(
-                        //                               '${replyCommentsList[itemIndex]}',
-                        //                               style: TextStyle(
-                        //                                 fontSize: 16,
-                        //                                 letterSpacing: 0.5,
-                        //                                 height: 1.2,
-                        //                                 fontWeight: FontWeight.w400
-                        //                               ),
-                        //                             ),
-                        //                           ),
-                        //                         ),                          
-                        //                       ],
-                        //                     ),
-                        //                   ),
-                        //                 ),
-                        //                 ),
-                        //               ],
-                        //             ),
-                        //             SizedBox(height: 2.0,),
-                        //             Padding(
-                        //               padding: EdgeInsets.only(right: 16.0, bottom: 8.0),
-                        //               child: GestureDetector(
-                        //                 child: Text(
-                        //                   'Reply',
-                        //                   style: TextStyle(
-                        //                     color: isSubReplying == true ? ColorTheme.primary : Colors.black
-                        //                   ),
-                        //                 ),
-                        //                 onTap: () {
+                                                      },
+                                                    ),
+                                                    SizedBox(width: 8.0,),
+                                                    Flexible(
+                                                      child: Text(
+                                                        '$formattedDate',
+                                                        style: TextStyle(
+                                                          fontSize: 11,
+                                                          fontWeight: FontWeight.normal
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                                SizedBox(height: 8.0,),
+                                                Padding(
+                                                  padding: const EdgeInsets.only(left: 8.0),
+                                                  child: Align(
+                                                    alignment: Alignment.topLeft,
+                                                    child: Row(
+                                                      children: [
+                                                        Text(
+                                                          '${item['replyComments'][itemIndex]['replyMention']}',
+                                                          style: TextStyle(
+                                                            fontSize: 16,
+                                                            color: ColorTheme.primary,
+                                                            letterSpacing: 0.5,
+                                                            height: 1.2,
+                                                            fontWeight: FontWeight.w400
+                                                          ),
+                                                        ),
+                                                        SizedBox(width: 4.0,),
+                                                        Text(
+                                                          '${item['replyComments'][itemIndex]['comment']}',
+                                                          style: TextStyle(
+                                                            fontSize: 16,
+                                                            letterSpacing: 0.5,
+                                                            height: 1.2,
+                                                            fontWeight: FontWeight.w400
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),                          
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 2.0,),
+                                    Padding(
+                                      padding: EdgeInsets.only(right: 16.0, bottom: 8.0),
+                                      child: GestureDetector(
+                                        child: Text(
+                                          'Reply',
+                                          style: TextStyle(
+                                            color: isSubReplying == true ? ColorTheme.primary : Colors.black
+                                          ),
+                                        ),
+                                        onTap: () {
               
-                        //                   setState(() {
-                        //                     // TODO: this should changed to reply comment name
-                        //                     commentReplyMention = item['user'][0]['name'];
-                        //                     replyingComment = 'sub_main_comment${item['_id']}';
-                        //                     subReplyCommentIndex = itemIndex;
-                        //                   });
+                                          setState(() {
+                                            // TODO: this should changed to reply comment name
+                                            commentReplyMention = item['replyComments'][itemIndex]['user']['name'];
+
+                                            replyingComment = 'sub_comment${item['replyComments'][itemIndex]['user']['_id']}';
+                                            //replyingComment = 'sub_comment${item[itemIndex]['user']['_id']}';
+                                            subReplyCommentIndex = itemIndex;
+                                            commentId = item['_id'];
+                                          });
+
+                                          // _firebaseCloudMessaging.sendCommentPushNotification(
+                                          //   userId: '625c2b524d883585a02d123b',//item['user'][0]['_id'],
+                                          //   postId: widget.postId
+                                          // );
               
-                        //                 },
-                        //               ),
-                        //             ),
-                        //           ],
-                        //         ),
-                        //       );
-                        //     },
-                        //   ),
-                        // )
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        )
 
                         // --------- End reply comment feature ---------
                         ],
