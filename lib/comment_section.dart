@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:anime_fanarts/profile/users_profile.dart';
 import 'package:anime_fanarts/services/fcm.dart';
 import 'package:anime_fanarts/services/interactions.dart';
+import 'package:anime_fanarts/services/secure_storage.dart';
 import 'package:anime_fanarts/services/shared_pref.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/date_time_formatter.dart';
@@ -44,16 +45,25 @@ class _CommentSecionState extends State<CommentSecion> {
 
   final _firebaseCloudMessaging = FirebaseCloudMessaging();
 
+  String? currentUserId = '';
+
   String replyingComment = '';
   int replyCommentIndex = 0;
   int subReplyCommentIndex = 0;
   String commentId = '';
+  String replyCommentUserId = '';
+
+  void init() async {
+    currentUserId = await SecureStorage.getUserId();
+  }
 
   @override
   void initState() {
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
     });
+
+    init();
 
     super.initState();
   }
@@ -336,6 +346,23 @@ class _CommentSecionState extends State<CommentSecion> {
 
                                     });
 
+                                    print('replyCommentUserId $replyCommentUserId');
+
+                                    FirebaseCloudMessaging().sendCommentPushNotification(
+                                      userId: replyCommentUserId,
+                                      postId: widget.postId
+                                    );
+
+                                    // if there is a new reply comment post user also notifies TODO: check this logic works
+                                    if(widget.postId != currentUserId) {
+
+                                      FirebaseCloudMessaging().sendCommentPushNotification(
+                                        userId: widget.userId,
+                                        postId: widget.postId
+                                      );
+
+                                    }
+
                                   }
                                     
                                 } else if(commentReplyMention.isEmpty) {
@@ -345,6 +372,11 @@ class _CommentSecionState extends State<CommentSecion> {
                                   _interactionsReq.addNewComment(
                                     commentTextController.text, 
                                     widget.postId,
+                                  );
+
+                                  FirebaseCloudMessaging().sendCommentPushNotification(
+                                    userId: widget.userId,
+                                    postId: widget.postId
                                   );
                           
                                   setState(() {
@@ -535,6 +567,7 @@ class _CommentSecionState extends State<CommentSecion> {
                               replyingComment = 'main_comment_reply';
                               replyCommentIndex = index;
                               commentId = item['_id'];
+                              replyCommentUserId = item['user']['_id'];
                             });
               
                             // _firebaseCloudMessaging.sendCommentPushNotification(
@@ -702,6 +735,9 @@ class _CommentSecionState extends State<CommentSecion> {
                                             //replyingComment = 'sub_comment${item[itemIndex]['user']['_id']}';
                                             subReplyCommentIndex = itemIndex;
                                             commentId = item['_id'];
+
+                                            replyCommentUserId = item['replyComments'][itemIndex]['user']['_id'];
+
                                           });
 
                                           // _firebaseCloudMessaging.sendCommentPushNotification(
