@@ -146,7 +146,7 @@ class FirebaseCloudMessaging {
 
   // -------------- send commented push notification -------------
 
-  Future sendCommentPushNotification({String? userId, String? postId}) async {
+  Future sendCommentPushNotification({String? userId, String? postId, String? currentUserName, String? commentType}) async {
 
     try {
 
@@ -155,7 +155,9 @@ class FirebaseCloudMessaging {
       
       Response userNotification = await _dio.post('$URL/daily/sendMsgToDevice/$userId', data: {
         'userId': userId,
-        'postId': postId
+        'postId': postId,
+        'currentUserName': currentUserName,
+        'commentType': commentType
       }, options: Options(
         headers: {'Authorization': 'Bearer $bearerToken'},
       ));

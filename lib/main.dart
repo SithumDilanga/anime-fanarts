@@ -107,7 +107,7 @@ class _MyAppState extends State<MyApp> {
 
     bool isDevTokenSent = SharedPref.getIsDevTokenSent();
 
-    // if(!isDevTokenSent) {
+    if(!isDevTokenSent) {
 
       messaging = FirebaseMessaging.instance;
 
@@ -122,7 +122,7 @@ class _MyAppState extends State<MyApp> {
 
       SharedPref.setIsDevTokenSent(true);
 
-    // } 
+    } 
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) { 
         print('onMessageOpenedApp ${message.data['userId']}');

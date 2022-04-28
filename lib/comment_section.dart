@@ -46,6 +46,7 @@ class _CommentSecionState extends State<CommentSecion> {
   final _firebaseCloudMessaging = FirebaseCloudMessaging();
 
   String? currentUserId = '';
+  String? currentUserName = '';
 
   String replyingComment = '';
   int replyCommentIndex = 0;
@@ -55,6 +56,7 @@ class _CommentSecionState extends State<CommentSecion> {
 
   void init() async {
     currentUserId = await SecureStorage.getUserId();
+    currentUserName = SharedPref.getUserName();
   }
 
   @override
@@ -348,20 +350,47 @@ class _CommentSecionState extends State<CommentSecion> {
 
                                     print('replyCommentUserId $replyCommentUserId');
 
-                                    FirebaseCloudMessaging().sendCommentPushNotification(
-                                      userId: replyCommentUserId,
-                                      postId: widget.postId
-                                    );
+                                    if(replyCommentUserId == widget.userId) {
 
-                                    // if there is a new reply comment post user also notifies TODO: check this logic works
-                                    if(widget.postId != currentUserId) {
+                                      FirebaseCloudMessaging().sendCommentPushNotification(
+                                        userId: replyCommentUserId,
+                                        postId: widget.postId,
+                                        currentUserName: currentUserName,
+                                        commentType: 'own_post_mention_comment'
+                                      );
+
+                                    } else if(widget.userId != currentUserId) {
 
                                       FirebaseCloudMessaging().sendCommentPushNotification(
                                         userId: widget.userId,
-                                        postId: widget.postId
+                                        postId: widget.postId,
+                                        currentUserName: currentUserName,
+                                        commentType: 'main_comment'
+                                      );
+
+                                    } else {
+
+                                      FirebaseCloudMessaging().sendCommentPushNotification(
+                                        userId: replyCommentUserId,
+                                        postId: widget.postId,
+                                        currentUserName: currentUserName,
+                                        commentType: 'mention_comment'
                                       );
 
                                     }
+
+
+                                    // if there is a new reply comment post user also notifies TODO: check this logic works
+                                    // if(widget.userId != currentUserId) {
+
+                                    //   FirebaseCloudMessaging().sendCommentPushNotification(
+                                    //     userId: widget.userId,
+                                    //     postId: widget.postId,
+                                    //     currentUserName: currentUserName,
+                                    //     commentType: 'main_comment'
+                                    //   );
+
+                                    // }
 
                                   }
                                     
@@ -376,7 +405,9 @@ class _CommentSecionState extends State<CommentSecion> {
 
                                   FirebaseCloudMessaging().sendCommentPushNotification(
                                     userId: widget.userId,
-                                    postId: widget.postId
+                                    postId: widget.postId,
+                                    currentUserName: currentUserName,
+                                    commentType: 'main_comment'
                                   );
                           
                                   setState(() {
@@ -447,11 +478,11 @@ class _CommentSecionState extends State<CommentSecion> {
                                       CircleAvatar(
                                         radius: 18,
                                         backgroundColor: Colors.blueGrey[700],
-                                        backgroundImage: item['user']['profilePic'] == 'default-profile-pic.jpg' ? AssetImage(
+                                        backgroundImage: item['user'][0]['profilePic'] == 'default-profile-pic.jpg' ? AssetImage( //[0]
                                           'assets/images/profile-img-placeholder.jpg'
                                         ) as ImageProvider : NetworkImage(
-                                          '${item['user']['profilePic']}'
-                                        ),
+                                          '${item['user'][0]['profilePic']}' 
+                                        ),//[0]
                                       ),
                                     ],
                                   ),
@@ -459,8 +490,8 @@ class _CommentSecionState extends State<CommentSecion> {
                                             
                                     Navigator.of(context).push(
                                       RouteTransAnim().createRoute(1.0, .0, UsersProfile(
-                                        name: '${item['user']['name']}', 
-                                        userId: item['user']['_id'],
+                                        name: '${item['user'][0]['name']}', //[0]
+                                        userId: item['user'][0]['_id'], //[0]
                                       )),
                                     );
                                   },
@@ -493,7 +524,7 @@ class _CommentSecionState extends State<CommentSecion> {
                                                 // ),
                                                 SizedBox(width: 8.0,),
                                                 Text(
-                                                  '${item['user']['name']}',
+                                                  '${item['user'][0]['name']}', //[0]
                                                   style: TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.w500
@@ -504,9 +535,9 @@ class _CommentSecionState extends State<CommentSecion> {
                                             onTap: () {
                                                       
                                               Navigator.of(context).push(
-                                                RouteTransAnim().createRoute(1.0, .0, UsersProfile(
-                                                  name: '${item['user']['name']}', 
-                                                  userId: item['user']['_id'],
+                                                RouteTransAnim().createRoute(1.0, .0, UsersProfile( //[0]
+                                                  name: '${item['user'][0]['name']}', 
+                                                  userId: item['user'][0]['_id'],
                                                 )),
                                               );
                                                       
@@ -563,11 +594,11 @@ class _CommentSecionState extends State<CommentSecion> {
                           ),
                           onTap: () {
                             setState(() {
-                              commentReplyMention = item['user']['name'];
+                              commentReplyMention = item['user'][0]['name'];
                               replyingComment = 'main_comment_reply';
                               replyCommentIndex = index;
                               commentId = item['_id'];
-                              replyCommentUserId = item['user']['_id'];
+                              replyCommentUserId = item['user'][0]['_id'];
                             });
               
                             // _firebaseCloudMessaging.sendCommentPushNotification(
