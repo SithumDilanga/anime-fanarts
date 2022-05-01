@@ -2,6 +2,7 @@ import 'package:anime_fanarts/auth/log_in.dart';
 import 'package:anime_fanarts/auth/sign_up.dart';
 import 'package:anime_fanarts/profile/admin_add_new_art.dart';
 import 'package:anime_fanarts/services/secure_storage.dart';
+import 'package:anime_fanarts/services/shared_pref.dart';
 import 'package:anime_fanarts/settings/blocked_users.dart';
 import 'package:anime_fanarts/settings/bug_report.dart';
 import 'package:anime_fanarts/settings/contact_us.dart';
@@ -85,6 +86,9 @@ class _SettingsState extends State<Settings> {
                       try {
 
                          await SecureStorage.deleteToken().whenComplete(() {
+
+                           // removing deviceToken cache
+                           SharedPref.removeSpecificCache('deviceToken');
 
                             Navigator.pushAndRemoveUntil(
                               context,

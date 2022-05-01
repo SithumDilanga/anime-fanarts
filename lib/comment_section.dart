@@ -359,7 +359,9 @@ class _CommentSecionState extends State<CommentSecion> {
                                         commentType: 'own_post_mention_comment'
                                       );
 
-                                    } else if(widget.userId != currentUserId) {
+                                    } else if(widget.userId != currentUserId && commentReplyMention.isNotEmpty) {
+
+                                      print('widget.userId != currentUserId');
 
                                       FirebaseCloudMessaging().sendCommentPushNotification(
                                         userId: widget.userId,
@@ -369,6 +371,12 @@ class _CommentSecionState extends State<CommentSecion> {
                                       );
 
                                     } else {
+
+                                      print('mentioning');
+
+                                      print('replyCommentUserId $replyCommentUserId');
+
+                                      print('currentUserName $currentUserName');
 
                                       FirebaseCloudMessaging().sendCommentPushNotification(
                                         userId: replyCommentUserId,

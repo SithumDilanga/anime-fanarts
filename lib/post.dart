@@ -213,6 +213,7 @@ class _PostState extends State<Post> with AutomaticKeepAliveClientMixin<Post> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         if(widget.isUserPost)
                           CircleAvatar(
@@ -296,97 +297,114 @@ class _PostState extends State<Post> with AutomaticKeepAliveClientMixin<Post> {
                             ],
                           ),
                         if(widget.userId != animuzuId)
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-
-                              if(widget.isUserPost)
-                                Text(
-                                  widget.name!,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16.0
-                                  ),
-                                ),
-                              if(!widget.isUserPost)
-                                GestureDetector(
-                                  child: Text(
-                                    widget.name!,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16.0
+                          Flexible(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                          
+                                if(widget.isUserPost)
+                                  Container(
+                                    constraints: BoxConstraints(
+                                      maxWidth: MediaQuery.of(context).size.width - 160 // this kind of a logic had to give for adjusting the name to a new line
+                                    ),
+                                    child: Text(
+                                      widget.name!,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16.0
+                                      ),
                                     ),
                                   ),
-                                  onTap: () {
+                                if(!widget.isUserPost)
+                                  GestureDetector(
+                                    child: Container(
+                                      constraints: BoxConstraints(
+                                        maxWidth: MediaQuery.of(context).size.width - 160 // this kind of a logic had to give for adjusting the name to a new line
+                                      ),
+                                      child: Text(
+                                        widget.name!,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16.0
+                                        ),
+                                      ),
+                                    ),
+                                    onTap: () {
+                                    
+                                      Navigator.of(context).push(
+                                        RouteTransAnim().createRoute(1.0, .0, UsersProfile(name: widget.name, userId: widget.userId))
+                                      );
                                   
-                                    Navigator.of(context).push(
-                                      RouteTransAnim().createRoute(1.0, .0, UsersProfile(name: widget.name, userId: widget.userId))
-                                    );
-
-                                  },
-                                ),
-                              Text(
-                                '$formattedDate',//widget.date.toString(),
-                                style: TextStyle(
-                                  fontSize: 11.0
-                                ),
-                              )
-                            ],
+                                    },
+                                  ),
+                                Text(
+                                  '$formattedDate',//widget.date.toString(),
+                                  style: TextStyle(
+                                    fontSize: 11.0
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                       ],
                     ), 
                   ),
                   if(widget.isUserPost && secureStorageUserId.toString() == widget.userId.toString())
-                    IconButton(
-                      icon: Icon(
-                        Icons.close_rounded,
-                        color: ColorTheme.primary,
+                    Flexible(
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.close_rounded,
+                          color: ColorTheme.primary,
+                        ),
+                        onPressed: () {
+                      
+                          _deletPostAlert(context);
+                      
+                        }, 
                       ),
-                      onPressed: () {
-
-                        _deletPostAlert(context);
-
-                      }, 
                     ),
                   if(!widget.isUserPost)
-                  PopupMenuButton(
-                    color: Colors.grey[200],
-                    icon: Icon(
-                      Icons.more_horiz_rounded,
-                      color: ColorTheme.primary,
-                    ),
-                    onSelected: (selection) async {
-                    
-                      if(selection == 0) {
-                      
-                        Navigator.of(context).push(
-                          RouteTransAnim().createRoute(
-                            1.0, 0.0, 
-                            SelectReason(postId: widget.id)
-                          )
-                        );
-
-                      } 
-
-                    },
-                    itemBuilder: (context) => [
-                      PopupMenuItem(
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.report_gmailerrorred_rounded,
-                              color: Colors.black,
-                            ),
-                            SizedBox(width: 8.0,),
-                            Text(
-                              'Report this art',
-                            ),
-                          ],
-                        ),
-                        value: 0
+                  Flexible(
+                    child: PopupMenuButton(
+                      color: Colors.grey[200],
+                      icon: Icon(
+                        Icons.more_horiz_rounded,
+                        color: ColorTheme.primary,
                       ),
-                    ]
-                    )
+                      onSelected: (selection) async {
+                      
+                        if(selection == 0) {
+                        
+                          Navigator.of(context).push(
+                            RouteTransAnim().createRoute(
+                              1.0, 0.0, 
+                              SelectReason(postId: widget.id)
+                            )
+                          );
+                    
+                        } 
+                    
+                      },
+                      itemBuilder: (context) => [
+                        PopupMenuItem(
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.report_gmailerrorred_rounded,
+                                color: Colors.black,
+                              ),
+                              SizedBox(width: 8.0,),
+                              Text(
+                                'Report this art',
+                              ),
+                            ],
+                          ),
+                          value: 0
+                        ),
+                      ]
+                      ),
+                  )
                 ],
               ), 
               if(widget.desc!.isNotEmpty && widget.userId == animuzuId)

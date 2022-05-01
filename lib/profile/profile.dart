@@ -221,6 +221,9 @@ class _ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin<Pr
               children: <Widget>[
                 TextFormField(
                   controller: _changeName,
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
+                  maxLength: 40,
                   cursorColor: ColorTheme.primary,
                   decoration: InputDecoration(
                     focusedBorder: UnderlineInputBorder(
