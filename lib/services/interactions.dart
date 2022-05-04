@@ -154,7 +154,7 @@ class Interactions {
 
   // ------------ add a new comment reply ----------------
 
-  Future addNewReplyComment(String? commentText, String? commentId, String? replyMention) async {
+  Future addNewReplyComment({String? commentText, String? commentId, String? postId, String? replyMention}) async {
 
     try {
 
@@ -168,6 +168,7 @@ class Interactions {
       Response addComment = await _dio.post('$URL/comments/replyComment', data: {
         'comment': commentText,
         'commentId': commentId,
+        'postId': postId,
         'replyMention': replyMention
       } , options: Options(
         headers: {'Authorization': 'Bearer $bearerToken'},

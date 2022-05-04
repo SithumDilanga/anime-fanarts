@@ -112,7 +112,7 @@ class _CommentSecionState extends State<CommentSecion> {
 
     FocusScope.of(context).requestFocus(_focusNode);
 
-    print('replyingComment $replyingComment');
+    // print('replyingComment $replyingComment');
 
     return Scaffold(
       appBar: AppBar(
@@ -331,14 +331,14 @@ class _CommentSecionState extends State<CommentSecion> {
                                 if(commentTextController.text.isNotEmpty && replyingComment.contains('sub_comment') || replyingComment.contains('main_comment_reply')) {
 
                                   print('sub main comment');
-                                  print('replyingCommentInside $replyingComment');
 
                                   if(commentId.isNotEmpty) {
 
                                     _interactionsReq.addNewReplyComment(
-                                      commentTextController.text, 
-                                      commentId,
-                                      commentReplyMention
+                                      commentText: commentTextController.text, 
+                                      commentId: commentId,
+                                      postId: widget.postId,
+                                      replyMention: commentReplyMention
                                     ).whenComplete(() {
 
                                       setState(() {
@@ -348,9 +348,12 @@ class _CommentSecionState extends State<CommentSecion> {
 
                                     });
 
-                                    print('replyCommentUserId $replyCommentUserId');
 
                                     if(replyCommentUserId == widget.userId) {
+
+                                      // when test1 mentioning himself in his own post own comment
+
+                                      print('own_post_mention_comment');
 
                                       FirebaseCloudMessaging().sendCommentPushNotification(
                                         userId: replyCommentUserId,
@@ -361,8 +364,11 @@ class _CommentSecionState extends State<CommentSecion> {
 
                                     } else if(widget.userId != currentUserId && commentReplyMention.isNotEmpty) {
 
+                                      // when test2 replied to test1 in test3 post - test1 and test3 both should notify
+
                                       print('widget.userId != currentUserId');
 
+                                      // notifying post owner
                                       FirebaseCloudMessaging().sendCommentPushNotification(
                                         userId: widget.userId,
                                         postId: widget.postId,
@@ -370,7 +376,18 @@ class _CommentSecionState extends State<CommentSecion> {
                                         commentType: 'main_comment'
                                       );
 
-                                    } else {
+                                      // notifying mention user
+                                      FirebaseCloudMessaging().sendCommentPushNotification(
+                                        userId: replyCommentUserId,
+                                        postId: widget.postId,
+                                        currentUserName: currentUserName,
+                                        commentType: 'mention_comment'
+                                      );
+
+                                    } 
+                                    else {
+
+                                      // when test1 user mentioning test2 user in test1's own art
 
                                       print('mentioning');
 
@@ -402,7 +419,9 @@ class _CommentSecionState extends State<CommentSecion> {
 
                                   }
                                     
-                                } else if(commentReplyMention.isEmpty) {
+                                } else if(commentReplyMention.isEmpty && commentTextController.text.isNotEmpty) {
+
+                                  // test2 user adding a main comment to test1's post
 
                                   print('adding main comment');
 
