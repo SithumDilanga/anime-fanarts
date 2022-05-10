@@ -16,6 +16,8 @@ import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/route_trans_anim.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:launch_review/launch_review.dart';
+import 'package:share_plus/share_plus.dart';
 
 class Settings extends StatefulWidget {
 
@@ -210,6 +212,23 @@ class _SettingsState extends State<Settings> {
                       1.0, 0.0, 
                       PrivacyPolicy()
                     )
+                  );
+                }
+              ),
+              CustomeListTile(
+                Icons.star_border_rounded,
+                'Rate us',
+                () async => {
+                  LaunchReview.launch(androidAppId: 'com.animizu')
+                }
+              ),
+              CustomeListTile(
+                Icons.share_outlined,
+                'Share',
+                () {
+                  Share.share(
+                    ' Animizu Andriod App : ' +  
+                    'https://play.google.com/store/apps/details?id=com.animizu'
                   );
                 }
               ),

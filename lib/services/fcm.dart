@@ -13,7 +13,7 @@ class FirebaseCloudMessaging {
 
   final FirebaseMessaging _fc = FirebaseMessaging.instance;
 
-  void configureCallbacks() {
+  void configureCallbacks() {   
 
     // FirebaseMessaging.onBackgroundMessage((message) async => message.data);
     FirebaseMessaging.onMessage.listen((event) {
@@ -35,63 +35,59 @@ class FirebaseCloudMessaging {
 
   // ------------ send daily quote ---------------
 
-  Future sendDailyQuote({required Quote dailyQuote}) async {
+  // Future sendDailyQuote({required Quote dailyQuote}) async {
 
-    Quote? retrievedDailyQuote;
-    Response? response;
-    var _dio = Dio();
+  //   Quote? retrievedDailyQuote;
+  //   Response? response;
+  //   var _dio = Dio();
 
-    try {
+  //   try {
 
-      response = await _dio.post('$URL/daily/createQuote', data: dailyQuote.toJson());
+  //     response = await _dio.post('$URL/fcm/createQuote', data: dailyQuote.toJson());
 
-      print(response.statusCode);
-      print('User created: ${response.data}');
+  //     print(response.statusCode);
+  //     print('User created: ${response.data}');
 
-      Fluttertoast.showToast(
-        msg: 'Quote Sent Successfully!',
-        toastLength: Toast.LENGTH_LONG,
-      );
+  //     Fluttertoast.showToast(
+  //       msg: 'Quote Sent Successfully!',
+  //       toastLength: Toast.LENGTH_LONG,
+  //     );
 
-      retrievedDailyQuote = Quote.fromJson(response.data);
+  //     retrievedDailyQuote = Quote.fromJson(response.data);
 
-    } on DioError catch (e) {
+  //   } on DioError catch (e) {
 
-      if(e.type == DioErrorType.response) {
-        print('bitch catched!');
-      }
+  //     if(e.type == DioErrorType.response) {
+  //       print('bitch catched!');
+  //     }
 
-      if (e.response != null) {
-        print('Dio error!');
-        print('STATUS: ${e.response?.statusCode}');
-        print('DATA: ${e.response?.data}');
-        print('HEADERS: ${e.response?.headers}');
+  //     if (e.response != null) {
 
-        Fluttertoast.showToast(
-          msg: e.response!.data['message'],
-          toastLength: Toast.LENGTH_LONG,
-        );
+  //       Fluttertoast.showToast(
+  //         msg: e.response!.data['message'],
+  //         toastLength: Toast.LENGTH_LONG,
+  //       );
 
-        // returning error status code
-        return e.response!.statusCode;
+  //       // returning error status code
+  //       return e.response!.statusCode;
 
-      } else {
+  //     } else {
 
-        Fluttertoast.showToast(
-          msg: e.message,
-          toastLength: Toast.LENGTH_LONG,
-        );
+  //       Fluttertoast.showToast(
+  //         msg: e.message,
+  //         toastLength: Toast.LENGTH_LONG,
+  //       );
 
-        print('Error sending request!');
-        print(e.message);
-        return e.message;
-      }
+  //       print('Error sending request!');
+  //       print(e.message);
+  //       return e.message;
+  //     }
 
-    }
+  //   }
 
-    return retrievedDailyQuote;
+  //   return retrievedDailyQuote;
 
-  }
+  // }
 
   // ------------ End send daily quote ---------------
 
@@ -104,37 +100,37 @@ class FirebaseCloudMessaging {
       final bearerToken = await SecureStorage.getToken() ?? '';    
       
       
-      Response userPosts = await _dio.post('$URL/daily/saveDeviceToken', data: {
+      Response userPosts = await _dio.post('$URL/fcm/saveDeviceToken', data: {
         'deviceToken': devToken,
       }, options: Options(
         headers: {'Authorization': 'Bearer $bearerToken'},
       ));
 
-      print('response ${userPosts.data}');
+      // print('response ${userPosts.data}');
 
-      Fluttertoast.showToast(
-        msg: 'dev token has been sent!',
-        toastLength: Toast.LENGTH_LONG,
-      );
+      // Fluttertoast.showToast(
+      //   msg: 'dev token has been sent!',
+      //   toastLength: Toast.LENGTH_LONG,
+      // );
 
     } on DioError catch (e) {
 
       if (e.response != null) {
 
-        Fluttertoast.showToast(
-          msg: 'Error sending token!',
-          toastLength: Toast.LENGTH_LONG,
-        );
+        // Fluttertoast.showToast(
+        //   msg: 'Error sending token!',
+        //   toastLength: Toast.LENGTH_LONG,
+        // );
 
         // throw Error();
         throw(e.response!.data['message']);
 
       } else {
 
-        Fluttertoast.showToast(
-          msg: 'Error sending token!',
-          toastLength: Toast.LENGTH_LONG,
-        );
+        // Fluttertoast.showToast(
+        //   msg: 'Error sending token!',
+        //   toastLength: Toast.LENGTH_LONG,
+        // );
 
       }
 
@@ -153,7 +149,7 @@ class FirebaseCloudMessaging {
       final bearerToken = await SecureStorage.getToken() ?? '';    
       
       
-      Response userNotification = await _dio.post('$URL/daily/sendMsgToDevice/$userId', data: {
+      Response userNotification = await _dio.post('$URL/fcm/sendMsgToDevice/$userId', data: {
         'userId': userId,
         'postId': postId,
         'currentUserName': currentUserName,

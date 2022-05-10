@@ -14,24 +14,25 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class UsersProfile extends StatefulWidget {
+class UsersProfileTest extends StatefulWidget {
 
   final String? name;
   final String? userId;
 
-  const UsersProfile({ Key? key, required this.name, required this.userId, }) : super(key: key);
+  const UsersProfileTest({ Key? key, required this.name, required this.userId, }) : super(key: key);
 
   @override
-  UsersProfileState createState() => UsersProfileState();
+  UsersProfileTestState createState() => UsersProfileTestState();
 }
 
-class UsersProfileState extends State<UsersProfile> with AutomaticKeepAliveClientMixin<UsersProfile> {
+class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAliveClientMixin<UsersProfileTest> {
 
   static const animuzuId = Urls.animuzuUserId;
 
   static const _pageSize = 8;
-   List reactedPosts = [];
-   dynamic userInfo = {
+  List reactedPosts = [];
+  bool isFollow = false;
+  dynamic userInfo = {
      "profilePic": "default-profile-pic.jpg",
      "coverPic": "default-cover-pic.png",
      "name": "Loading...",
@@ -312,9 +313,10 @@ class UsersProfileState extends State<UsersProfile> with AutomaticKeepAliveClien
                               ),
                               Positioned(
                                 // top: 70,
-                                bottom: -70,
-                                // left: 20,
+                                bottom: -40,
+                                left: 20,
                                 child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     CircleAvatar(
                                       radius: 50,
@@ -333,9 +335,110 @@ class UsersProfileState extends State<UsersProfile> with AutomaticKeepAliveClien
                                             
                                       ),
                                     ),
-                                    SizedBox(height: 4.0,),
-                                    if(widget.userId == animuzuId)
-                                      Row(
+                                    // SizedBox(height: 4.0,),
+                                    // if(widget.userId == animuzuId)
+                                    //   Row(
+                                    //     children: [
+                                    //       Text(
+                                    //         '${userInfo['name']}',
+                                    //         style: TextStyle(
+                                    //           fontSize: 18,
+                                    //           fontWeight: FontWeight.bold,
+                                    //         ),
+                                    //       ),
+                                    //       SizedBox(width: 4.0,),
+                                    //       Icon(
+                                    //         Icons.check_circle_rounded,
+                                    //         size: 18,
+                                    //         color: ColorTheme.primary,
+                                    //       )
+                                    //     ],
+                                    //   ),
+                                    // if(widget.userId != animuzuId)
+                                    //   Text(
+                                    //     '${userInfo['name']}',
+                                    //     style: TextStyle(
+                                    //       fontSize: 18,
+                                    //       fontWeight: FontWeight.bold,
+                                    //     ),
+                                    //   ),
+                                    // Text(
+                                    //   '@username'
+                                    // )
+                                  ],
+                                ),
+                              ),
+                              // Positioned(
+                              //   top: 150,
+                              //   right: 10,
+                              //   child: Align(
+                              //     alignment: Alignment.bottomRight,
+                              //     child: GestureDetector(
+                              //       onTap: () {
+                              //         print('fuck!');
+                              //       },
+                              //       child: ElevatedButton(
+                              //         child: Padding(
+                              //           padding: const EdgeInsets.only(left: 24.0, right: 24.0),
+                              //           child: Text(
+                              //             isFollow ? 'Following' : 'Follow',
+                              //             style: TextStyle(
+                              //               color: isFollow ? Colors.white : ColorTheme.primary
+                              //             ),
+                              //           ),
+                              //         ),
+                              //         style: ElevatedButton.styleFrom(
+                              //           side: BorderSide(
+                              //             width: 1.5, 
+                              //             color: ColorTheme.primary,
+                              //           ),
+                              //           primary: isFollow ? ColorTheme.primary : Colors.white,
+                              //           shape: RoundedRectangleBorder(
+                              //             borderRadius: BorderRadius.circular(25),
+                              //           ),
+                              //           // elevation: 4.0,
+                              //         ),
+                              //         onPressed: () {
+                              //           setState(() {
+                              //             isFollow = !isFollow;
+                              //             print('isFollow $isFollow');
+                              //           });
+                              //         }, 
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
+                            ],
+                          ),
+                          //TODO: find some other way to make a margin here
+                          SizedBox(height: 40.0,),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 20.0, right: 8.0),
+                            child: Column(
+                              children: [
+                                if(widget.userId == animuzuId)
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '${userInfo['name']}',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      SizedBox(width: 4.0,),
+                                      Icon(
+                                        Icons.check_circle_rounded,
+                                        size: 18,
+                                        color: ColorTheme.primary,
+                                      )
+                                    ],
+                                  ),
+                                if(widget.userId != animuzuId)
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
                                         children: [
                                           Text(
                                             '${userInfo['name']}',
@@ -344,29 +447,67 @@ class UsersProfileState extends State<UsersProfile> with AutomaticKeepAliveClien
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
-                                          SizedBox(width: 4.0,),
-                                          Icon(
-                                            Icons.check_circle_rounded,
-                                            size: 18,
-                                            color: ColorTheme.primary,
+                                          Text(
+                                            '@username'
                                           )
                                         ],
                                       ),
-                                    if(widget.userId != animuzuId)
-                                      Text(
-                                        '${userInfo['name']}',
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                      Stack(
+                                        children: [
+                                          ElevatedButton(
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(left: 24.0, right: 24.0),
+                                              child: Text(
+                                                isFollow ? 'Following' : 'Follow',
+                                                style: TextStyle(
+                                                  color: isFollow ? Colors.white : ColorTheme.primary
+                                                ),
+                                              ),
+                                            ),
+                                            style: ElevatedButton.styleFrom(
+                                              side: BorderSide(
+                                                width: 1.5, 
+                                                color: ColorTheme.primary,
+                                              ),
+                                              primary: isFollow ? ColorTheme.primary : Colors.white,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(25),
+                                              ),
+                                              // elevation: 4.0,
+                                            ),
+                                            onPressed: () {
+                                              setState(() {
+                                                isFollow = !isFollow;
+                                                print('isFollow $isFollow');
+                                              });
+                                            }, 
+                                          ),
+                                        ],
                                       ),
-                                  ],
-                                ),
-                              )
-                            ],
+                                    ],
+                                  ),
+                              ],
+                            ),
                           ),
-                          //TODO: find some other way to make a margin here
-                          SizedBox(height: 92.0,),
+                          // ElevatedButton(
+                          //   child: Padding(
+                          //     padding: const EdgeInsets.only(left: 24.0, right: 24.0),
+                          //     child: Text(
+                          //       'Follow'
+                          //     ),
+                          //   ),
+                          //   style: ElevatedButton.styleFrom(
+                          //     primary: ColorTheme.primary,
+                          //     shape: RoundedRectangleBorder(
+                          //       borderRadius: BorderRadius.circular(25),
+                          //     ),
+                          //     elevation: 4.0,
+                          //   ),
+                          //   onPressed: () {
+                          
+                          //   }, 
+                          // ),
+                          SizedBox(height: 28.0,),
                           if(widget.userId == animuzuId) 
                             Padding(
                               padding: const EdgeInsets.only(left: 16.0, right: 8.0),

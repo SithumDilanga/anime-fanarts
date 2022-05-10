@@ -7,6 +7,7 @@ import 'package:anime_fanarts/main.dart';
 import 'package:anime_fanarts/models/reacted_posts.dart';
 import 'package:anime_fanarts/models/reaction.dart';
 import 'package:anime_fanarts/profile/users_profile.dart';
+import 'package:anime_fanarts/profile/users_profile_test.dart';
 import 'package:anime_fanarts/report/select_reason.dart';
 import 'package:anime_fanarts/services/download_share.dart';
 import 'package:anime_fanarts/services/get_create_posts.dart';
@@ -242,7 +243,17 @@ class _PostState extends State<Post> with AutomaticKeepAliveClientMixin<Post> {
                             ),
                             onTap: () {
                               Navigator.of(context).push(
-                                RouteTransAnim().createRoute(1.0, .0, UsersProfile(name: widget.name, userId: widget.userId,))
+                                RouteTransAnim().createRoute(
+                                  1.0, .0, 
+                                  // UsersProfile(
+                                  //   name: widget.name, 
+                                  //   userId: widget.userId,
+                                  // )
+                                  UsersProfileTest(
+                                    name: widget.name, 
+                                    userId: widget.userId
+                                  )
+                                )
                               );
                             },
                           ),
@@ -333,7 +344,14 @@ class _PostState extends State<Post> with AutomaticKeepAliveClientMixin<Post> {
                                     onTap: () {
                                     
                                       Navigator.of(context).push(
-                                        RouteTransAnim().createRoute(1.0, .0, UsersProfile(name: widget.name, userId: widget.userId))
+                                        RouteTransAnim().createRoute(
+                                          1.0, .0, 
+                                          UsersProfile(name: widget.name, userId: widget.userId)
+                                          // UsersProfileTest(
+                                          //   name: widget.name, 
+                                          //   userId: widget.userId
+                                          // )
+                                        )
                                       );
                                   
                                     },

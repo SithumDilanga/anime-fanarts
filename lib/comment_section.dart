@@ -550,11 +550,16 @@ class _CommentSecionState extends State<CommentSecion> {
                                                 //   ),
                                                 // ),
                                                 SizedBox(width: 8.0,),
-                                                Text(
-                                                  '${item['user'][0]['name']}', //[0]
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w500
+                                                Container(
+                                                  constraints: BoxConstraints(
+                                                    maxWidth: MediaQuery.of(context).size.width - 160 // this kind of a logic had to give for adjusting the name to a new line
+                                                  ),
+                                                  child: Text(
+                                                    '${item['user'][0]['name']}', //[0]
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.w500
+                                                    ),
                                                   ),
                                                 )
                                               ],
@@ -742,14 +747,19 @@ class _CommentSecionState extends State<CommentSecion> {
                                                     alignment: Alignment.topLeft,
                                                     child: Row(
                                                       children: [
-                                                        Text(
-                                                          '${item['replyComments'][itemIndex]['replyMention']}',
-                                                          style: TextStyle(
-                                                            fontSize: 16,
-                                                            color: ColorTheme.primary,
-                                                            letterSpacing: 0.5,
-                                                            height: 1.2,
-                                                            fontWeight: FontWeight.w400
+                                                        Container(
+                                                          constraints: BoxConstraints(
+                                                            maxWidth: MediaQuery.of(context).size.width - 160 // this kind of a logic had to give for adjusting the name to a new line
+                                                          ),
+                                                          child: Text(
+                                                            '${item['replyComments'][itemIndex]['replyMention']}',
+                                                            style: TextStyle(
+                                                              fontSize: 16,
+                                                              color: ColorTheme.primary,
+                                                              letterSpacing: 0.5,
+                                                              height: 1.2,
+                                                              fontWeight: FontWeight.w400
+                                                            ),
                                                           ),
                                                         ),
                                                         SizedBox(width: 4.0,),

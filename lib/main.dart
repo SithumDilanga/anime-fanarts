@@ -112,7 +112,7 @@ class _MyAppState extends State<MyApp> {
       messaging = FirebaseMessaging.instance;
 
       messaging.getToken().then((value){
-        print('token ' + value.toString());
+        // print('token ' + value.toString());
 
         FirebaseCloudMessaging().sendDevToken(
           devToken: value.toString()
@@ -125,11 +125,9 @@ class _MyAppState extends State<MyApp> {
     } 
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) { 
-        print('onMessageOpenedApp ${message.data['userId']}');
 
         if(message.data['screen'] == 'comment_section') {
 
-          print('open comment section');
 
           Navigator.push(
             context,
