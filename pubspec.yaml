@@ -108,6 +108,17 @@ flutter:
     - family: Forte
       fonts:
         - asset: assets/fonts/FORTE.TTF
+    - family:  TwitterIcon
+      fonts:
+        - asset: assets/icons/twitter-icon.ttf
+
+    - family:  InstaIcon
+      fonts:
+        - asset: assets/icons/insta-icon.ttf
+
+    - family:  TikTokIcon
+      fonts:
+        - asset: assets/icons/tiktok-icon.ttf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

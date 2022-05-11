@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:anime_fanarts/utils/custom_icons.dart';
 
 class UsersProfileTest extends StatefulWidget {
 
@@ -368,146 +369,95 @@ class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAl
                                   ],
                                 ),
                               ),
-                              // Positioned(
-                              //   top: 150,
-                              //   right: 10,
-                              //   child: Align(
-                              //     alignment: Alignment.bottomRight,
-                              //     child: GestureDetector(
-                              //       onTap: () {
-                              //         print('fuck!');
-                              //       },
-                              //       child: ElevatedButton(
-                              //         child: Padding(
-                              //           padding: const EdgeInsets.only(left: 24.0, right: 24.0),
-                              //           child: Text(
-                              //             isFollow ? 'Following' : 'Follow',
-                              //             style: TextStyle(
-                              //               color: isFollow ? Colors.white : ColorTheme.primary
-                              //             ),
-                              //           ),
-                              //         ),
-                              //         style: ElevatedButton.styleFrom(
-                              //           side: BorderSide(
-                              //             width: 1.5, 
-                              //             color: ColorTheme.primary,
-                              //           ),
-                              //           primary: isFollow ? ColorTheme.primary : Colors.white,
-                              //           shape: RoundedRectangleBorder(
-                              //             borderRadius: BorderRadius.circular(25),
-                              //           ),
-                              //           // elevation: 4.0,
-                              //         ),
-                              //         onPressed: () {
-                              //           setState(() {
-                              //             isFollow = !isFollow;
-                              //             print('isFollow $isFollow');
-                              //           });
-                              //         }, 
-                              //       ),
-                              //     ),
-                              //   ),
-                              // ),
                             ],
                           ),
-                          //TODO: find some other way to make a margin here
-                          SizedBox(height: 40.0,),
                           Padding(
-                            padding: const EdgeInsets.only(left: 20.0, right: 8.0),
-                            child: Column(
-                              children: [
-                                if(widget.userId == animuzuId)
-                                  Row(
-                                    children: [
-                                      Text(
-                                        '${userInfo['name']}',
+                            padding: EdgeInsets.only(right: 16.0),
+                            child: Align(
+                              alignment: Alignment.bottomRight,
+                              child: Column(
+                                children: [
+                                  ElevatedButton(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+                                      child: Text(
+                                        isFollow ? 'Following' : 'Follow',
                                         style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
+                                          color: isFollow ? Colors.white : ColorTheme.primary
                                         ),
                                       ),
-                                      SizedBox(width: 4.0,),
-                                      Icon(
-                                        Icons.check_circle_rounded,
-                                        size: 18,
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                      side: BorderSide(
+                                        width: 1.5, 
                                         color: ColorTheme.primary,
-                                      )
-                                    ],
-                                  ),
-                                if(widget.userId != animuzuId)
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Column(
-                                        children: [
-                                          Text(
-                                            '${userInfo['name']}',
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          Text(
-                                            '@username'
-                                          )
-                                        ],
                                       ),
-                                      Stack(
-                                        children: [
-                                          ElevatedButton(
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(left: 24.0, right: 24.0),
-                                              child: Text(
-                                                isFollow ? 'Following' : 'Follow',
-                                                style: TextStyle(
-                                                  color: isFollow ? Colors.white : ColorTheme.primary
-                                                ),
-                                              ),
-                                            ),
-                                            style: ElevatedButton.styleFrom(
-                                              side: BorderSide(
-                                                width: 1.5, 
-                                                color: ColorTheme.primary,
-                                              ),
-                                              primary: isFollow ? ColorTheme.primary : Colors.white,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(25),
-                                              ),
-                                              // elevation: 4.0,
-                                            ),
-                                            onPressed: () {
-                                              setState(() {
-                                                isFollow = !isFollow;
-                                                print('isFollow $isFollow');
-                                              });
-                                            }, 
-                                          ),
-                                        ],
+                                      primary: isFollow ? ColorTheme.primary : Colors.white,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(25),
                                       ),
-                                    ],
+                                      // elevation: 4.0,
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        isFollow = !isFollow;
+                                        print('isFollow $isFollow');
+                                      });
+                                    }, 
                                   ),
-                              ],
+                                  // Text(
+                                  //   '536 Followers'
+                                  // )
+                                ],
+                              ),
                             ),
                           ),
-                          // ElevatedButton(
-                          //   child: Padding(
-                          //     padding: const EdgeInsets.only(left: 24.0, right: 24.0),
-                          //     child: Text(
-                          //       'Follow'
-                          //     ),
-                          //   ),
-                          //   style: ElevatedButton.styleFrom(
-                          //     primary: ColorTheme.primary,
-                          //     shape: RoundedRectangleBorder(
-                          //       borderRadius: BorderRadius.circular(25),
-                          //     ),
-                          //     elevation: 4.0,
-                          //   ),
-                          //   onPressed: () {
-                          
-                          //   }, 
-                          // ),
-                          SizedBox(height: 28.0,),
+                          //TODO: find some other way to make a margin here
+                          SizedBox(height: 4.0,),
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 20.0, right: 8.0),
+                              child: Column(
+                                children: [
+                                  if(widget.userId == animuzuId)
+                                    Row(
+                                      children: [
+                                        Text(
+                                          '${userInfo['name']}',
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        SizedBox(width: 4.0,),
+                                        Icon(
+                                          Icons.check_circle_rounded,
+                                          size: 18,
+                                          color: ColorTheme.primary,
+                                        )
+                                      ],
+                                    ),
+                                  if(widget.userId != animuzuId)
+                                    Column(
+                                      children: [
+                                        Text(
+                                          '${userInfo['name']}',
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          '@username'
+                                        ),
+                                      ],
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 16.0,),
                           if(widget.userId == animuzuId) 
                             Padding(
                               padding: const EdgeInsets.only(left: 16.0, right: 8.0),
@@ -533,20 +483,116 @@ class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAl
                               ),
                             ),
                           if(widget.userId != animuzuId)
-                            Padding(
-                              padding: const EdgeInsets.only(left: 16.0, right: 8.0),
-                              child: Text(
-                                userInfo['bio'] == null ? '' : userInfo['bio'],
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                  height: 1.3
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 16.0, right: 8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    RichText(
+                                      text: TextSpan(
+                                        text: '589 ',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold
+                                        ),
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                            text: 'Followers', 
+                                            style: TextStyle(
+                                              color: ColorTheme.primary,
+                                              fontWeight: FontWeight.normal
+                                            )
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(height: 12.0,),
+                                    Text(
+                                      userInfo['bio'] == null ? '' : userInfo['bio'],
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                        height: 1.3
+                                      ),
+                                    ),
+                                    SizedBox(height: 8.0,),
+                                    Material(
+                                      color: Colors.transparent,
+                                      child: Row(
+                                        children: [
+                                          InkWell(
+                                            splashColor: Colors.grey,
+                                            customBorder: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(6),
+                                            ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(4.0),
+                                              child: Icon(
+                                                CustomIcons.twitter,
+                                                color: ColorTheme.primary,
+                                              ),
+                                            ),
+                                            onTap: () {
+                                              print('tapped');
+                                            },
+                                          ),
+                                          SizedBox(width: 8.0,),
+                                          InkWell(
+                                            splashColor: Colors.grey,
+                                            customBorder: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(6),
+                                            ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(4.0),
+                                              child: Icon(
+                                                CustomIcons.insta,
+                                                color: ColorTheme.primary,
+                                                size: 24,
+                                              ),
+                                            ),
+                                            onTap: () {
+                                              print('tapped');
+                                            },
+                                          ),
+                                          SizedBox(width: 8.0,),
+                                          InkWell(
+                                            splashColor: Colors.grey,
+                                            customBorder: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(6),
+                                            ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(4.0),
+                                              child: Icon(
+                                                CustomIcons.tiktok,
+                                                color: ColorTheme.primary,
+                                                size: 24,
+                                              ),
+                                            ),
+                                            onTap: () {
+                                              print('tapped');
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(height: 8.0,),
+                                    // IconButton(
+                                    //   icon: Icon(
+                                    //     Icons.ac_unit
+                                    //   ),
+                                    //   onPressed: () {
+                                    //     print('yo nigga');
+                                    //   }, 
+                                    // )
+                                  ],
                                 ),
                               ),
                             ),
                         ],
                       ),  
-                      SizedBox(height: 16.0,),
+                      SizedBox(height: 4.0,),
                       Padding(
                         padding: const EdgeInsets.only(left: 16.0),
                         child: Text(
