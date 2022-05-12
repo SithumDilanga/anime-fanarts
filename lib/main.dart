@@ -7,6 +7,7 @@ import 'package:anime_fanarts/intro_screen.dart';
 import 'package:anime_fanarts/models/profile_user.dart';
 import 'package:anime_fanarts/models/reacted_posts.dart';
 import 'package:anime_fanarts/profile/profile.dart';
+import 'package:anime_fanarts/profile/profile_test.dart';
 import 'package:anime_fanarts/profile/users_profile.dart';
 import 'package:anime_fanarts/services/fcm.dart';
 // import 'package:anime_fanarts/search/search-2.dart';
@@ -293,7 +294,8 @@ class _MyAppState extends State<MyApp> {
             child: TabBarView(
               children: [
                 Explore(),
-                Profile()
+                ProfileTest()
+                // Profile()
               ]
             ),
           ),

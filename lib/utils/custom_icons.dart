@@ -25,6 +25,9 @@ class CustomIcons {
   static const _twitterFontFam = 'TwitterIcon';
   static const _instaFontFam = 'InstaIcon';
   static const _tiktokFontFam = 'TikTokIcon';
+  static const _deviantFontFam = 'DeviantArtIcon';
+  static const _linkFontFam = 'LinkIcon';
+  
   static const String? _kFontPkg = null;
 
   static const IconData twitter = IconData(0xf099, fontFamily: _twitterFontFam, fontPackage: _kFontPkg);
@@ -32,4 +35,8 @@ class CustomIcons {
   static const IconData insta = IconData(0xe800, fontFamily: _instaFontFam, fontPackage: _kFontPkg);
 
   static const IconData tiktok = IconData(0xe800, fontFamily: _tiktokFontFam, fontPackage: _kFontPkg);
+
+  static const IconData deviantArt = IconData(0xe800, fontFamily: _deviantFontFam, fontPackage: _kFontPkg);
+
+  static const IconData link = IconData(0xe800, fontFamily: _linkFontFam, fontPackage: _kFontPkg);
 }

@@ -14,6 +14,8 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:anime_fanarts/utils/custom_icons.dart';
+import 'dart:io';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class UsersProfileTest extends StatefulWidget {
 
@@ -158,6 +160,9 @@ class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAl
       _fetchPage(pageKey);
     });
 
+    // Enable virtual display.
+    if (Platform.isAndroid) WebView.platform = AndroidWebView();
+
     super.initState();
   }
 
@@ -193,7 +198,10 @@ class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAl
               }, 
             ),
             title: Text(
-              '${widget.name}'
+              '${widget.name}',
+              style: TextStyle(
+                fontSize: 18.0
+              ),
             ),
             actions: [
               PopupMenuButton(
@@ -315,7 +323,7 @@ class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAl
                               Positioned(
                                 // top: 70,
                                 bottom: -40,
-                                left: 20,
+                                left: 16,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -417,7 +425,7 @@ class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAl
                           Align(
                             alignment: Alignment.topLeft,
                             child: Padding(
-                              padding: const EdgeInsets.only(left: 20.0, right: 8.0),
+                              padding: const EdgeInsets.only(left: 16.0, right: 8.0),
                               child: Column(
                                 children: [
                                   if(widget.userId == animuzuId)
@@ -440,6 +448,7 @@ class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAl
                                     ),
                                   if(widget.userId != animuzuId)
                                     Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           '${userInfo['name']}',
@@ -534,8 +543,23 @@ class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAl
                                                 color: ColorTheme.primary,
                                               ),
                                             ),
-                                            onTap: () {
-                                              print('tapped');
+                                            onTap: () async {
+
+                                              const url = 'https://twitter.com/SithumDilanga';
+
+                                              // WebView(
+                                              //   initialUrl: url,
+                                              // );
+
+                                              if(await canLaunch(url)){
+                                                await launch(
+                                                  url, 
+                                                  // forceWebView: true,
+                                                  // enableJavaScript: true
+                                                ); 
+                                              }else {
+                                                throw 'Could not launch $url';
+                                              }
                                             },
                                           ),
                                           SizedBox(width: 8.0,),
@@ -552,8 +576,19 @@ class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAl
                                                 size: 24,
                                               ),
                                             ),
-                                            onTap: () {
-                                              print('tapped');
+                                            onTap: () async {
+
+                                              const instaUrl = 'https://www.instagram.com/niko_belic98/';
+
+                                              if(await canLaunch(instaUrl)){
+                                                await launch(
+                                                  instaUrl, 
+                                                ); 
+                                              }else {
+                                                throw 'Could not launch $instaUrl';
+                                              }
+
+
                                             },
                                           ),
                                           SizedBox(width: 8.0,),
@@ -570,8 +605,74 @@ class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAl
                                                 size: 24,
                                               ),
                                             ),
-                                            onTap: () {
-                                              print('tapped');
+                                            onTap: () async {
+                                              
+                                              const tiktokUrl = 'https://www.tiktok.com/@thatlittlepuff';
+
+                                              if(await canLaunch(tiktokUrl)){
+                                                await launch(
+                                                  tiktokUrl, 
+                                                ); 
+                                              }else {
+                                                throw 'Could not launch $tiktokUrl';
+                                              }
+
+                                            },
+                                          ),
+                                          SizedBox(width: 8.0,),
+                                          InkWell(
+                                            splashColor: Colors.grey,
+                                            customBorder: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(6),
+                                            ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(4.0),
+                                              child: Icon(
+                                                CustomIcons.deviantArt,
+                                                color: ColorTheme.primary,
+                                                size: 22,
+                                              ),
+                                            ),
+                                            onTap: () async {
+                                              
+                                              const deviantArtUrl = 'https://www.deviantart.com/kittensquitten';
+
+                                              if(await canLaunch(deviantArtUrl)){
+                                                await launch(
+                                                  deviantArtUrl, 
+                                                ); 
+                                              }else {
+                                                throw 'Could not launch $deviantArtUrl';
+                                              }
+
+                                            },
+                                          ),
+                                          SizedBox(width: 8.0,),
+                                          InkWell(
+                                            splashColor: Colors.grey,
+                                            customBorder: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(6),
+                                            ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(4.0),
+                                              child: Icon(
+                                                CustomIcons.link,
+                                                color: ColorTheme.primary,
+                                                size: 18,
+                                              ),
+                                            ),
+                                            onTap: () async {
+                                              
+                                              const link = 'https://myanimelist.net/';
+
+                                              if(await canLaunch(link)){
+                                                await launch(
+                                                  link, 
+                                                ); 
+                                              }else {
+                                                throw 'Could not launch $link';
+                                              }
+
                                             },
                                           ),
                                         ],

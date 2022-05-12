@@ -68,6 +68,7 @@ dependencies:
   extended_image: ^6.0.2+1
   flutter_image_compress: ^1.1.0
   launch_review: ^3.0.1
+  webview_flutter: ^3.0.4
   # flutter_luban: ^0.1.13
   # flutter_native_image: ^0.0.6+1
   
@@ -119,6 +120,15 @@ flutter:
     - family:  TikTokIcon
       fonts:
         - asset: assets/icons/tiktok-icon.ttf
+
+    - family:  DeviantArtIcon
+      fonts:
+        - asset: assets/icons/deviantArt-icon.ttf
+
+    - family:  LinkIcon
+      fonts:
+        - asset: assets/icons/link-icon.ttf
+
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

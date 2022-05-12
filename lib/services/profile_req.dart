@@ -370,4 +370,73 @@ class ProfileReq {
 
   // ------------ End get user by id -------------
 
+  // ------------ update social platforms -------------
+
+  Future updateSocialPlatforms({String? twitter, String? insta, String? tiktok, String? deviatArt, String? website}) async {
+
+    // String fileName = file.path.split('/').last;
+    
+    FormData data = FormData.fromMap({
+      'twitter': twitter,
+      // 'type': 'image/jpg'
+      // 'name': 'sdlive'
+    });
+
+    try {
+
+      final bearerToken = await SecureStorage.getToken() ?? '';
+
+      Response response = await _dio.patch('$URL/users/updateSocialPlatforms', data: [
+        {
+          'socialPlatform': 'twitter',
+          'link': twitter
+        },
+        {
+          'socialPlatform': 'insta',
+          'link': insta
+        },
+        {
+          'socialPlatform': 'tiktok',
+          'link': tiktok
+        },
+        {
+          'socialPlatform': 'deviatArt',
+          'link': deviatArt
+        },
+        {
+          'socialPlatform': 'website',
+          'link': website
+        }
+      ], options: Options(
+        headers: {'Authorization': 'Bearer $bearerToken'},
+        contentType: 'multipart/form-data'
+      ));
+
+    } on DioError catch (e) {
+
+    if (e.response != null) {
+
+      Fluttertoast.showToast(
+        msg: 'Error updating social media platforms',
+        toastLength: Toast.LENGTH_LONG,
+      );
+
+      // throw Error();
+      throw(e.response!.data['message']);
+
+    } else {
+
+      Fluttertoast.showToast(
+        msg: 'Error updating username',
+        toastLength: Toast.LENGTH_LONG,
+      );
+
+    }
+
+    }
+
+  }
+
+  // ------------ End update social platforms -------------
+
 }
