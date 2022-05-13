@@ -10,7 +10,6 @@ import 'package:anime_fanarts/utils/error_loading.dart';
 import 'package:anime_fanarts/utils/loading_animation.dart';
 import 'package:anime_fanarts/utils/route_trans_anim.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
@@ -36,14 +35,10 @@ class _CommentSecionState extends State<CommentSecion> {
 
   final PagingController<int, dynamic> _pagingController =
       PagingController(firstPageKey: 1);
-
-  final List<String> replyCommentsList = ['comment 1', 'comment 2', 'comment 3'];
   
   String commentReplyMention = '';
 
   final FocusNode _focusNode = FocusNode();
-
-  final _firebaseCloudMessaging = FirebaseCloudMessaging();
 
   String? currentUserId = '';
   String? currentUserName = '';
@@ -109,10 +104,6 @@ class _CommentSecionState extends State<CommentSecion> {
 
   @override
   Widget build(BuildContext context) {
-
-    FocusScope.of(context).requestFocus(_focusNode);
-
-    // print('replyingComment $replyingComment');
 
     return Scaffold(
       appBar: AppBar(
@@ -204,9 +195,6 @@ class _CommentSecionState extends State<CommentSecion> {
                             backgroundImage: AssetImage(
                               'assets/images/profile-img-placeholder.jpg'
                             )
-                            // NetworkImage(
-                            //   'https://cdna.artstation.com/p/assets/images/images/031/257/402/large/yukisho-art-vector-6.jpg?1603101769&dl=10'
-                            // ),
                           ),
                         if(SharedPref.getProfilePic() != null)
                         CircleAvatar(
@@ -215,18 +203,8 @@ class _CommentSecionState extends State<CommentSecion> {
                           backgroundImage: FileImage(
                             File(SharedPref.getProfilePic()!)
                           ),
-                          // NetworkImage(
-                          //   'https://cdna.artstation.com/p/assets/images/images/031/257/402/large/yukisho-art-vector-6.jpg?1603101769&dl=10'
-                          // ),
                         ),
                         SizedBox(width: 12.0,),
-                        // Text(
-                        //   'Levi Ackerman',
-                        //   style: TextStyle(
-                        //     fontSize: 16,
-                        //     fontWeight: FontWeight.w500
-                        //   ),
-                        // )
                         Expanded(
                           child: Row(
                           children: [
@@ -240,46 +218,26 @@ class _CommentSecionState extends State<CommentSecion> {
                             ),
                             SizedBox(width: 4.0,),
                             Expanded(
-                              child: RawKeyboardListener(
-                                autofocus: true,
-                                focusNode: FocusNode(),
-                                onKey: (event) {
-                                  print('event $event');
-
-                                  if(event.logicalKey == LogicalKeyboardKey.keyQ) {
-                                    print('backspace clicked');
-                                  }
-
-                                  if (event.isKeyPressed(LogicalKeyboardKey.keyQ)) {
-                                    print('q key pressed'); // <--- works!
-                                  }
-
-                                  if(event.physicalKey == PhysicalKeyboardKey(0x0007002a)) {
-                                    print('backspace clicked');
-                                  }
-
-                                },
-                                child: TextFormField(
-                                  controller: commentTextController,
-                                  // initialValue: commentReplyMention.isNotEmpty ? commentReplyMention : null,
-                                  cursorColor: ColorTheme.primary,
-                                  maxLines: null,
-                                  keyboardType: TextInputType.multiline,
-                                  decoration: InputDecoration(
-                                    focusedBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(color: ColorTheme.primary)
-                                    ),
-                                    // errorText: emailErrorText
-                                    hintText: 'Leave a comment...'
+                              child: TextFormField(
+                                controller: commentTextController,
+                                // initialValue: commentReplyMention.isNotEmpty ? commentReplyMention : null,
+                                cursorColor: ColorTheme.primary,
+                                maxLines: null,
+                                keyboardType: TextInputType.multiline,
+                                decoration: InputDecoration(
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(color: ColorTheme.primary)
                                   ),
-                                  style: TextStyle(
-                                    fontSize: 16
-                                  ),
-                                  // validation
-                                  validator: (val) => val!.isEmpty ? 'Enter an Email' : null,
-                                  onChanged: (val) {
-                                  },
+                                  // errorText: emailErrorText
+                                  hintText: 'Leave a comment...'
                                 ),
+                                style: TextStyle(
+                                  fontSize: 16
+                                ),
+                                // validation
+                                validator: (val) => val!.isEmpty ? 'Enter an Email' : null,
+                                onChanged: (val) {
+                                },
                               ),
                             ),
                             IconButton(
@@ -289,45 +247,7 @@ class _CommentSecionState extends State<CommentSecion> {
                                 color: ColorTheme.primary,
                               ),
                               onPressed: () {
-                  
-                                // if(commentTextController.text.isNotEmpty && replyingComment.contains('main_comment_reply')) {
 
-                                //   print('main comment');
-                                //   print('replyingCommentInside $replyingComment');
-                  
-                                //   _interactionsReq.addNewComment(
-                                //     commentTextController.text, 
-                                //     widget.postId
-                                //   );
-                          
-                                //   setState(() {
-                                //     commentTextController.clear();
-                                //     _pagingController.refresh();
-                                //   });
-
-                                //   // -------- for FCM -----------
-
-                                //   // FirebaseCloudMessaging().sendCommentPushNotification(
-                                //   //   userId: widget.userId,
-                                //   //   postId: widget.postId
-                                //   // );
-
-
-                                //   // // TODO: fix logic for all occations
-                                //   // if(replyingComment.contains('sub_comment')) {
-
-                                //   //   print('sub_comment notification');
-
-                                //   //   _firebaseCloudMessaging.sendCommentPushNotification(
-                                //   //     userId: '625c2c4c4d883585a02d12c8',//item['user'][0]['_id'],
-                                //   //     postId: widget.postId
-                                //   //   );
-
-                                //   // }
-
-                                //   // -------- End for FCM -----------
-                  
-                                // } else 
                                 if(commentTextController.text.isNotEmpty && replyingComment.contains('sub_comment') || replyingComment.contains('main_comment_reply')) {
 
                                   print('sub main comment');
@@ -633,10 +553,6 @@ class _CommentSecionState extends State<CommentSecion> {
                               replyCommentUserId = item['user'][0]['_id'];
                             });
               
-                            // _firebaseCloudMessaging.sendCommentPushNotification(
-                            //   userId: item['user'][0]['_id'],
-                            //   postId: widget.postId
-                            // );
               
                           },
                         ),
@@ -746,32 +662,38 @@ class _CommentSecionState extends State<CommentSecion> {
                                                   child: Align(
                                                     alignment: Alignment.topLeft,
                                                     child: Row(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: [
                                                         Container(
                                                           constraints: BoxConstraints(
-                                                            maxWidth: MediaQuery.of(context).size.width - 160 // this kind of a logic had to give for adjusting the name to a new line
+                                                            maxWidth: MediaQuery.of(context).size.width - 120 // this kind of a logic had to give for adjusting the name to a new line
                                                           ),
-                                                          child: Text(
-                                                            '${item['replyComments'][itemIndex]['replyMention']}',
-                                                            style: TextStyle(
-                                                              fontSize: 16,
-                                                              color: ColorTheme.primary,
-                                                              letterSpacing: 0.5,
-                                                              height: 1.2,
-                                                              fontWeight: FontWeight.w400
-                                                            ),
-                                                          ),
+                                                          child: 
+                                                          RichText(
+                                                            text: TextSpan(
+                                                              text: '${item['replyComments'][itemIndex]['replyMention']} ',
+                                                              style: TextStyle(
+                                                                fontSize: 16,
+                                                                color: ColorTheme.primary,
+                                                                letterSpacing: 0.5,
+                                                                height: 1.2,
+                                                                fontWeight: FontWeight.w400
+                                                              ),
+                                                              children: <TextSpan>[
+                                                                TextSpan(
+                                                                  text: '${item['replyComments'][itemIndex]['comment']}', style: TextStyle(
+                                                                    color: Colors.black,
+                                                                    fontSize: 16,
+                                                                    letterSpacing: 0.5,
+                                                                    height: 1.2,
+                                                                    fontWeight: FontWeight.w400
+                                                                  ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            )
                                                         ),
                                                         SizedBox(width: 4.0,),
-                                                        Text(
-                                                          '${item['replyComments'][itemIndex]['comment']}',
-                                                          style: TextStyle(
-                                                            fontSize: 16,
-                                                            letterSpacing: 0.5,
-                                                            height: 1.2,
-                                                            fontWeight: FontWeight.w400
-                                                          ),
-                                                        ),
                                                       ],
                                                     ),
                                                   ),
@@ -807,11 +729,6 @@ class _CommentSecionState extends State<CommentSecion> {
                                             replyCommentUserId = item['replyComments'][itemIndex]['user']['_id'];
 
                                           });
-
-                                          // _firebaseCloudMessaging.sendCommentPushNotification(
-                                          //   userId: '625c2b524d883585a02d123b',//item['user'][0]['_id'],
-                                          //   postId: widget.postId
-                                          // );
               
                                         },
                                       ),
@@ -867,152 +784,6 @@ class _CommentSecionState extends State<CommentSecion> {
                 ),
               ),
             ),
-            // Card(
-            //   shape: RoundedRectangleBorder(
-            //     borderRadius: BorderRadius.circular(15.0),
-            //   ),
-            //   child: Padding(
-            //     padding: const EdgeInsets.all(8.0),
-            //     child: Column(
-            //       mainAxisSize: MainAxisSize.min,
-            //       children: [
-            //         Row(
-            //           children: [
-            //             if(SharedPref.getProfilePic() == null)
-            //               CircleAvatar(
-            //                 radius: 20,
-            //                 backgroundColor: Colors.blueGrey[700],
-            //                 backgroundImage: AssetImage(
-            //                   'assets/images/profile-img-placeholder.jpg'
-            //                 )
-            //                 // NetworkImage(
-            //                 //   'https://cdna.artstation.com/p/assets/images/images/031/257/402/large/yukisho-art-vector-6.jpg?1603101769&dl=10'
-            //                 // ),
-            //               ),
-            //             if(SharedPref.getProfilePic() != null)
-            //             CircleAvatar(
-            //               radius: 20,
-            //               backgroundColor: Colors.blueGrey[700],
-            //               backgroundImage: FileImage(
-            //                 File(SharedPref.getProfilePic()!)
-            //               ),
-            //               // NetworkImage(
-            //               //   'https://cdna.artstation.com/p/assets/images/images/031/257/402/large/yukisho-art-vector-6.jpg?1603101769&dl=10'
-            //               // ),
-            //             ),
-            //             SizedBox(width: 12.0,),
-            //             // Text(
-            //             //   'Levi Ackerman',
-            //             //   style: TextStyle(
-            //             //     fontSize: 16,
-            //             //     fontWeight: FontWeight.w500
-            //             //   ),
-            //             // )
-            //             Expanded(
-            //               child: Row(
-            //               children: [
-            //                 Text(
-            //                   '$commentReplyMention',
-            //                   style: TextStyle(
-            //                     fontSize: 16,
-            //                     fontWeight: FontWeight.bold,
-            //                     color: ColorTheme.primary
-            //                   ),
-            //                 ),
-            //                 SizedBox(width: 4.0,),
-            //                 Expanded(
-            //                   child: RawKeyboardListener(
-            //                     autofocus: true,
-            //                     focusNode: FocusNode(),
-            //                     onKey: (event) {
-            //                       print('event $event');
-
-            //                       if(event.logicalKey == LogicalKeyboardKey.keyQ) {
-            //                         print('backspace clicked');
-            //                       }
-
-            //                       if (event.isKeyPressed(LogicalKeyboardKey.keyQ)) {
-            //                         print('q key pressed'); // <--- works!
-            //                       }
-
-            //                       if(event.physicalKey == PhysicalKeyboardKey(0x0007002a)) {
-            //                         print('backspace clicked');
-            //                       }
-
-            //                     },
-            //                     child: TextFormField(
-            //                       controller: commentTextController,
-            //                       // initialValue: commentReplyMention.isNotEmpty ? commentReplyMention : null,
-            //                       cursorColor: ColorTheme.primary,
-            //                       maxLines: null,
-            //                       keyboardType: TextInputType.multiline,
-            //                       decoration: InputDecoration(
-            //                         focusedBorder: UnderlineInputBorder(
-            //                           borderSide: BorderSide(color: ColorTheme.primary)
-            //                         ),
-            //                         // errorText: emailErrorText
-            //                         hintText: 'Leave a comment...'
-            //                       ),
-            //                       style: TextStyle(
-            //                         fontSize: 16
-            //                       ),
-            //                       // validation
-            //                       validator: (val) => val!.isEmpty ? 'Enter an Email' : null,
-            //                       onChanged: (val) {
-            //                       },
-            //                     ),
-            //                   ),
-            //                 ),
-            //                 IconButton(
-            //                   icon: Icon(
-            //                     Icons.send_rounded,
-            //                     size: 28,
-            //                     color: ColorTheme.primary,
-            //                   ),
-            //                   onPressed: () {
-                  
-            //                     if(commentTextController.text.isNotEmpty) {
-                  
-            //                       _interactionsReq.addNewComment(
-            //                         commentTextController.text, 
-            //                         widget.postId
-            //                       );
-                          
-            //                       setState(() {
-            //                         commentTextController.clear();
-            //                         _pagingController.refresh();
-            //                       });
-
-            //                       FirebaseCloudMessaging().sendCommentPushNotification(
-            //                         userId: widget.userId,
-            //                         postId: widget.postId
-            //                       );
-                  
-            //                     } else {
-                  
-            //                       Fluttertoast.showToast(
-            //                         msg: "comment text is empty",
-            //                         toastLength: Toast.LENGTH_SHORT,
-            //                         gravity: ToastGravity.BOTTOM,
-            //                         fontSize: 16.0
-            //                       );
-                  
-            //                     }
-                                                              
-            //                   }, 
-            //                 )
-            //               ],
-            //                                       ),
-            //             ),
-            //           ],
-            //         ),
-            //         Padding(
-            //           padding: const EdgeInsets.only(left: 20.0),
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
           ],
         ),
                 ),

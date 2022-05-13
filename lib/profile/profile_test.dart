@@ -19,6 +19,7 @@ import 'package:anime_fanarts/utils/route_trans_anim.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'edit_bio.dart';
 import 'package:path_provider/path_provider.dart';
@@ -333,6 +334,15 @@ class _ProfileTestState extends State<ProfileTest> with AutomaticKeepAliveClient
             // dynamic userReactedPosts = snapshot.data[1]['reacted'];
 
             if(userInfo != null) {
+
+              Map<String, IconData> iconsMap = {
+               'twitter': CustomIcons.twitter,
+               'insta': CustomIcons.insta,
+               'pinterest': CustomIcons.pinterest,
+               'deviantArt': CustomIcons.deviantArt,
+               'tiktok': CustomIcons.tiktok,
+               'website': CustomIcons.website,
+              };
 
               return Material(
                 child: Container(
@@ -662,150 +672,48 @@ class _ProfileTestState extends State<ProfileTest> with AutomaticKeepAliveClient
                                         color: Colors.transparent,
                                         child: Row(
                                           children: [
-                                            InkWell(
-                                              splashColor: Colors.grey,
-                                              customBorder: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(6),
-                                              ),
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(4.0),
-                                                child: Icon(
-                                                  CustomIcons.twitter,
-                                                  color: ColorTheme.primary,
+
+                                            if(userInfo['socialPlatforms'] != null)
+                                          for(int i = 0; i < userInfo['socialPlatforms'].length; i++)
+                                            if(userInfo['socialPlatforms'][i]['link'].isNotEmpty)
+                                            Row(
+                                              children: [
+                                                InkWell(
+                                                  splashColor: Colors.grey,
+                                                  customBorder: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(6),
+                                                  ),
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.all(4.0),
+                                                    child: Icon(
+                                                      iconsMap['${userInfo['socialPlatforms'][i]['socialPlatform']}'],
+                                                      color: ColorTheme.primary,
+                                                      size: userInfo['socialPlatforms'][i]['socialPlatform'] == 'website' ? 18 : null
+                                                    ),
+                                                  ),
+                                                  onTap: () async {
+
+                                                    String url = '${userInfo['socialPlatforms'][i]['link']}';
+
+                                                    // WebView(
+                                                    //   initialUrl: url,
+                                                    // );
+
+                                                    if(await canLaunch(url)){
+                                                      await launch(
+                                                        url, 
+                                                        // forceWebView: true,
+                                                        // enableJavaScript: true
+                                                      ); 
+                                                    }else {
+                                                      throw 'Could not launch $url';
+                                                    }
+                                                  },
                                                 ),
-                                              ),
-                                              onTap: () async {
-
-                                                const url = 'https://twitter.com/SithumDilanga';
-
-                                                // WebView(
-                                                //   initialUrl: url,
-                                                // );
-
-                                                if(await canLaunch(url)){
-                                                  await launch(
-                                                    url, 
-                                                    // forceWebView: true,
-                                                    // enableJavaScript: true
-                                                  ); 
-                                                }else {
-                                                  throw 'Could not launch $url';
-                                                }
-                                              },
+                                                SizedBox(width: 8.0,),
+                                              ],
                                             ),
-                                            SizedBox(width: 8.0,),
-                                            InkWell(
-                                              splashColor: Colors.grey,
-                                              customBorder: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(6),
-                                              ),
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(4.0),
-                                                child: Icon(
-                                                  CustomIcons.insta,
-                                                  color: ColorTheme.primary,
-                                                  size: 24,
-                                                ),
-                                              ),
-                                              onTap: () async {
 
-                                                const instaUrl = 'https://www.instagram.com/niko_belic98/';
-
-                                                if(await canLaunch(instaUrl)){
-                                                  await launch(
-                                                    instaUrl, 
-                                                  ); 
-                                                }else {
-                                                  throw 'Could not launch $instaUrl';
-                                                }
-
-
-                                              },
-                                            ),
-                                            SizedBox(width: 8.0,),
-                                            InkWell(
-                                              splashColor: Colors.grey,
-                                              customBorder: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(6),
-                                              ),
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(4.0),
-                                                child: Icon(
-                                                  CustomIcons.tiktok,
-                                                  color: ColorTheme.primary,
-                                                  size: 24,
-                                                ),
-                                              ),
-                                              onTap: () async {
-                                                
-                                                const tiktokUrl = 'https://www.tiktok.com/@thatlittlepuff';
-
-                                                if(await canLaunch(tiktokUrl)){
-                                                  await launch(
-                                                    tiktokUrl, 
-                                                  ); 
-                                                }else {
-                                                  throw 'Could not launch $tiktokUrl';
-                                                }
-
-                                              },
-                                            ),
-                                            SizedBox(width: 8.0,),
-                                            InkWell(
-                                              splashColor: Colors.grey,
-                                              customBorder: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(6),
-                                              ),
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(4.0),
-                                                child: Icon(
-                                                  CustomIcons.deviantArt,
-                                                  color: ColorTheme.primary,
-                                                  size: 22,
-                                                ),
-                                              ),
-                                              onTap: () async {
-                                                
-                                                const deviantArtUrl = 'https://www.deviantart.com/kittensquitten';
-
-                                                if(await canLaunch(deviantArtUrl)){
-                                                  await launch(
-                                                    deviantArtUrl, 
-                                                  ); 
-                                                }else {
-                                                  throw 'Could not launch $deviantArtUrl';
-                                                }
-
-                                              },
-                                            ),
-                                            SizedBox(width: 8.0,),
-                                            InkWell(
-                                              splashColor: Colors.grey,
-                                              customBorder: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(6),
-                                              ),
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(4.0),
-                                                child: Icon(
-                                                  CustomIcons.link,
-                                                  color: ColorTheme.primary,
-                                                  size: 18,
-                                                ),
-                                              ),
-                                              onTap: () async {
-                                                
-                                                const link = 'https://myanimelist.net/';
-
-                                                if(await canLaunch(link)){
-                                                  await launch(
-                                                    link, 
-                                                  ); 
-                                                }else {
-                                                  throw 'Could not launch $link';
-                                                }
-
-                                              },
-                                            ),
                                           ],
                                         ),
                                       ),
@@ -850,14 +758,20 @@ class _ProfileTestState extends State<ProfileTest> with AutomaticKeepAliveClient
                                             ],
                                           ),
                                         ),
-                                        onTap: () async {
+                                        onTap: () {
 
-                                          Navigator.of(context).push(
-                                            RouteTransAnim().createRoute(
-                                              0.0, 1.0, 
-                                              AddSocials()
-                                            )
-                                          );
+                                          if(userInfo['socialPlatforms'] != null) {
+
+                                            Navigator.of(context).push(
+                                              RouteTransAnim().createRoute(
+                                                0.0, 1.0, 
+                                                AddSocials(
+                                                  socialPlatforms: userInfo['socialPlatforms'],
+                                                )
+                                              )
+                                            );
+
+                                          }
 
                                         },
                                       ),

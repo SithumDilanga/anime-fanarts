@@ -372,21 +372,12 @@ class ProfileReq {
 
   // ------------ update social platforms -------------
 
-  Future updateSocialPlatforms({String? twitter, String? insta, String? tiktok, String? deviatArt, String? website}) async {
+  Future updateSocialPlatforms({String? twitter, String? insta, String? tiktok, String? deviatArt, String? website, String? pinterest}) async {
 
     // String fileName = file.path.split('/').last;
     
     FormData data = FormData.fromMap({
-      'twitter': twitter,
-      // 'type': 'image/jpg'
-      // 'name': 'sdlive'
-    });
-
-    try {
-
-      final bearerToken = await SecureStorage.getToken() ?? '';
-
-      Response response = await _dio.patch('$URL/users/updateSocialPlatforms', data: [
+      'socialPlatforms': [
         {
           'socialPlatform': 'twitter',
           'link': twitter
@@ -396,21 +387,37 @@ class ProfileReq {
           'link': insta
         },
         {
-          'socialPlatform': 'tiktok',
-          'link': tiktok
+          'socialPlatform': 'pinterest',
+          'link': pinterest
         },
         {
-          'socialPlatform': 'deviatArt',
+          'socialPlatform': 'deviantArt',
           'link': deviatArt
+        },
+        {
+          'socialPlatform': 'tiktok',
+          'link': tiktok
         },
         {
           'socialPlatform': 'website',
           'link': website
         }
-      ], options: Options(
+      ]
+    });
+
+    try {
+
+      final bearerToken = await SecureStorage.getToken() ?? '';
+
+      Response response = await _dio.patch('$URL/users/updateSocialPlatforms', data: data, options: Options(
         headers: {'Authorization': 'Bearer $bearerToken'},
         contentType: 'multipart/form-data'
       ));
+
+      Fluttertoast.showToast(
+        msg: 'succesfully updated!',
+        toastLength: Toast.LENGTH_LONG,
+      );
 
     } on DioError catch (e) {
 

@@ -129,6 +129,10 @@ flutter:
       fonts:
         - asset: assets/icons/link-icon.ttf
 
+    - family:  PinterestIcon
+      fonts:
+        - asset: assets/icons/pinterest-icon.ttf
+
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

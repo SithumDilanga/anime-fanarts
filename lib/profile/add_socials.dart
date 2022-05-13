@@ -1,9 +1,14 @@
+import 'package:anime_fanarts/main.dart';
+import 'package:anime_fanarts/services/profile_req.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/custom_icons.dart';
 import 'package:flutter/material.dart';
 
 class AddSocials extends StatefulWidget {
-  const AddSocials({ Key? key }) : super(key: key);
+
+  final List socialPlatforms;
+
+  const AddSocials({ Key? key, required this.socialPlatforms }) : super(key: key);
 
   @override
   State<AddSocials> createState() => _AddSocialsState();
@@ -11,14 +16,52 @@ class AddSocials extends StatefulWidget {
 
 class _AddSocialsState extends State<AddSocials> {
 
-  TextEditingController twitterTextController = TextEditingController();
-  TextEditingController instaTextController = TextEditingController();
-  TextEditingController tiktokTextController = TextEditingController();
-  TextEditingController deviantArtTextController = TextEditingController();
-  TextEditingController websiteTextController = TextEditingController();
+  ProfileReq _profileReq = ProfileReq();
+
+  String twitterText = '';
+  String instaText = '';
+  String pinterestText = '';
+  String deviantArtText = '';
+  String tiktokText = '';
+  String websiteText = '';
+
+  // this was created for checking when the user want to fully remove an added link
+  List isEditedList = [
+    {
+      'socialPlatform': 'twitter',
+      'isEdited': false
+    },
+    {
+      'socialPlatform': 'insta',
+      'isEdited': false
+    },
+    {
+      'socialPlatform': 'pinterest',
+      'isEdited': false
+    },
+    {
+      'socialPlatform': 'deviantArt',
+      'isEdited': false
+    },
+    {
+      'socialPlatform': 'tiktok',
+      'isEdited': false
+    },
+    {
+      'socialPlatform': 'website',
+      'isEdited': false
+    },
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorTheme.primary,
@@ -53,18 +96,45 @@ class _AddSocialsState extends State<AddSocials> {
               ),
               onPressed: () {
 
-                if(
-                  twitterTextController.text.isNotEmpty || 
-                  instaTextController.text.isNotEmpty ||
-                  tiktokTextController.text.isNotEmpty ||
-                  deviantArtTextController.text.isNotEmpty ||
-                  websiteTextController.text.isNotEmpty) {
+                _profileReq.updateSocialPlatforms(
+                  // check whether typed text is empty and specific social platform is not added
+                  twitter: (twitterText.isEmpty && widget.socialPlatforms[0]['link'].isEmpty || 
 
-                    
+                  // check whether typed text is empty and specific social platform is not added and is user removed that specific link or changed it
+                  (twitterText.isEmpty && widget.socialPlatforms[0]['link'].isNotEmpty && isEditedList[0]['isEdited'] == false)) 
+                  ? widget.socialPlatforms[0]['link'] 
+                  : twitterText,
 
-                }
+                  insta: (instaText.isEmpty && widget.socialPlatforms[1]['link'].isEmpty || (instaText.isEmpty && widget.socialPlatforms[1]['link'].isNotEmpty && isEditedList[1]['isEdited'] == false)) 
+                  ? widget.socialPlatforms[1]['link'] 
+                  : instaText,
 
-                Navigator.pop(context);
+                  pinterest: (pinterestText.isEmpty && widget.socialPlatforms[2]['link'].isEmpty || (pinterestText.isEmpty && widget.socialPlatforms[2]['link'].isNotEmpty && isEditedList[2]['isEdited'] == false)) 
+                  ? widget.socialPlatforms[2]['link'] 
+                  : pinterestText,
+                  
+                  deviatArt: (deviantArtText.isEmpty && widget.socialPlatforms[3]['link'].isEmpty || (deviantArtText.isEmpty && widget.socialPlatforms[3]['link'].isNotEmpty && isEditedList[3]['isEdited'] == false)) 
+                  ? widget.socialPlatforms[3]['link'] 
+                  : deviantArtText,
+
+                  tiktok: (tiktokText.isEmpty && widget.socialPlatforms[4]['link'].isEmpty || (tiktokText.isEmpty && widget.socialPlatforms[4]['link'].isNotEmpty && isEditedList[4]['isEdited'] == false)) 
+                  ? widget.socialPlatforms[4]['link'] 
+                  : tiktokText,
+
+                  website: (websiteText.isEmpty && widget.socialPlatforms[5]['link'].isEmpty || (websiteText.isEmpty && widget.socialPlatforms[5]['link'].isNotEmpty && isEditedList[5]['isEdited'] == false)) 
+                  ? widget.socialPlatforms[5]['link'] 
+                  : websiteText
+
+                ).whenComplete(() {
+
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => MyApp(selectedPage: 1)),
+                      (Route<dynamic> route) => false,
+                    );
+
+                });
+
               }, 
             ),
           )
@@ -75,6 +145,7 @@ class _AddSocialsState extends State<AddSocials> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
+
               Column(
                 children: [
                   Row(
@@ -94,8 +165,10 @@ class _AddSocialsState extends State<AddSocials> {
                     ],
                   ),
                   TextFormField(
-                    controller: twitterTextController,
+                    initialValue: widget.socialPlatforms[0]['link'] ?? '',
                     cursorColor: ColorTheme.primary,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
                     decoration: InputDecoration(
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: ColorTheme.primary)
@@ -104,6 +177,14 @@ class _AddSocialsState extends State<AddSocials> {
                     style: TextStyle(
                       fontSize: 18
                     ),
+                    onChanged: (val) {
+                      setState(() {
+                        twitterText = val;
+                      });
+
+                      // set isEdited to true while typing
+                      isEditedList[0]['isEdited'] = true;
+                    },
                   ),
                 ],
               ),
@@ -127,8 +208,10 @@ class _AddSocialsState extends State<AddSocials> {
                     ],
                   ),
                   TextFormField(
-                    controller: instaTextController,
+                    initialValue: widget.socialPlatforms[1]['link'] ?? '',
                     cursorColor: ColorTheme.primary,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
                     decoration: InputDecoration(
                       //hintText: 'Enter your Password'
                       focusedBorder: UnderlineInputBorder(
@@ -138,6 +221,14 @@ class _AddSocialsState extends State<AddSocials> {
                     style: TextStyle(
                       fontSize: 18
                     ),
+                    onChanged: (val) {
+
+                      setState(() {
+                        instaText = val;
+                      });
+
+                      isEditedList[1]['isEdited'] = true;
+                    },
                   ),
                 ],
               ),
@@ -147,12 +238,12 @@ class _AddSocialsState extends State<AddSocials> {
                   Row(
                     children: [
                       Icon(
-                        CustomIcons.tiktok,
+                        CustomIcons.pinterest,
                         color: ColorTheme.primary,
                       ),
                       SizedBox(width: 8.0,),
                       Text(
-                        'TikTok',
+                        'Pinterest',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold
@@ -161,8 +252,10 @@ class _AddSocialsState extends State<AddSocials> {
                     ],
                   ),
                   TextFormField(
-                    controller: tiktokTextController,
+                    initialValue: widget.socialPlatforms[2]['link'] ?? '',
                     cursorColor: ColorTheme.primary,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
                     decoration: InputDecoration(
                       //hintText: 'Enter your Password'
                       focusedBorder: UnderlineInputBorder(
@@ -172,6 +265,14 @@ class _AddSocialsState extends State<AddSocials> {
                     style: TextStyle(
                       fontSize: 18
                     ),
+                    onChanged: (val) {
+
+                      setState(() {
+                        pinterestText = val;
+                      });
+
+                      isEditedList[2]['isEdited'] = true;
+                    },
                   ),
                 ],
               ),
@@ -195,8 +296,10 @@ class _AddSocialsState extends State<AddSocials> {
                     ],
                   ),
                   TextFormField(
-                    controller: deviantArtTextController,
+                    initialValue: widget.socialPlatforms[3]['link'] ?? '',
                     cursorColor: ColorTheme.primary,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
                     decoration: InputDecoration(
                       //hintText: 'Enter your Password'
                       focusedBorder: UnderlineInputBorder(
@@ -206,6 +309,14 @@ class _AddSocialsState extends State<AddSocials> {
                     style: TextStyle(
                       fontSize: 18
                     ),
+                    onChanged: (val) {
+
+                      setState(() {
+                        deviantArtText = val;
+                      });
+
+                      isEditedList[3]['isEdited'] = true;
+                    },
                   ),
                 ],
               ),
@@ -215,7 +326,51 @@ class _AddSocialsState extends State<AddSocials> {
                   Row(
                     children: [
                       Icon(
-                        CustomIcons.link,
+                        CustomIcons.tiktok,
+                        color: ColorTheme.primary,
+                      ),
+                      SizedBox(width: 8.0,),
+                      Text(
+                        'TikTok',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold
+                        ),
+                      )
+                    ],
+                  ),
+                  TextFormField(
+                    initialValue: widget.socialPlatforms[4]['link'] ?? '',
+                    cursorColor: ColorTheme.primary,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
+                    decoration: InputDecoration(
+                      //hintText: 'Enter your Password'
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: ColorTheme.primary)
+                      ),
+                    ),
+                    style: TextStyle(
+                      fontSize: 18
+                    ),
+                    onChanged: (val) {
+
+                      setState(() {
+                        tiktokText = val;
+                      });
+
+                      isEditedList[4]['isEdited'] = true;
+                    },
+                  ),
+                ],
+              ),
+              SizedBox(height: 24.0,),
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        CustomIcons.website,
                         size: 18,
                         color: ColorTheme.primary,
                       ),
@@ -230,8 +385,10 @@ class _AddSocialsState extends State<AddSocials> {
                     ],
                   ),
                   TextFormField(
-                    controller: websiteTextController,
+                    initialValue: widget.socialPlatforms[5]['link'] ?? '',
                     cursorColor: ColorTheme.primary,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
                     decoration: InputDecoration(
                       //hintText: 'Enter your Password'
                       focusedBorder: UnderlineInputBorder(
@@ -241,6 +398,14 @@ class _AddSocialsState extends State<AddSocials> {
                     style: TextStyle(
                       fontSize: 18
                     ),
+                    onChanged: (val) {
+
+                      setState(() {
+                        websiteText = val;
+                      });
+
+                      isEditedList[5]['isEdited'] = true;
+                    },
                   ),
                 ],
               ),
@@ -251,3 +416,52 @@ class _AddSocialsState extends State<AddSocials> {
     );
   }
 }
+
+// class SocialItem extends StatelessWidget {
+
+//   final String platformName;
+//   final String platformLink;
+
+//   const SocialItem({ Key? key, required this.platformName, required this.platformLink,}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       children: [
+//         Row(
+//           children: [
+//             Icon(
+//               CustomIcons.website,
+//               size: 18,
+//               color: ColorTheme.primary,
+//             ),
+//             SizedBox(width: 8.0,),
+//             Text(
+//               '$platformName',
+//               style: TextStyle(
+//                 fontSize: 16,
+//                 fontWeight: FontWeight.bold
+//               ),
+//             )
+//           ],
+//         ),
+//         TextFormField(
+//           initialValue: platformLink,
+//           cursorColor: ColorTheme.primary,
+//           keyboardType: TextInputType.multiline,
+//           maxLines: null,
+//           decoration: InputDecoration(
+//             //hintText: 'Enter your Password'
+//             focusedBorder: UnderlineInputBorder(
+//               borderSide: BorderSide(color: ColorTheme.primary)
+//             ),
+//           ),
+//           style: TextStyle(
+//             fontSize: 18
+//           ),
+//         ),
+//         SizedBox(height: 24.0,),
+//       ],
+//     );
+//   }
+// }
