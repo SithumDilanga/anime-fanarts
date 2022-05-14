@@ -133,6 +133,10 @@ flutter:
       fonts:
         - asset: assets/icons/pinterest-icon.ttf
 
+    - family:  ArtstationIcon
+      fonts:
+        - asset: assets/icons/artstation-icon.ttf
+
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

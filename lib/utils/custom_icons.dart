@@ -28,6 +28,7 @@ class CustomIcons {
   static const _deviantFontFam = 'DeviantArtIcon';
   static const _websiteFontFam = 'LinkIcon';
   static const _pinterestFontFam = 'PinterestIcon';
+  static const _artstationFontFam = 'ArtstationIcon';
   
   static const String? _kFontPkg = null;
 
@@ -42,4 +43,6 @@ class CustomIcons {
   static const IconData website = IconData(0xe800, fontFamily: _websiteFontFam, fontPackage: _kFontPkg);
 
   static const IconData pinterest = IconData(0xe800, fontFamily: _pinterestFontFam, fontPackage: _kFontPkg);
+
+  static const IconData artstation = IconData(0xe800, fontFamily: _artstationFontFam, fontPackage: _kFontPkg);
 }

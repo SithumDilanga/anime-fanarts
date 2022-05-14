@@ -372,7 +372,7 @@ class ProfileReq {
 
   // ------------ update social platforms -------------
 
-  Future updateSocialPlatforms({String? twitter, String? insta, String? tiktok, String? deviatArt, String? website, String? pinterest}) async {
+  Future updateSocialPlatforms({String? twitter, String? insta, String? tiktok, String? deviatArt, String? website, String? pinterest, String? artstation}) async {
 
     // String fileName = file.path.split('/').last;
     
@@ -393,6 +393,10 @@ class ProfileReq {
         {
           'socialPlatform': 'deviantArt',
           'link': deviatArt
+        },
+        {
+          'socialPlatform': 'artstation',
+          'link': artstation
         },
         {
           'socialPlatform': 'tiktok',

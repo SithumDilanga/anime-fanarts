@@ -273,13 +273,24 @@ class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAl
 
               if(snapshot.hasData) {
 
-                print('socials ${userInfo['socialPlatforms']}');
+                // ---- had to come up with logic in order fix the innapropriate space issue when there's no social platform added by the user -----
+
+                String checkSocialPlatforms = '';
+
+                if(userInfo['socialPlatforms'] != null) {
+                  for(int i = 0; i < userInfo['socialPlatforms'].length; i++) {
+                    checkSocialPlatforms = checkSocialPlatforms + userInfo['socialPlatforms'][i]['link'];
+                  }
+                }
+
+                // --- End the logic ----
 
                 Map<String, IconData> iconsMap = {
                  'twitter': CustomIcons.twitter,
                  'insta': CustomIcons.insta,
                  'pinterest': CustomIcons.pinterest,
                  'deviantArt': CustomIcons.deviantArt,
+                 'artstation': CustomIcons.artstation,
                  'tiktok': CustomIcons.tiktok,
                  'website': CustomIcons.website,
                 };
@@ -538,9 +549,18 @@ class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAl
                                       ),
                                     ),
                                     SizedBox(height: 8.0,),
+
+                                    // check whether user added at least one social platform
+                                    if(checkSocialPlatforms.isNotEmpty)
                                     Material(
                                       color: Colors.transparent,
-                                      child: Row(
+                                      child: GridView.count(
+                                        shrinkWrap: true,
+                                        primary: false,
+                                        // padding: const EdgeInsets.all(20),
+                                        // crossAxisSpacing: 10,
+                                        // mainAxisSpacing: 10,
+                                        crossAxisCount: 8,
                                         children: [
                                           if(userInfo['socialPlatforms'] != null)
                                           for(int i = 0; i < userInfo['socialPlatforms'].length; i++)
@@ -584,10 +604,11 @@ class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAl
 
                                                   },
                                                 ),
-                                                SizedBox(width: 8.0,),
+                                                // SizedBox(width: 8.0,),
                                               ],
-                                            ),
-                                            
+                                            )
+
+                                          // for(int i = 0; i < 5; i++)
                                           // InkWell(
                                           //   splashColor: Colors.grey,
                                           //   customBorder: RoundedRectangleBorder(
@@ -602,9 +623,9 @@ class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAl
                                           //     ),
                                           //   ),
                                           //   onTap: () async {
-
+                                          
                                           //     const instaUrl = 'https://www.instagram.com/niko_belic98/';
-
+                                          
                                           //     if(await canLaunch(instaUrl)){
                                           //       await launch(
                                           //         instaUrl, 
@@ -612,124 +633,64 @@ class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAl
                                           //     }else {
                                           //       throw 'Could not launch $instaUrl';
                                           //     }
-
-
+                                          
+                                          
                                           //   },
                                           // ),
-                                          // SizedBox(width: 8.0,),
-                                          // InkWell(
-                                          //   splashColor: Colors.grey,
-                                          //   customBorder: RoundedRectangleBorder(
-                                          //     borderRadius: BorderRadius.circular(6),
-                                          //   ),
-                                          //   child: Padding(
-                                          //     padding: const EdgeInsets.all(4.0),
-                                          //     child: Icon(
-                                          //       CustomIcons.pinterest,
-                                          //       color: ColorTheme.primary,
-                                          //       size: 24,
-                                          //     ),
-                                          //   ),
-                                          //   onTap: () async {
-                                              
-                                          //     const pinterestUrl = 'https://www.pinterest.com/sithumdilanga/_saved/';
-
-                                          //     if(await canLaunch(pinterestUrl)){
-                                          //       await launch(
-                                          //         pinterestUrl, 
-                                          //       ); 
-                                          //     }else {
-                                          //       throw 'Could not launch $pinterestUrl';
-                                          //     }
-
-                                          //   },
-                                          // ),
-                                          // SizedBox(width: 8.0,),
-                                          // InkWell(
-                                          //   splashColor: Colors.grey,
-                                          //   customBorder: RoundedRectangleBorder(
-                                          //     borderRadius: BorderRadius.circular(6),
-                                          //   ),
-                                          //   child: Padding(
-                                          //     padding: const EdgeInsets.all(4.0),
-                                          //     child: Icon(
-                                          //       CustomIcons.deviantArt,
-                                          //       color: ColorTheme.primary,
-                                          //       size: 22,
-                                          //     ),
-                                          //   ),
-                                          //   onTap: () async {
-                                              
-                                          //     const deviantArtUrl = 'https://www.deviantart.com/kittensquitten';
-
-                                          //     if(await canLaunch(deviantArtUrl)){
-                                          //       await launch(
-                                          //         deviantArtUrl, 
-                                          //       ); 
-                                          //     }else {
-                                          //       throw 'Could not launch $deviantArtUrl';
-                                          //     }
-
-                                          //   },
-                                          // ),
-                                          // SizedBox(width: 8.0,),
-                                          // InkWell(
-                                          //   splashColor: Colors.grey,
-                                          //   customBorder: RoundedRectangleBorder(
-                                          //     borderRadius: BorderRadius.circular(6),
-                                          //   ),
-                                          //   child: Padding(
-                                          //     padding: const EdgeInsets.all(4.0),
-                                          //     child: Icon(
-                                          //       CustomIcons.tiktok,
-                                          //       color: ColorTheme.primary,
-                                          //       size: 24,
-                                          //     ),
-                                          //   ),
-                                          //   onTap: () async {
-                                              
-                                          //     const tiktokUrl = 'https://www.tiktok.com/@thatlittlepuff';
-
-                                          //     if(await canLaunch(tiktokUrl)){
-                                          //       await launch(
-                                          //         tiktokUrl, 
-                                          //       ); 
-                                          //     }else {
-                                          //       throw 'Could not launch $tiktokUrl';
-                                          //     }
-
-                                          //   },
-                                          // ),
-                                          // SizedBox(width: 8.0,),
-                                          // InkWell(
-                                          //   splashColor: Colors.grey,
-                                          //   customBorder: RoundedRectangleBorder(
-                                          //     borderRadius: BorderRadius.circular(6),
-                                          //   ),
-                                          //   child: Padding(
-                                          //     padding: const EdgeInsets.all(4.0),
-                                          //     child: Icon(
-                                          //       CustomIcons.link,
-                                          //       color: ColorTheme.primary,
-                                          //       size: 18,
-                                          //     ),
-                                          //   ),
-                                          //   onTap: () async {
-                                              
-                                          //     const link = 'https://myanimelist.net/';
-
-                                          //     if(await canLaunch(link)){
-                                          //       await launch(
-                                          //         link, 
-                                          //       ); 
-                                          //     }else {
-                                          //       throw 'Could not launch $link';
-                                          //     }
-
-                                          //   },
-                                          // ),
+                                          // // SizedBox(width: 8.0,),
+                                          
                                         ],
-                                      ),
+                                      )
+                                      // Row(
+                                      //   children: [
+                                      //     // if(userInfo['socialPlatforms'] != null)
+                                      //     // for(int i = 0; i < userInfo['socialPlatforms'].length; i++)
+                                      //     //   if(userInfo['socialPlatforms'][i]['link'].isNotEmpty)
+                                      //     //   Row(
+                                      //     //     children: [
+                                      //     //       InkWell(
+                                      //     //         splashColor: Colors.grey,
+                                      //     //         customBorder: RoundedRectangleBorder(
+                                      //     //           borderRadius: BorderRadius.circular(6),
+                                      //     //         ),
+                                      //     //         child: Padding(
+                                      //     //           padding: const EdgeInsets.all(4.0),
+                                      //     //           child: Icon(
+                                      //     //             iconsMap['${userInfo['socialPlatforms'][i]['socialPlatform']}'],
+                                      //     //             color: ColorTheme.primary,
+                                      //     //             size: userInfo['socialPlatforms'][i]['socialPlatform'] == 'website' ? 18 : null
+                                      //     //           ),
+                                      //     //         ),
+                                      //     //         onTap: () async {
+
+                                      //     //           String url = '${userInfo['socialPlatforms'][i]['link']}';
+
+                                      //     //           try {
+
+                                      //     //             if(await canLaunch(url)){
+                                      //     //               await launch(
+                                      //     //                 url, 
+                                      //     //                 // forceWebView: true,
+                                      //     //                 enableJavaScript: true
+                                      //     //               ); 
+                                      //     //             } else {
+                                      //     //               throw 'Could not launch $url';
+                                      //     //             }
+
+                                      //     //           } catch(e) {
+
+                                      //     //             throw(e);
+
+                                      //     //           }
+
+                                      //     //         },
+                                      //     //       ),
+                                      //     //       SizedBox(width: 8.0,),
+                                      //     //     ],
+                                      //     //   ),
+                                          
+                                      //   ],
+                                      // ),
                                     ),
                                     SizedBox(height: 8.0,),
                                     // IconButton(

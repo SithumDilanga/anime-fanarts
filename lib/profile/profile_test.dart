@@ -333,6 +333,18 @@ class _ProfileTestState extends State<ProfileTest> with AutomaticKeepAliveClient
             // dynamic userPosts = snapshot.data[1]['posts'];
             // dynamic userReactedPosts = snapshot.data[1]['reacted'];
 
+            // ---- had to come up with logic in order fix the innapropriate space issue when there's no social platform added by the user -----
+
+                String checkSocialPlatforms = '';
+
+                if(userInfo['socialPlatforms'] != null) {
+                  for(int i = 0; i < userInfo['socialPlatforms'].length; i++) {
+                    checkSocialPlatforms = checkSocialPlatforms + userInfo['socialPlatforms'][i]['link'];
+                  }
+                }
+
+            // --- End the logic ----
+
             if(userInfo != null) {
 
               Map<String, IconData> iconsMap = {
@@ -340,6 +352,7 @@ class _ProfileTestState extends State<ProfileTest> with AutomaticKeepAliveClient
                'insta': CustomIcons.insta,
                'pinterest': CustomIcons.pinterest,
                'deviantArt': CustomIcons.deviantArt,
+               'artstation': CustomIcons.artstation,
                'tiktok': CustomIcons.tiktok,
                'website': CustomIcons.website,
               };
@@ -668,12 +681,20 @@ class _ProfileTestState extends State<ProfileTest> with AutomaticKeepAliveClient
                                         ),
                                       ),
                                       SizedBox(height: 8.0,),
+
+                                      // check whether user added at least one social platform
+                                      if(checkSocialPlatforms.isNotEmpty)
                                       Material(
                                         color: Colors.transparent,
-                                        child: Row(
-                                          children: [
-
-                                            if(userInfo['socialPlatforms'] != null)
+                                        child: GridView.count(
+                                        shrinkWrap: true,
+                                        primary: false,
+                                        // padding: const EdgeInsets.all(20),
+                                        // crossAxisSpacing: 10,
+                                        // mainAxisSpacing: 10,
+                                        crossAxisCount: 8,
+                                        children: [
+                                          if(userInfo['socialPlatforms'] != null)
                                           for(int i = 0; i < userInfo['socialPlatforms'].length; i++)
                                             if(userInfo['socialPlatforms'][i]['link'].isNotEmpty)
                                             Row(
@@ -695,27 +716,31 @@ class _ProfileTestState extends State<ProfileTest> with AutomaticKeepAliveClient
 
                                                     String url = '${userInfo['socialPlatforms'][i]['link']}';
 
-                                                    // WebView(
-                                                    //   initialUrl: url,
-                                                    // );
+                                                    try {
 
-                                                    if(await canLaunch(url)){
-                                                      await launch(
-                                                        url, 
-                                                        // forceWebView: true,
-                                                        // enableJavaScript: true
-                                                      ); 
-                                                    }else {
-                                                      throw 'Could not launch $url';
+                                                      if(await canLaunch(url)){
+                                                        await launch(
+                                                          url, 
+                                                          // forceWebView: true,
+                                                          enableJavaScript: true
+                                                        ); 
+                                                      } else {
+                                                        throw 'Could not launch $url';
+                                                      }
+
+                                                    } catch(e) {
+
+                                                      throw(e);
+
                                                     }
+
                                                   },
                                                 ),
-                                                SizedBox(width: 8.0,),
                                               ],
-                                            ),
-
-                                          ],
-                                        ),
+                                            )
+                                          
+                                        ],
+                                      )
                                       ),
                                     ],
                                   ),

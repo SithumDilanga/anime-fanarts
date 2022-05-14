@@ -624,11 +624,16 @@ class _CommentSecionState extends State<CommentSecion> {
                                                       child: Row(
                                                         children: [
                                                           SizedBox(width: 8.0,),
-                                                          Text(
-                                                            '${item['replyComments'][itemIndex]['user']['name']}',
-                                                            style: TextStyle(
-                                                              fontSize: 16,
-                                                              fontWeight: FontWeight.w500
+                                                          Container(
+                                                            constraints: BoxConstraints(
+                                                              maxWidth: MediaQuery.of(context).size.width - 160 // this kind of a logic had to give for adjusting the name to a new line
+                                                            ),
+                                                            child: Text(
+                                                              '${item['replyComments'][itemIndex]['user']['name']}',
+                                                              style: TextStyle(
+                                                                fontSize: 16,
+                                                                fontWeight: FontWeight.w500
+                                                              ),
                                                             ),
                                                           )
                                                         ],

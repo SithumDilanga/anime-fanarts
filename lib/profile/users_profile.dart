@@ -5,6 +5,7 @@ import 'package:anime_fanarts/services/block_user_req.dart';
 import 'package:anime_fanarts/services/profile_req.dart';
 import 'package:anime_fanarts/services/shared_pref.dart';
 import 'package:anime_fanarts/utils/colors.dart';
+import 'package:anime_fanarts/utils/custom_icons.dart';
 import 'package:anime_fanarts/utils/error_loading.dart';
 import 'package:anime_fanarts/utils/loading_animation.dart';
 import 'package:anime_fanarts/utils/route_trans_anim.dart';
@@ -191,7 +192,10 @@ class UsersProfileState extends State<UsersProfile> with AutomaticKeepAliveClien
               }, 
             ),
             title: Text(
-              '${widget.name}'
+              '${widget.name}',
+              style: TextStyle(
+                fontSize: 18.0
+              ),
             ),
             actions: [
               PopupMenuButton(
@@ -263,9 +267,31 @@ class UsersProfileState extends State<UsersProfile> with AutomaticKeepAliveClien
 
               if(snapshot.hasData) {
 
+                // ---- had to come up with logic in order fix the innapropriate space issue when there's no social platform added by the user -----
+
+                String checkSocialPlatforms = '';
+
+                if(userInfo['socialPlatforms'] != null) {
+                  for(int i = 0; i < userInfo['socialPlatforms'].length; i++) {
+                    checkSocialPlatforms = checkSocialPlatforms + userInfo['socialPlatforms'][i]['link'];
+                  }
+                }
+
+                // --- End the logic ----
+
                 // dynamic data = snapshot.data;
                 // dynamic userInfo = data['data']['user'];
                 // dynamic userPosts = data['posts']['posts'];
+
+                Map<String, IconData> iconsMap = {
+                 'twitter': CustomIcons.twitter,
+                 'insta': CustomIcons.insta,
+                 'pinterest': CustomIcons.pinterest,
+                 'deviantArt': CustomIcons.deviantArt,
+                 'artstation': CustomIcons.artstation,
+                 'tiktok': CustomIcons.tiktok,
+                 'website': CustomIcons.website,
+                };
 
                 return Container(
                 color: Color(0xffF0F0F0),
@@ -405,6 +431,72 @@ class UsersProfileState extends State<UsersProfile> with AutomaticKeepAliveClien
                             ),
                         ],
                       ),  
+                      SizedBox(height: 8.0,),
+
+                      // check whether user added at least one social platform
+                      if(checkSocialPlatforms.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(left: 16.0, right: 8.0),
+                          child: Material(
+                            color: Colors.transparent,
+                            child: GridView.count(
+                              shrinkWrap: true,
+                              primary: false,
+                              // padding: const EdgeInsets.all(20),
+                              // crossAxisSpacing: 10,
+                              // mainAxisSpacing: 10,
+                              crossAxisCount: 8,
+                              children: [
+                                if(userInfo['socialPlatforms'] != null)
+                                for(int i = 0; i < userInfo['socialPlatforms'].length; i++)
+                                  if(userInfo['socialPlatforms'][i]['link'].isNotEmpty)
+                                  Row(
+                                    children: [
+                                      InkWell(
+                                        splashColor: Colors.grey,
+                                        customBorder: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(6),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Icon(
+                                            iconsMap['${userInfo['socialPlatforms'][i]['socialPlatform']}'],
+                                            color: ColorTheme.primary,
+                                            size: userInfo['socialPlatforms'][i]['socialPlatform'] == 'website' ? 18 : null
+                                          ),
+                                        ),
+                                        onTap: () async {
+
+                                          String url = '${userInfo['socialPlatforms'][i]['link']}';
+
+                                          try {
+
+                                            if(await canLaunch(url)){
+                                              await launch(
+                                                url, 
+                                                // forceWebView: true,
+                                                enableJavaScript: true
+                                              ); 
+                                            } else {
+                                              throw 'Could not launch $url';
+                                            }
+
+                                          } catch(e) {
+
+                                            throw(e);
+
+                                          }
+
+                                        },
+                                      ),
+                                      // SizedBox(width: 8.0,),
+                                    ],
+                                  )
+                                
+                              ],
+                            )
+                          ),
+                        ),
                       SizedBox(height: 16.0,),
                       Padding(
                         padding: const EdgeInsets.only(left: 16.0),

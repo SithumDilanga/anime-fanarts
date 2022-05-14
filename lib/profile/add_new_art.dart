@@ -588,11 +588,12 @@ class _AddNewArtState extends State<AddNewArt> {
                             ],
                           ),
                           SizedBox(height: 8.0,),
-                          SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Container(
-                              width: MediaQuery.of(context).size.width,
+                          Align(
+                            alignment: Alignment.bottomLeft,
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
                               child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
                                   for(String tag in tagList)
@@ -608,12 +609,31 @@ class _AddNewArtState extends State<AddNewArt> {
                                             horizontal: 8.0,
                                             vertical: 4.0
                                           ),
-                                          child: Text(
-                                            '$tag',
-                                            style: TextStyle(
-                                              fontSize: 11,
-                                              color: Colors.white
-                                            ),
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                '$tag',
+                                                style: TextStyle(
+                                                  fontSize: 11,
+                                                  color: Colors.white
+                                                ),
+                                              ),
+                                              SizedBox(width: 4.0,),
+                                              GestureDetector(
+                                                child: Icon(
+                                                  Icons.close_rounded,
+                                                  size: 11,
+                                                ),
+                                                onTap: () {
+                              
+                                                  setState(() {
+                                                    tagList.remove(tag);
+                                                  });
+                              
+                              
+                                                },
+                                              )
+                                            ],
                                           ),
                                         ),
                                       ),

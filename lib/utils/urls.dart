@@ -6,7 +6,7 @@ class Urls {
   // testing ip : 54.85.150.114
   // production ip : 52.72.73.234
 
-  static const String apiUrl = 'http://54.85.150.114/api/v1'; // http://52.72.73.234/api/v1
+  static const String apiUrl = 'http://52.72.73.234/api/v1'; // http://52.72.73.234/api/v1
 
   static const String animuzuUserId = '6242217a06e7ba94057a6212';
   
