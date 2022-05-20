@@ -26,6 +26,102 @@ class _AddSocialsState extends State<AddSocials> {
   String tiktokText = '';
   String websiteText = '';
 
+  // ---------- validation functions --------------
+
+  String? get twitterErrorText {
+
+    if (!twitterText.contains('twitter.com') && twitterText.isNotEmpty) {
+      return 'Invalid twitter link';
+    } 
+
+    if(!twitterText.contains('https://') && twitterText.isNotEmpty) {
+      return 'You must include https:// at the beginning';
+    }
+
+    return null;
+  }
+
+  String? get instaTextErrorText {
+
+    if (!instaText.contains('instagram.com') && instaText.isNotEmpty) {
+      return 'Invalid instagram link';
+    } 
+
+    if(!instaText.contains('https://') && instaText.isNotEmpty) {
+      return 'You must include https:// at the beginning';
+    }
+
+    return null;
+  }
+
+  String? get pinterestErrorText {
+
+    if (!pinterestText.contains('pin.it') && pinterestText.isNotEmpty) {
+
+      if(pinterestText.contains('pinterest.com')) {
+        return null;
+      }
+
+      return 'Invalid pinterest link';
+    } 
+
+    if(!pinterestText.contains('https://') && pinterestText.isNotEmpty) {
+      return 'You must include https:// at the beginning';
+    }
+
+    return null;
+  }
+
+  String? get deviantArtTextErrorText {
+
+    if (!deviantArtText.contains('deviantart.com') && deviantArtText.isNotEmpty) {
+      return 'Invalid deviantArt link';
+    } 
+
+    if(!deviantArtText.contains('https://') && deviantArtText.isNotEmpty) {
+      return 'You must include https:// at the beginning';
+    }
+
+    return null;
+  }
+
+  String? get artStationTextErrorText {
+
+    if (!artstationText.contains('artstation.com') && artstationText.isNotEmpty) {
+      return 'Invalid artStation link';
+    } 
+
+    if(!artstationText.contains('https://') && artstationText.isNotEmpty) {
+      return 'You must include https:// at the beginning';
+    }
+
+    return null;
+  }
+
+  String? get tikTokTextErrorText {
+
+    if (!tiktokText.contains('tiktok.com') && tiktokText.isNotEmpty) {
+      return 'Invalid TikTok link';
+    } 
+
+    if(!tiktokText.contains('https://') && tiktokText.isNotEmpty) {
+      return 'You must include https:// at the beginning';
+    }
+
+    return null;
+  }
+
+  String? get webSiteTextErrorText {
+
+    if(!websiteText.contains('https://') && websiteText.isNotEmpty) {
+      return 'You must include https:// at the beginning';
+    }
+
+    return null;
+  }
+
+  // ---------- End validation functions --------------
+
   // this was created for checking when the user want to fully remove an added link
   List isEditedList = [
     {
@@ -99,7 +195,15 @@ class _AddSocialsState extends State<AddSocials> {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              onPressed: () {
+              onPressed: (
+                twitterErrorText == null &&
+                instaTextErrorText == null &&
+                pinterestErrorText == null &&
+                deviantArtTextErrorText == null &&
+                artStationTextErrorText == null &&
+                tikTokTextErrorText == null &&
+                webSiteTextErrorText == null
+              ) ? () {
 
                 _profileReq.updateSocialPlatforms(
                   // check whether typed text is empty and specific social platform is not added
@@ -144,7 +248,7 @@ class _AddSocialsState extends State<AddSocials> {
 
                 });
 
-              }, 
+              } : null, 
             ),
           )
         ],
@@ -182,6 +286,7 @@ class _AddSocialsState extends State<AddSocials> {
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: ColorTheme.primary)
                       ),
+                      errorText: twitterErrorText 
                     ),
                     style: TextStyle(
                       fontSize: 18
@@ -226,6 +331,7 @@ class _AddSocialsState extends State<AddSocials> {
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: ColorTheme.primary)
                       ),
+                      errorText: instaTextErrorText
                     ),
                     style: TextStyle(
                       fontSize: 18
@@ -270,6 +376,7 @@ class _AddSocialsState extends State<AddSocials> {
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: ColorTheme.primary)
                       ),
+                      errorText: pinterestErrorText
                     ),
                     style: TextStyle(
                       fontSize: 18
@@ -314,6 +421,7 @@ class _AddSocialsState extends State<AddSocials> {
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: ColorTheme.primary)
                       ),
+                      errorText: deviantArtTextErrorText
                     ),
                     style: TextStyle(
                       fontSize: 18
@@ -358,6 +466,7 @@ class _AddSocialsState extends State<AddSocials> {
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: ColorTheme.primary)
                       ),
+                      errorText: artStationTextErrorText
                     ),
                     style: TextStyle(
                       fontSize: 18
@@ -402,6 +511,7 @@ class _AddSocialsState extends State<AddSocials> {
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: ColorTheme.primary)
                       ),
+                      errorText: tikTokTextErrorText
                     ),
                     style: TextStyle(
                       fontSize: 18
@@ -447,6 +557,7 @@ class _AddSocialsState extends State<AddSocials> {
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: ColorTheme.primary)
                       ),
+                      errorText: webSiteTextErrorText
                     ),
                     style: TextStyle(
                       fontSize: 18

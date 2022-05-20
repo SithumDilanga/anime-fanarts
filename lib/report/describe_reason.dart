@@ -127,7 +127,7 @@ class _DescribeReasonState extends State<DescribeReason> {
                         throw 'Could not launch $link';
                       }
                     },
-                    text: 'If you want to describe more about the issue you can send more details to this email. gritie.contact@gmail.com',
+                    text: 'If you want to describe more about the issue you can send more details to this email. animizu.contact@gmail.com',
                     style: TextStyle(
                       fontSize: 16.0, 
                       color: Colors.black,
@@ -163,20 +163,41 @@ class _DescribeReasonState extends State<DescribeReason> {
                         ),
                       ),
                       onPressed: () {
-                        
-                        _firestireService.sendUserReport(
-                          reason: widget.reason,
-                          description: _descTextController.text,
-                          userId: widget.postId
-                        ).whenComplete(() {
 
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => MyApp(selectedPage: 0)),
-                          );
+                        if(widget.reportType == 'postReport') {
 
-                        });
-                  
+                          _reportReq.reportPost(
+                            reason: widget.reason,
+                            description: _descTextController.text,
+                            postId: widget.postId
+                          ).whenComplete(() {
+
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => MyApp(selectedPage: 0)),
+                            );
+
+                          });
+
+                        } else {
+
+                          // if the reportType is user report
+
+                          _firestireService.sendUserReport(
+                            reason: widget.reason,
+                            description: _descTextController.text,
+                            userId: widget.postId
+                          ).whenComplete(() {
+
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => MyApp(selectedPage: 0)),
+                            );
+
+                          });
+
+                        }
+                                          
                       }, 
                     ),
                   )

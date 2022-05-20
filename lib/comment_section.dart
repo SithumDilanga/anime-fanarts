@@ -248,7 +248,7 @@ class _CommentSecionState extends State<CommentSecion> {
                               ),
                               onPressed: () {
 
-                                if(commentTextController.text.isNotEmpty && replyingComment.contains('sub_comment') || replyingComment.contains('main_comment_reply')) {
+                                if(commentTextController.text.isNotEmpty && (replyingComment.contains('sub_comment') || replyingComment.contains('main_comment_reply'))) {
 
                                   print('sub main comment');
 
@@ -566,6 +566,18 @@ class _CommentSecionState extends State<CommentSecion> {
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
                             itemBuilder: (context, itemIndex) {
+
+                              String formattedDateReplyComments = '';
+
+                              if(item['replyComments'][itemIndex]['createdAt'] != null) {
+
+                                formattedDateReplyComments = _dateTimeFormatter.getFormattedDateFromFormattedString(
+                                  value: item['replyComments'][itemIndex]['createdAt'].toString(), 
+                                  currentFormat: "yyyy-MM-ddTHH:mm:ssZ", 
+                                  desiredFormat: "yyyy-MM-dd hh:mm a"
+                                );
+
+                              }
               
                               bool isSubReplying = false;
               
@@ -652,7 +664,7 @@ class _CommentSecionState extends State<CommentSecion> {
                                                     SizedBox(width: 8.0,),
                                                     Flexible(
                                                       child: Text(
-                                                        '$formattedDate',
+                                                        '$formattedDateReplyComments',
                                                         style: TextStyle(
                                                           fontSize: 11,
                                                           fontWeight: FontWeight.normal

@@ -450,4 +450,65 @@ class ProfileReq {
 
   // ------------ End update social platforms -------------
 
+  // ------------ update social platforms -------------
+
+  Future addNewfollowUpUser({String? userId}) async {
+
+    // String fileName = file.path.split('/').last;
+    
+    try {
+
+      final bearerToken = await SecureStorage.getToken() ?? '';
+      final followedUserId = await SecureStorage.getUserId() ?? '';
+      final deviceId = await SecureStorage.getDeviceId() ?? '';
+
+      FormData data = FormData.fromMap({
+        'followedUserId': '627e10c2e9019d5a761d67ba',
+        'deviceId': 'test123',
+        'userId': '62868b7cada68cbe3ec1118e'
+      });
+
+      print('data $userId');
+
+      Response response = await _dio.patch('$URL/users/addNewFollower', data: {
+        'followedUserId': followedUserId,
+        'deviceId': deviceId,
+        'userId': userId
+      }, options: Options(
+        headers: {'Authorization': 'Bearer $bearerToken'},
+        contentType: 'multipart/form-data'
+      ));
+
+      print('data $response');
+
+      Fluttertoast.showToast(
+        msg: 'succesfully followed!',
+        toastLength: Toast.LENGTH_LONG,
+      );
+
+    } on DioError catch (e) {
+
+    if (e.response != null) {
+
+      Fluttertoast.showToast(
+        msg: 'Error updating social media platforms',
+        toastLength: Toast.LENGTH_LONG,
+      );
+
+      // throw Error();
+      throw(e.response!.data['message']);
+
+    } else {
+
+      Fluttertoast.showToast(
+        msg: 'Error updating username',
+        toastLength: Toast.LENGTH_LONG,
+      );
+
+    }
+
+    }
+
+  }
+
 }

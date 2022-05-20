@@ -429,6 +429,11 @@ class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAl
                                       // elevation: 4.0,
                                     ),
                                     onPressed: () {
+
+                                      _profileReq.addNewfollowUpUser(
+                                        userId: widget.userId
+                                      );
+
                                       setState(() {
                                         isFollow = !isFollow;
                                         print('isFollow $isFollow');

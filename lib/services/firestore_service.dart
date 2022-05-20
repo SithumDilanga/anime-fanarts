@@ -1,3 +1,4 @@
+import 'package:anime_fanarts/services/secure_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -64,12 +65,15 @@ class FirestoreService {
 
   Future sendUserReport({String? reason, String? description, String? userId}) async {
 
+    final reportedByUserId = await SecureStorage.getUserId() ?? '';
+
     try {
 
       return await userReportstCollection.add({
         'reason': reason,
         'description': description,
         'userId': userId,
+        'reportedByUserId': reportedByUserId,
         'time': FieldValue.serverTimestamp()
       }).whenComplete(() {
 

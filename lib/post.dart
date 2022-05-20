@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:typed_data';
-
 import 'package:anime_fanarts/comment_section.dart';
 import 'package:anime_fanarts/img_fullscreen.dart';
 import 'package:anime_fanarts/main.dart';
@@ -8,6 +6,7 @@ import 'package:anime_fanarts/models/reacted_posts.dart';
 import 'package:anime_fanarts/models/reaction.dart';
 import 'package:anime_fanarts/profile/users_profile.dart';
 import 'package:anime_fanarts/profile/users_profile_test.dart';
+// import 'package:anime_fanarts/profile/users_profile_test.dart';
 import 'package:anime_fanarts/report/select_reason.dart';
 import 'package:anime_fanarts/services/download_share.dart';
 import 'package:anime_fanarts/services/get_create_posts.dart';
@@ -19,7 +18,6 @@ import 'package:anime_fanarts/utils/route_trans_anim.dart';
 import 'package:anime_fanarts/utils/urls.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
