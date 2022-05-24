@@ -59,6 +59,11 @@ class _AddSocialsState extends State<AddSocials> {
     if (!pinterestText.contains('pin.it') && pinterestText.isNotEmpty) {
 
       if(pinterestText.contains('pinterest.com')) {
+
+        if(!pinterestText.contains('https://') && pinterestText.isNotEmpty) {
+          return 'You must include https:// at the beginning';
+        }
+
         return null;
       }
 
@@ -204,6 +209,8 @@ class _AddSocialsState extends State<AddSocials> {
                 tikTokTextErrorText == null &&
                 webSiteTextErrorText == null
               ) ? () {
+
+                print('tiktok $tiktokText');
 
                 _profileReq.updateSocialPlatforms(
                   // check whether typed text is empty and specific social platform is not added

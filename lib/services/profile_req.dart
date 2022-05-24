@@ -462,24 +462,21 @@ class ProfileReq {
       final followedUserId = await SecureStorage.getUserId() ?? '';
       final deviceId = await SecureStorage.getDeviceId() ?? '';
 
-      FormData data = FormData.fromMap({
-        'followedUserId': '627e10c2e9019d5a761d67ba',
-        'deviceId': 'test123',
-        'userId': '62868b7cada68cbe3ec1118e'
-      });
+      print('userId $userId');
+      print('followedUserId $followedUserId');
+      print('deviceId $deviceId');
 
       print('data $userId');
 
-      Response response = await _dio.patch('$URL/users/addNewFollower', data: {
-        'followedUserId': followedUserId,
-        'deviceId': deviceId,
-        'userId': userId
+      Response response = await _dio.post('$URL/follow', data: {
+        'followedUser': userId,
+        'follow': 1,
+        'deviceID': deviceId
       }, options: Options(
         headers: {'Authorization': 'Bearer $bearerToken'},
-        contentType: 'multipart/form-data'
       ));
 
-      print('data $response');
+      print('response $response');
 
       Fluttertoast.showToast(
         msg: 'succesfully followed!',
@@ -491,7 +488,7 @@ class ProfileReq {
     if (e.response != null) {
 
       Fluttertoast.showToast(
-        msg: 'Error updating social media platforms',
+        msg: 'Error following!',
         toastLength: Toast.LENGTH_LONG,
       );
 

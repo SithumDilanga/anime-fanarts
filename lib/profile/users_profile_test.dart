@@ -3,6 +3,7 @@ import 'package:anime_fanarts/post.dart';
 import 'package:anime_fanarts/report/reasons_user_report.dart';
 import 'package:anime_fanarts/services/block_user_req.dart';
 import 'package:anime_fanarts/services/profile_req.dart';
+import 'package:anime_fanarts/services/secure_storage.dart';
 import 'package:anime_fanarts/services/shared_pref.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/error_loading.dart';
@@ -31,6 +32,8 @@ class UsersProfileTest extends StatefulWidget {
 class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAliveClientMixin<UsersProfileTest> {
 
   static const animuzuId = Urls.animuzuUserId;
+
+  String? currentUserId;
 
   static const _pageSize = 8;
   List reactedPosts = [];
@@ -72,6 +75,11 @@ class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAl
       setState(() {
         reactedPosts = reactedPosts + allPostsData['reacted'];
         userInfo = allPostsData['data']['user'];
+
+        if(allPostsData['followed'] != null) {
+          isFollow = allPostsData['followed'];
+        }
+
       });
 
     } catch (error) {
@@ -153,12 +161,22 @@ class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAl
     );
   }
 
+  init() async {
+
+    currentUserId = await SecureStorage.getUserId() ?? '';
+
+    print('currentUserId $currentUserId');
+
+  }
+
   @override
   void initState() {
 
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
     });
+
+    init();
 
     // Enable virtual display.
     if (Platform.isAndroid) WebView.platform = AndroidWebView();
@@ -299,6 +317,7 @@ class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAl
                 // dynamic userInfo = data['data']['user'];
                 // dynamic userPosts = data['posts']['posts'];
 
+
                 return Container(
                 color: Color(0xffF0F0F0),
                 height: double.infinity,
@@ -428,7 +447,7 @@ class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAl
                                       ),
                                       // elevation: 4.0,
                                     ),
-                                    onPressed: () {
+                                    onPressed: currentUserId != userInfo['_id'] ? () {
 
                                       _profileReq.addNewfollowUpUser(
                                         userId: widget.userId
@@ -438,7 +457,7 @@ class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAl
                                         isFollow = !isFollow;
                                         print('isFollow $isFollow');
                                       });
-                                    }, 
+                                    } : null, 
                                   ),
                                   // Text(
                                   //   '536 Followers'
@@ -526,9 +545,10 @@ class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAl
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    if(userInfo['followers'] != null)
                                     RichText(
                                       text: TextSpan(
-                                        text: '589 ',
+                                        text: '${userInfo['followers'][0]['followersCount']} ',
                                         style: TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.bold
