@@ -3,6 +3,7 @@ import 'package:anime_fanarts/profile/add_new_art.dart';
 import 'package:anime_fanarts/post.dart';
 import 'package:anime_fanarts/profile/add_socials.dart';
 import 'package:anime_fanarts/profile/admin_add_new_art.dart';
+import 'package:anime_fanarts/profile/followers_list.dart';
 import 'package:anime_fanarts/services/profile_req.dart';
 import 'package:anime_fanarts/services/secure_storage.dart';
 import 'package:anime_fanarts/utils/colors.dart';
@@ -653,23 +654,35 @@ class _ProfileTestState extends State<ProfileTest> with AutomaticKeepAliveClient
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      RichText(
-                                        text: TextSpan(
-                                          text: '589 ',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold
-                                          ),
-                                          children: <TextSpan>[
-                                            TextSpan(
-                                              text: 'Followers', 
-                                              style: TextStyle(
-                                                color: ColorTheme.primary,
-                                                fontWeight: FontWeight.normal
-                                              )
+                                      GestureDetector(
+                                        child: RichText(
+                                          text: TextSpan(
+                                            text: '${userInfo['followers'][0]['followersCount']} ',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold
                                             ),
-                                          ],
+                                            children: <TextSpan>[
+                                              TextSpan(
+                                                text: 'Followers', 
+                                                style: TextStyle(
+                                                  color: ColorTheme.primary,
+                                                  fontWeight: FontWeight.normal
+                                                )
+                                              ),
+                                            ],
+                                          ),
                                         ),
+                                        onTap: () {
+
+                                          Navigator.of(context).push(
+                                            RouteTransAnim().createRoute(
+                                              1.0, 0.0, 
+                                              FollowersList()
+                                            )
+                                          );
+
+                                        },
                                       ),
                                       SizedBox(height: 12.0,),
                                       Text(

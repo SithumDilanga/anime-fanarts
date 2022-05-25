@@ -1,5 +1,6 @@
 import 'package:anime_fanarts/main.dart';
 import 'package:anime_fanarts/post.dart';
+import 'package:anime_fanarts/profile/followers_list.dart';
 import 'package:anime_fanarts/report/reasons_user_report.dart';
 import 'package:anime_fanarts/services/block_user_req.dart';
 import 'package:anime_fanarts/services/profile_req.dart';
@@ -496,12 +497,39 @@ class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAl
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          '${userInfo['name']}',
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              '${userInfo['name']}',
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            if(userInfo['followers'] != null)
+                                            Padding(
+                                              padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+                                              child: RichText(
+                                                text: TextSpan(
+                                                  text: '${userInfo['followers'][0]['followersCount']} ',
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontWeight: FontWeight.bold
+                                                  ),
+                                                  children: <TextSpan>[
+                                                    TextSpan(
+                                                      text: 'Followers', 
+                                                      style: TextStyle(
+                                                        color: ColorTheme.primary,
+                                                        fontWeight: FontWeight.normal
+                                                      )
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                         Text(
                                           '@username'
@@ -545,26 +573,37 @@ class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAl
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    if(userInfo['followers'] != null)
-                                    RichText(
-                                      text: TextSpan(
-                                        text: '${userInfo['followers'][0]['followersCount']} ',
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold
-                                        ),
-                                        children: <TextSpan>[
-                                          TextSpan(
-                                            text: 'Followers', 
-                                            style: TextStyle(
-                                              color: ColorTheme.primary,
-                                              fontWeight: FontWeight.normal
-                                            )
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(height: 12.0,),
+                                    // if(userInfo['followers'] != null)
+                                    // GestureDetector(
+                                    //   child: RichText(
+                                    //     text: TextSpan(
+                                    //       text: '${userInfo['followers'][0]['followersCount']} ',
+                                    //       style: TextStyle(
+                                    //         color: Colors.black,
+                                    //         fontWeight: FontWeight.bold
+                                    //       ),
+                                    //       children: <TextSpan>[
+                                    //         TextSpan(
+                                    //           text: 'Followers', 
+                                    //           style: TextStyle(
+                                    //             color: ColorTheme.primary,
+                                    //             fontWeight: FontWeight.normal
+                                    //           )
+                                    //         ),
+                                    //       ],
+                                    //     ),
+                                    //   ),
+                                    //   onTap: () {
+                                    //     Navigator.of(context).push(
+                                    //       RouteTransAnim().createRoute(
+                                    //         1.0, 0.0, 
+                                    //         FollowersList()
+                                    //       )
+                                    //     );
+                    
+                                    //   }
+                                    // ),
+                                    // SizedBox(height: 12.0,),
                                     Text(
                                       userInfo['bio'] == null ? '' : userInfo['bio'],
                                       style: TextStyle(
