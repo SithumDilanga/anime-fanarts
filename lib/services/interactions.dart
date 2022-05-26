@@ -203,4 +203,44 @@ class Interactions {
 
   // ------------ End add a new comment reply ----------------
 
+  // ------------ get reacted users list -------------
+
+  Future getReactedUsersList({required String? postId, required int pageKey, required int pageSize}) async {
+
+    try {
+
+      final bearerToken = await SecureStorage.getToken() ?? '';
+      
+      Response userData = await _dio.get('$URL/reactions/getReactedUsers/$postId?page=$pageKey&limit=$pageSize', options: Options(
+        headers: {'Authorization': 'Bearer $bearerToken'},
+      ));
+
+      dynamic data = userData;
+
+      print('FollowersList ${data}');
+
+      return userData.data;
+
+    } on DioError catch (e) {
+
+      if (e.response != null) {
+    
+        return e.response!.statusCode;
+
+      } else {
+        
+        Fluttertoast.showToast(
+          msg: 'Error getting followers list!',
+          toastLength: Toast.LENGTH_LONG,
+        );
+
+
+        return e.message;
+      }
+
+    }
+  }
+
+  // ------------ End get reacted users list -------------
+
 }

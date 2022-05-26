@@ -654,6 +654,7 @@ class _ProfileTestState extends State<ProfileTest> with AutomaticKeepAliveClient
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
+                                      if(userInfo['followers'] != null)
                                       GestureDetector(
                                         child: RichText(
                                           text: TextSpan(

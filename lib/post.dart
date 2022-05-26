@@ -4,6 +4,7 @@ import 'package:anime_fanarts/img_fullscreen.dart';
 import 'package:anime_fanarts/main.dart';
 import 'package:anime_fanarts/models/reacted_posts.dart';
 import 'package:anime_fanarts/models/reaction.dart';
+import 'package:anime_fanarts/profile/reacted_users_list.dart';
 import 'package:anime_fanarts/profile/users_profile.dart';
 import 'package:anime_fanarts/profile/users_profile_test.dart';
 // import 'package:anime_fanarts/profile/users_profile_test.dart';
@@ -735,21 +736,57 @@ class _PostState extends State<Post> with AutomaticKeepAliveClientMixin<Post> {
                       Row(
                         children: [
                           if(userReaction == 'default')
-                            Text(
-                              '${widget.reactionCount}',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 12.0
+                            GestureDetector(
+                              child: Text(
+                                '${widget.reactionCount}',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 12.0
+                                ),
                               ),
+                              onTap: () {
+
+                                if(widget.isUserPost) {
+
+                                  Navigator.of(context).push(
+                                    RouteTransAnim().createRoute(
+                                      1.0, 0.0, 
+                                      ReactedUsersList(
+                                        postId: widget.id,
+                                      )
+                                    )
+                                  );
+
+                                }
+
+                              },
                             ),
                           if(userReaction != 'default')
-                            Text(
-                              '${userReaction == 'add' ? widget.reactionCount! + 1 : 
-                              widget.reactionCount}',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 12.0
+                            GestureDetector(
+                              child: Text(
+                                '${userReaction == 'add' ? widget.reactionCount! + 1 : 
+                                widget.reactionCount}',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 12.0
+                                ),
                               ),
+                              onTap: () {
+
+                                if(widget.isUserPost) {
+
+                                  Navigator.of(context).push(
+                                    RouteTransAnim().createRoute(
+                                      1.0, 0.0, 
+                                      ReactedUsersList(
+                                        postId: widget.id,
+                                      )
+                                    )
+                                  );
+
+                                }
+
+                              },
                             ),
                           
                           IconButton(

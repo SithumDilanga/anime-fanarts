@@ -1,5 +1,6 @@
 import 'package:anime_fanarts/profile/users_profile.dart';
 import 'package:anime_fanarts/profile/users_profile_test.dart';
+import 'package:anime_fanarts/services/interactions.dart';
 import 'package:anime_fanarts/services/profile_req.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/error_loading.dart';
@@ -9,18 +10,20 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-class FollowersList extends StatefulWidget {
-  const FollowersList({ Key? key }) : super(key: key);
+class ReactedUsersList extends StatefulWidget {
+
+  final String? postId;
+
+  const ReactedUsersList({ Key? key, required this.postId }) : super(key: key);
 
   @override
-  State<FollowersList> createState() => _FollowersListState();
+  State<ReactedUsersList> createState() => _ReactedUsersListState();
 }
 
-class _FollowersListState extends State<FollowersList> {
+class _ReactedUsersListState extends State<ReactedUsersList> {
 
   static const _pageSize = 20;
-  List followersList = [];
-  ProfileReq _profileReq = ProfileReq();
+  Interactions _interationsReq = Interactions();
 
   final PagingController<int, dynamic> _pagingController =
       PagingController(firstPageKey: 1,);
@@ -36,15 +39,16 @@ class _FollowersListState extends State<FollowersList> {
 
   void _fetchPage(int pageKey) async {
 
-    final followersData = await _profileReq.getFollowersList(
+    final reactedUsersData = await _interationsReq.getReactedUsersList(
+      postId: widget.postId,
       pageKey: pageKey,
       pageSize: _pageSize
     );
 
-    print('followersData ${followersData['followers']}');
+    print('followersData ${reactedUsersData['reactedUsers']}');
 
      try {
-      final newItems = await followersData['followers'];
+      final newItems = await reactedUsersData['reactedUsers'];
 
       final isLastPage = newItems.length < _pageSize;
       if (isLastPage) {
@@ -54,10 +58,6 @@ class _FollowersListState extends State<FollowersList> {
         int nextPageKey = (pageKey + 1);
         _pagingController.appendPage(newItems, nextPageKey);
       }
-      
-      setState(() {
-        followersList = followersList + followersData['followers'];
-      });
 
     } catch (error) {
       print('errpr $error');
@@ -86,7 +86,7 @@ class _FollowersListState extends State<FollowersList> {
           }, 
         ),
         title: Text(
-          'Followed Users'
+          'Reacted Users'
         ),
       ),
       body: RefreshIndicator(
@@ -165,7 +165,7 @@ class _FollowersListState extends State<FollowersList> {
               padding: const EdgeInsets.all(8.0),
               child: Center(
                 child: Text(
-                  'No followers to show!',
+                  'No reacted users to show!',
                   style: TextStyle(
                     fontSize: 16.0
                   ),

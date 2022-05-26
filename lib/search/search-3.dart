@@ -265,7 +265,7 @@ class SearchResultsListView extends StatelessWidget {
 
       return ListView(
       padding: EdgeInsets.only(
-        top: 76 //fsb.height + fsb.margins.vertical
+        top: 92 //fsb.height + fsb.margins.vertical
       ),
       children: List.generate(
         1,
@@ -326,7 +326,7 @@ class SearchResultsListView extends StatelessWidget {
 
       return ListView(
       padding: EdgeInsets.only(
-        top: 76 //fsb.height + fsb.margins.vertical
+        top: 92 //fsb.height + fsb.margins.vertical
       ),
       children: List.generate(
         1,

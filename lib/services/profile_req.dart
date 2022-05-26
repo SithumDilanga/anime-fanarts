@@ -508,4 +508,40 @@ class ProfileReq {
 
   }
 
+  // ------------ get followers list -------------
+
+  Future getFollowersList({required int pageKey, required int pageSize}) async {
+
+    try {
+
+      final bearerToken = await SecureStorage.getToken() ?? '';
+      
+      Response userData = await _dio.get('$URL/follow/getAllFollowers?page=$pageKey&limit=$pageSize', options: Options(
+        headers: {'Authorization': 'Bearer $bearerToken'},
+      ));
+
+      return userData.data;
+
+    } on DioError catch (e) {
+
+      if (e.response != null) {
+    
+        return e.response!.statusCode;
+
+      } else {
+        
+        Fluttertoast.showToast(
+          msg: 'Error getting followers list!',
+          toastLength: Toast.LENGTH_LONG,
+        );
+
+
+        return e.message;
+      }
+
+    }
+  }
+
+  // ------------ End get followers list -------------
+
 }

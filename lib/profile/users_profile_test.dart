@@ -32,13 +32,28 @@ class UsersProfileTest extends StatefulWidget {
 
 class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAliveClientMixin<UsersProfileTest> {
 
+  // ------- 🏃 following logic 🏃 ----------
+
+    // isFollowDefaultMode = false and int followUserActionState != 1 : started following a new user
+
+    // isFollowDefaultMode = false and int followUserActionState = 1 : started unfollowing the just followed new user
+
+    // isFollowDefaultMode = true and int followUserActionState != 1 : started unfollowing the already followed user
+
+    // isFollowDefaultMode = true and int followUserActionState = 1 : started following the just followed new user but already followed before
+
+  // ------- End 🏃 following logic 🏃 ----------
+
   static const animuzuId = Urls.animuzuUserId;
 
   String? currentUserId;
 
+  int followUserActionState = 0;
+
   static const _pageSize = 8;
   List reactedPosts = [];
   bool isFollow = false;
+  bool isFollowDefaultMode = false;
   dynamic userInfo = {
      "profilePic": "default-profile-pic.jpg",
      "coverPic": "default-cover-pic.png",
@@ -79,6 +94,7 @@ class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAl
 
         if(allPostsData['followed'] != null) {
           isFollow = allPostsData['followed'];
+          isFollowDefaultMode = allPostsData['followed'];
         }
 
       });
@@ -450,14 +466,21 @@ class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAl
                                     ),
                                     onPressed: currentUserId != userInfo['_id'] ? () {
 
+                                      setState(() {
+                                        isFollow = !isFollow;
+                                        
+                                        followUserActionState++;
+
+                                        if(followUserActionState == 3) {
+                                          followUserActionState = 1;
+                                        }
+
+                                      });
+
                                       _profileReq.addNewfollowUpUser(
                                         userId: widget.userId
                                       );
 
-                                      setState(() {
-                                        isFollow = !isFollow;
-                                        print('isFollow $isFollow');
-                                      });
                                     } : null, 
                                   ),
                                   // Text(
@@ -507,12 +530,85 @@ class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAl
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
-                                            if(userInfo['followers'] != null)
+                                            // default mode
+                                            if(userInfo['followers'] != null && !isFollowDefaultMode && followUserActionState != 1 )
                                             Padding(
                                               padding: const EdgeInsets.only(left: 20.0, right: 20.0),
                                               child: RichText(
                                                 text: TextSpan(
                                                   text: '${userInfo['followers'][0]['followersCount']} ',
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontWeight: FontWeight.bold
+                                                  ),
+                                                  children: <TextSpan>[
+                                                    TextSpan(
+                                                      text: 'Followers', 
+                                                      style: TextStyle(
+                                                        color: ColorTheme.primary,
+                                                        fontWeight: FontWeight.normal
+                                                      )
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+
+                                            // when user started following
+                                            if(userInfo['followers'] != null && !isFollowDefaultMode && followUserActionState == 1)
+                                            Padding(
+                                              padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+                                              child: RichText(
+                                                text: TextSpan(
+                                                  text: '${userInfo['followers'][0]['followersCount'] + 1} ',
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontWeight: FontWeight.bold
+                                                  ),
+                                                  children: <TextSpan>[
+                                                    TextSpan(
+                                                      text: 'Followers', 
+                                                      style: TextStyle(
+                                                        color: ColorTheme.primary,
+                                                        fontWeight: FontWeight.normal
+                                                      )
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+
+                                            // user started unfollowing when he already followed
+                                            if(userInfo['followers'] != null && isFollowDefaultMode && followUserActionState != 1)
+                                            Padding(
+                                              padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+                                              child: RichText(
+                                                text: TextSpan(
+                                                  text: '${userInfo['followers'][0]['followersCount']} ',
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontWeight: FontWeight.bold
+                                                  ),
+                                                  children: <TextSpan>[
+                                                    TextSpan(
+                                                      text: 'Followers', 
+                                                      style: TextStyle(
+                                                        color: ColorTheme.primary,
+                                                        fontWeight: FontWeight.normal
+                                                      )
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            
+                                            // user started following when he already followed and unfollowed
+                                            if(userInfo['followers'] != null && isFollowDefaultMode && followUserActionState == 1)
+                                            Padding(
+                                              padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+                                              child: RichText(
+                                                text: TextSpan(
+                                                  text: '${userInfo['followers'][0]['followersCount'] - 1} ',
                                                   style: TextStyle(
                                                     color: Colors.black,
                                                     fontWeight: FontWeight.bold
@@ -668,103 +764,12 @@ class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAl
 
                                                   },
                                                 ),
-                                                // SizedBox(width: 8.0,),
                                               ],
                                             )
-
-                                          // for(int i = 0; i < 5; i++)
-                                          // InkWell(
-                                          //   splashColor: Colors.grey,
-                                          //   customBorder: RoundedRectangleBorder(
-                                          //     borderRadius: BorderRadius.circular(6),
-                                          //   ),
-                                          //   child: Padding(
-                                          //     padding: const EdgeInsets.all(4.0),
-                                          //     child: Icon(
-                                          //       CustomIcons.insta,
-                                          //       color: ColorTheme.primary,
-                                          //       size: 24,
-                                          //     ),
-                                          //   ),
-                                          //   onTap: () async {
-                                          
-                                          //     const instaUrl = 'https://www.instagram.com/niko_belic98/';
-                                          
-                                          //     if(await canLaunch(instaUrl)){
-                                          //       await launch(
-                                          //         instaUrl, 
-                                          //       ); 
-                                          //     }else {
-                                          //       throw 'Could not launch $instaUrl';
-                                          //     }
-                                          
-                                          
-                                          //   },
-                                          // ),
-                                          // // SizedBox(width: 8.0,),
-                                          
                                         ],
                                       )
-                                      // Row(
-                                      //   children: [
-                                      //     // if(userInfo['socialPlatforms'] != null)
-                                      //     // for(int i = 0; i < userInfo['socialPlatforms'].length; i++)
-                                      //     //   if(userInfo['socialPlatforms'][i]['link'].isNotEmpty)
-                                      //     //   Row(
-                                      //     //     children: [
-                                      //     //       InkWell(
-                                      //     //         splashColor: Colors.grey,
-                                      //     //         customBorder: RoundedRectangleBorder(
-                                      //     //           borderRadius: BorderRadius.circular(6),
-                                      //     //         ),
-                                      //     //         child: Padding(
-                                      //     //           padding: const EdgeInsets.all(4.0),
-                                      //     //           child: Icon(
-                                      //     //             iconsMap['${userInfo['socialPlatforms'][i]['socialPlatform']}'],
-                                      //     //             color: ColorTheme.primary,
-                                      //     //             size: userInfo['socialPlatforms'][i]['socialPlatform'] == 'website' ? 18 : null
-                                      //     //           ),
-                                      //     //         ),
-                                      //     //         onTap: () async {
-
-                                      //     //           String url = '${userInfo['socialPlatforms'][i]['link']}';
-
-                                      //     //           try {
-
-                                      //     //             if(await canLaunch(url)){
-                                      //     //               await launch(
-                                      //     //                 url, 
-                                      //     //                 // forceWebView: true,
-                                      //     //                 enableJavaScript: true
-                                      //     //               ); 
-                                      //     //             } else {
-                                      //     //               throw 'Could not launch $url';
-                                      //     //             }
-
-                                      //     //           } catch(e) {
-
-                                      //     //             throw(e);
-
-                                      //     //           }
-
-                                      //     //         },
-                                      //     //       ),
-                                      //     //       SizedBox(width: 8.0,),
-                                      //     //     ],
-                                      //     //   ),
-                                          
-                                      //   ],
-                                      // ),
                                     ),
                                     SizedBox(height: 8.0,),
-                                    // IconButton(
-                                    //   icon: Icon(
-                                    //     Icons.ac_unit
-                                    //   ),
-                                    //   onPressed: () {
-                                    //     print('yo nigga');
-                                    //   }, 
-                                    // )
                                   ],
                                 ),
                               ),
