@@ -56,7 +56,6 @@ class _PostState extends State<Post> with AutomaticKeepAliveClientMixin<Post> {
   static const animuzuId = Urls.animuzuUserId;
 
   static const primaryColor = Color(0xffffa500); 
-  int imageIndex = 0;
   String userReaction = 'default';
   String? secureStorageUserId = '';
 
@@ -676,7 +675,6 @@ class _PostState extends State<Post> with AutomaticKeepAliveClientMixin<Post> {
                     viewportFraction: 1,
                     enableInfiniteScroll: false, 
                     aspectRatio: 4/3,
-                    // enlargeCenterPage: true,
                   ),
                 ),
 

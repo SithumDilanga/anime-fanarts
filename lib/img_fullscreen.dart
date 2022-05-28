@@ -23,6 +23,7 @@ class _ImgFullScreenState extends State<ImgFullScreen> {
   DownloadShare _downloadShare = DownloadShare();
 
   late PageController controller;
+  int corousalImageIndex = 0;
   
   @override
   void initState() {
@@ -31,6 +32,9 @@ class _ImgFullScreenState extends State<ImgFullScreen> {
     controller = PageController(
       initialPage: widget.selectedimageIndex
     );
+
+    // setting initial selected image index
+    corousalImageIndex = widget.selectedimageIndex;
 
   }
 
@@ -50,6 +54,9 @@ class _ImgFullScreenState extends State<ImgFullScreen> {
   // --- End asking user permission ---
   @override
   Widget build(BuildContext context) {
+
+    print('images ${widget.imgLink}');
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.black87,
@@ -112,6 +119,12 @@ class _ImgFullScreenState extends State<ImgFullScreen> {
                       ),
                     ),
                 ],
+                onPageChanged: (index) {
+                  print('corousalImageIndex ${corousalImageIndex}');
+                  setState(() {
+                    corousalImageIndex = index;
+                  });
+                },
               ),
             ),
             Row(
@@ -141,7 +154,7 @@ class _ImgFullScreenState extends State<ImgFullScreen> {
                         onPressed: () {
 
                           _downloadShare.shareImage(
-                            '${widget.imgLink}',
+                            '${widget.imageList![corousalImageIndex]}',
                             widget.name
                           );
                           
@@ -157,7 +170,7 @@ class _ImgFullScreenState extends State<ImgFullScreen> {
                           askPermission();
                       
                           _downloadShare.downloadImage(
-                            '${widget.imgLink}'
+                            '${widget.imageList![corousalImageIndex]}'
                           );
                           
                         }, 
