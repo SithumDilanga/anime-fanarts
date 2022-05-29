@@ -732,7 +732,26 @@ class _PostState extends State<Post> with AutomaticKeepAliveClientMixin<Post> {
                       ),
                       // --------- implementation with reaction count --------
                       Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
+                          GestureDetector(
+                            child: Icon(
+                              Icons.bar_chart_rounded
+                            ),
+                            onTap: () {
+                              
+                              Navigator.of(context).push(
+                                RouteTransAnim().createRoute(
+                                  1.0, 0.0, 
+                                  ReactedUsersList(
+                                    postId: widget.id,
+                                  )
+                                )
+                              );
+
+                            },
+                          ),
+                          SizedBox(width: 8.0,),
                           if(userReaction == 'default')
                             GestureDetector(
                               child: Text(
@@ -743,20 +762,20 @@ class _PostState extends State<Post> with AutomaticKeepAliveClientMixin<Post> {
                                 ),
                               ),
                               onTap: () {
-
-                                if(widget.isUserPost) {
-
-                                  Navigator.of(context).push(
-                                    RouteTransAnim().createRoute(
-                                      1.0, 0.0, 
-                                      ReactedUsersList(
-                                        postId: widget.id,
-                                      )
-                                    )
-                                  );
-
-                                }
-
+                      
+                                // if(widget.isUserPost) {
+                      
+                                //   Navigator.of(context).push(
+                                //     RouteTransAnim().createRoute(
+                                //       1.0, 0.0, 
+                                //       ReactedUsersList(
+                                //         postId: widget.id,
+                                //       )
+                                //     )
+                                //   );
+                      
+                                // }
+                      
                               },
                             ),
                           if(userReaction != 'default')
@@ -770,9 +789,9 @@ class _PostState extends State<Post> with AutomaticKeepAliveClientMixin<Post> {
                                 ),
                               ),
                               onTap: () {
-
+                      
                                 if(widget.isUserPost) {
-
+                      
                                   Navigator.of(context).push(
                                     RouteTransAnim().createRoute(
                                       1.0, 0.0, 
@@ -781,9 +800,9 @@ class _PostState extends State<Post> with AutomaticKeepAliveClientMixin<Post> {
                                       )
                                     )
                                   );
-
+                      
                                 }
-
+                      
                               },
                             ),
                           
@@ -793,16 +812,16 @@ class _PostState extends State<Post> with AutomaticKeepAliveClientMixin<Post> {
                               color: widget.isReacted ? ColorTheme.primary : Colors.black,
                             ),
                             onPressed: () {
-
+                      
                               if(!widget.isReacted) {
                                 reactedPosts.addPostToReactedList(widget.id);
                                 reactedPosts.removeFromRemovedReactionList(widget.id);
-
+                      
                                 setState(() {
                                   widget.isReacted = true;
                                   userReaction = 'add';
                                 });
-
+                      
                               } else {
                                 reactedPosts.removePostFromReactedList(widget.id);
                                 reactedPosts.addToRemovedReactionList(widget.id);
@@ -811,24 +830,24 @@ class _PostState extends State<Post> with AutomaticKeepAliveClientMixin<Post> {
                                   widget.isReacted = false;
                                   userReaction = 'remove';
                                 });
-
+                      
                               }
-
-
-
-
+                      
+                      
+                      
+                      
                               _interactionsReq.createReaction(reaction: Reaction(
                                 post: widget.id, 
                                 reaction: 1
                               ));
-
+                      
                               // setState(() {
                               //   widget.isReacted = !widget.isReacted;
                               //   print('latestIsReacted ${widget.isReacted.toString()}');
                               //   // userReaction = 'remove';
                               // });
-
-
+                      
+                      
                             }, 
                           )
                         ],

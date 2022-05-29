@@ -523,11 +523,13 @@ class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAl
                                         Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text(
-                                              '${userInfo['name']}',
-                                              style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold,
+                                            Expanded(
+                                              child: Text(
+                                                '${userInfo['name']}',
+                                                style: TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                               ),
                                             ),
                                             // default mode
@@ -627,9 +629,9 @@ class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAl
                                             ),
                                           ],
                                         ),
-                                        Text(
-                                          '@username'
-                                        ),
+                                        // Text(
+                                        //   '@username'
+                                        // ),
                                       ],
                                     ),
                                 ],

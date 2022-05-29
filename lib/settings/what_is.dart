@@ -53,7 +53,7 @@ class WhatIs extends StatelessWidget {
               SizedBox(height: 16,),
                 RichText(
                   text: TextSpan(
-                    text: "Animizu is an artwork platform specified for Anime & Manga. Artists can showcase their artworks and manage their own portfolio. Fans can find fanarts of their favorite Anime/Manga character and so many other original artworks as well. You can share your own digital arts, pencil drawings, glow arts, pixel arts, sketches, 3-D designs, cosplays, and any kind of related art. You don’t have to be a professional artist. Even if your skills are in the initial stage feel free to share and ask for suggestions from others. Don’t forget to appreciate others' artworks as well.",
+                    text: "Animizu is an artwork platform specified for Anime & Manga. Artists can showcase their artworks and manage their own portfolio. Fans can find fanarts of their favorite Anime/Manga characters and so many other original artworks as well. You can share your own digital arts, pencil drawings, glow arts, pixel arts, sketches, 3-D designs, cosplays, and any kind of related art. You don’t have to be a professional artist. Even if your skills are in the initial stage feel free to share and ask for suggestions from others. Don’t forget to appreciate others' artworks as well.",
                     style: GoogleFonts.share(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,

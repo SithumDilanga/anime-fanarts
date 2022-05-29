@@ -206,177 +206,210 @@ class _CommentSecionState extends State<CommentSecion> {
                         ),
                         SizedBox(width: 12.0,),
                         Expanded(
-                          child: Row(
-                          children: [
-                            Text(
-                              '$commentReplyMention',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: ColorTheme.primary
-                              ),
-                            ),
-                            SizedBox(width: 4.0,),
-                            Expanded(
-                              child: TextFormField(
-                                controller: commentTextController,
-                                // initialValue: commentReplyMention.isNotEmpty ? commentReplyMention : null,
-                                cursorColor: ColorTheme.primary,
-                                maxLines: null,
-                                keyboardType: TextInputType.multiline,
-                                decoration: InputDecoration(
-                                  focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(color: ColorTheme.primary)
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Text(
+                              //   ' replying to $commentReplyMention',
+                              //   style: TextStyle(
+                              //     fontSize: 16,
+                              //     fontWeight: FontWeight.bold,
+                              //     color: ColorTheme.primary
+                              //   ),
+                              // ),
+                              if(commentReplyMention.isNotEmpty)
+                              RichText(
+                                text: TextSpan(
+                                  text: 'Replying to ',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black
                                   ),
-                                  // errorText: emailErrorText
-                                  hintText: 'Leave a comment...'
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text: '$commentReplyMention', 
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: ColorTheme.primary
+                                      )
+                                    ),
+                                  ],
                                 ),
-                                style: TextStyle(
-                                  fontSize: 16
+                              ),
+                              Row(
+                              children: [
+                                // Text(
+                                //   '$commentReplyMention',
+                                //   style: TextStyle(
+                                //     fontSize: 16,
+                                //     fontWeight: FontWeight.bold,
+                                //     color: ColorTheme.primary
+                                //   ),
+                                // ),
+                                SizedBox(width: 4.0,),
+                                Expanded(
+                                  child: TextFormField(
+                                    controller: commentTextController,
+                                    // initialValue: commentReplyMention.isNotEmpty ? commentReplyMention : null,
+                                    cursorColor: ColorTheme.primary,
+                                    maxLines: null,
+                                    keyboardType: TextInputType.multiline,
+                                    decoration: InputDecoration(
+                                      focusedBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(color: ColorTheme.primary)
+                                      ),
+                                      // errorText: emailErrorText
+                                      hintText: 'Leave a comment...'
+                                    ),
+                                    style: TextStyle(
+                                      fontSize: 16
+                                    ),
+                                    // validation
+                                    validator: (val) => val!.isEmpty ? 'Enter an Email' : null,
+                                    onChanged: (val) {
+                                    },
+                                  ),
                                 ),
-                                // validation
-                                validator: (val) => val!.isEmpty ? 'Enter an Email' : null,
-                                onChanged: (val) {
-                                },
-                              ),
-                            ),
-                            IconButton(
-                              icon: Icon(
-                                Icons.send_rounded,
-                                size: 28,
-                                color: ColorTheme.primary,
-                              ),
-                              onPressed: () {
+                                IconButton(
+                                  icon: Icon(
+                                    Icons.send_rounded,
+                                    size: 28,
+                                    color: ColorTheme.primary,
+                                  ),
+                                  onPressed: () {
 
-                                if(commentTextController.text.isNotEmpty && (replyingComment.contains('sub_comment') || replyingComment.contains('main_comment_reply'))) {
+                                    if(commentTextController.text.isNotEmpty && (replyingComment.contains('sub_comment') || replyingComment.contains('main_comment_reply'))) {
 
-                                  print('sub main comment');
+                                      print('sub main comment');
 
-                                  if(commentId.isNotEmpty) {
+                                      if(commentId.isNotEmpty) {
 
-                                    _interactionsReq.addNewReplyComment(
-                                      commentText: commentTextController.text, 
-                                      commentId: commentId,
-                                      postId: widget.postId,
-                                      replyMention: commentReplyMention
-                                    ).whenComplete(() {
+                                        _interactionsReq.addNewReplyComment(
+                                          commentText: commentTextController.text, 
+                                          commentId: commentId,
+                                          postId: widget.postId,
+                                          replyMention: commentReplyMention
+                                        ).whenComplete(() {
 
-                                      setState(() {
-                                        commentTextController.clear();
-                                        _pagingController.refresh();
-                                      });
+                                          setState(() {
+                                            commentTextController.clear();
+                                            _pagingController.refresh();
+                                          });
 
-                                    });
+                                        });
 
 
-                                    if(replyCommentUserId == widget.userId) {
+                                        if(replyCommentUserId == widget.userId) {
 
-                                      // when test1 mentioning himself in his own post own comment
+                                          // when test1 mentioning himself in his own post own comment
 
-                                      print('own_post_mention_comment');
+                                          print('own_post_mention_comment');
 
-                                      FirebaseCloudMessaging().sendCommentPushNotification(
-                                        userId: replyCommentUserId,
-                                        postId: widget.postId,
-                                        currentUserName: currentUserName,
-                                        commentType: 'own_post_mention_comment'
+                                          FirebaseCloudMessaging().sendCommentPushNotification(
+                                            userId: replyCommentUserId,
+                                            postId: widget.postId,
+                                            currentUserName: currentUserName,
+                                            commentType: 'own_post_mention_comment'
+                                          );
+
+                                        } else if(widget.userId != currentUserId && commentReplyMention.isNotEmpty) {
+
+                                          // when test2 replied to test1 in test3 post - test1 and test3 both should notify
+
+                                          print('widget.userId != currentUserId');
+
+                                          // notifying post owner
+                                          FirebaseCloudMessaging().sendCommentPushNotification(
+                                            userId: widget.userId,
+                                            postId: widget.postId,
+                                            currentUserName: currentUserName,
+                                            commentType: 'main_comment'
+                                          );
+
+                                          // notifying mention user
+                                          FirebaseCloudMessaging().sendCommentPushNotification(
+                                            userId: replyCommentUserId,
+                                            postId: widget.postId,
+                                            currentUserName: currentUserName,
+                                            commentType: 'mention_comment'
+                                          );
+
+                                        } 
+                                        else {
+
+                                          // when test1 user mentioning test2 user in test1's own art
+
+                                          print('mentioning');
+
+                                          print('replyCommentUserId $replyCommentUserId');
+
+                                          print('currentUserName $currentUserName');
+
+                                          FirebaseCloudMessaging().sendCommentPushNotification(
+                                            userId: replyCommentUserId,
+                                            postId: widget.postId,
+                                            currentUserName: currentUserName,
+                                            commentType: 'mention_comment'
+                                          );
+
+                                        }
+
+
+                                        // if there is a new reply comment post user also notifies TODO: check this logic works
+                                        // if(widget.userId != currentUserId) {
+
+                                        //   FirebaseCloudMessaging().sendCommentPushNotification(
+                                        //     userId: widget.userId,
+                                        //     postId: widget.postId,
+                                        //     currentUserName: currentUserName,
+                                        //     commentType: 'main_comment'
+                                        //   );
+
+                                        // }
+
+                                      }
+                                        
+                                    } else if(commentReplyMention.isEmpty && commentTextController.text.isNotEmpty) {
+
+                                      // test2 user adding a main comment to test1's post
+
+                                      print('adding main comment');
+
+                                      _interactionsReq.addNewComment(
+                                        commentTextController.text, 
+                                        widget.postId,
                                       );
 
-                                    } else if(widget.userId != currentUserId && commentReplyMention.isNotEmpty) {
-
-                                      // when test2 replied to test1 in test3 post - test1 and test3 both should notify
-
-                                      print('widget.userId != currentUserId');
-
-                                      // notifying post owner
                                       FirebaseCloudMessaging().sendCommentPushNotification(
                                         userId: widget.userId,
                                         postId: widget.postId,
                                         currentUserName: currentUserName,
                                         commentType: 'main_comment'
                                       );
+                              
+                                      setState(() {
+                                        commentTextController.clear();
+                                        _pagingController.refresh();
+                                      });
 
-                                      // notifying mention user
-                                      FirebaseCloudMessaging().sendCommentPushNotification(
-                                        userId: replyCommentUserId,
-                                        postId: widget.postId,
-                                        currentUserName: currentUserName,
-                                        commentType: 'mention_comment'
-                                      );
+                                    } else {
 
-                                    } 
-                                    else {
-
-                                      // when test1 user mentioning test2 user in test1's own art
-
-                                      print('mentioning');
-
-                                      print('replyCommentUserId $replyCommentUserId');
-
-                                      print('currentUserName $currentUserName');
-
-                                      FirebaseCloudMessaging().sendCommentPushNotification(
-                                        userId: replyCommentUserId,
-                                        postId: widget.postId,
-                                        currentUserName: currentUserName,
-                                        commentType: 'mention_comment'
+                                      Fluttertoast.showToast(
+                                        msg: "comment text is empty",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.BOTTOM,
+                                        fontSize: 16.0
                                       );
 
                                     }
-
-
-                                    // if there is a new reply comment post user also notifies TODO: check this logic works
-                                    // if(widget.userId != currentUserId) {
-
-                                    //   FirebaseCloudMessaging().sendCommentPushNotification(
-                                    //     userId: widget.userId,
-                                    //     postId: widget.postId,
-                                    //     currentUserName: currentUserName,
-                                    //     commentType: 'main_comment'
-                                    //   );
-
-                                    // }
-
-                                  }
-                                    
-                                } else if(commentReplyMention.isEmpty && commentTextController.text.isNotEmpty) {
-
-                                  // test2 user adding a main comment to test1's post
-
-                                  print('adding main comment');
-
-                                  _interactionsReq.addNewComment(
-                                    commentTextController.text, 
-                                    widget.postId,
-                                  );
-
-                                  FirebaseCloudMessaging().sendCommentPushNotification(
-                                    userId: widget.userId,
-                                    postId: widget.postId,
-                                    currentUserName: currentUserName,
-                                    commentType: 'main_comment'
-                                  );
-                          
-                                  setState(() {
-                                    commentTextController.clear();
-                                    _pagingController.refresh();
-                                  });
-
-                                } else {
-
-                                  Fluttertoast.showToast(
-                                    msg: "comment text is empty",
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.BOTTOM,
-                                    fontSize: 16.0
-                                  );
-
-                                }
-                                                              
-                              }, 
-                            )
-                          ],
+                                                                  
+                                  }, 
+                                )
+                              ],
                         ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
