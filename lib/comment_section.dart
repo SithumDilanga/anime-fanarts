@@ -304,8 +304,6 @@ class _CommentSecionState extends State<CommentSecion> {
 
                                           // when test1 mentioning himself in his own post own comment
 
-                                          print('own_post_mention_comment');
-
                                           FirebaseCloudMessaging().sendCommentPushNotification(
                                             userId: replyCommentUserId,
                                             postId: widget.postId,
@@ -316,8 +314,6 @@ class _CommentSecionState extends State<CommentSecion> {
                                         } else if(widget.userId != currentUserId && commentReplyMention.isNotEmpty) {
 
                                           // when test2 replied to test1 in test3 post - test1 and test3 both should notify
-
-                                          print('widget.userId != currentUserId');
 
                                           // notifying post owner
                                           FirebaseCloudMessaging().sendCommentPushNotification(
@@ -339,12 +335,6 @@ class _CommentSecionState extends State<CommentSecion> {
                                         else {
 
                                           // when test1 user mentioning test2 user in test1's own art
-
-                                          print('mentioning');
-
-                                          print('replyCommentUserId $replyCommentUserId');
-
-                                          print('currentUserName $currentUserName');
 
                                           FirebaseCloudMessaging().sendCommentPushNotification(
                                             userId: replyCommentUserId,

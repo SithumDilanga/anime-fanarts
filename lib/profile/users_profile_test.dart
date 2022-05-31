@@ -3,6 +3,7 @@ import 'package:anime_fanarts/post.dart';
 import 'package:anime_fanarts/profile/followers_list.dart';
 import 'package:anime_fanarts/report/reasons_user_report.dart';
 import 'package:anime_fanarts/services/block_user_req.dart';
+import 'package:anime_fanarts/services/fcm.dart';
 import 'package:anime_fanarts/services/profile_req.dart';
 import 'package:anime_fanarts/services/secure_storage.dart';
 import 'package:anime_fanarts/services/shared_pref.dart';
@@ -59,6 +60,8 @@ class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAl
      "coverPic": "default-cover-pic.png",
      "name": "Loading...",
    };
+
+  String? currentUserName = '';
 
   final PagingController<int, dynamic> _pagingController = PagingController(firstPageKey: 1);
 
@@ -182,7 +185,7 @@ class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAl
 
     currentUserId = await SecureStorage.getUserId() ?? '';
 
-    print('currentUserId $currentUserId');
+    currentUserName = SharedPref.getUserName();
 
   }
 
@@ -480,6 +483,17 @@ class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAl
                                       _profileReq.addNewfollowUpUser(
                                         userId: widget.userId
                                       );
+
+                                      if(isFollow) {
+
+                                        FirebaseCloudMessaging().sendCommentPushNotification(
+                                          userId: widget.userId,
+                                          currentUserName: currentUserName,
+                                          commentType: 'user_started_following'
+                                        );
+
+                                      }
+
 
                                     } : null, 
                                   ),

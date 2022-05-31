@@ -6,6 +6,7 @@ import 'package:anime_fanarts/explore.dart';
 import 'package:anime_fanarts/intro_screen.dart';
 import 'package:anime_fanarts/models/profile_user.dart';
 import 'package:anime_fanarts/models/reacted_posts.dart';
+import 'package:anime_fanarts/profile/followers_list.dart';
 import 'package:anime_fanarts/profile/profile.dart';
 import 'package:anime_fanarts/profile/profile_test.dart';
 import 'package:anime_fanarts/profile/users_profile.dart';
@@ -143,6 +144,13 @@ class _MyAppState extends State<MyApp> {
             )),
           );
 
+        } else if(message.data['screen'] == 'followers_list') {
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => FollowersList()),
+          );
+
         }
         
       });
@@ -159,6 +167,13 @@ class _MyAppState extends State<MyApp> {
               userId: message?.data['userId'], 
               postId: message?.data['postId']
             )),
+          );
+
+        } else if(message?.data['screen'] == 'followers_list') {
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => FollowersList()),
           );
 
         }

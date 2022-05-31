@@ -86,7 +86,7 @@ class _FollowersListState extends State<FollowersList> {
           }, 
         ),
         title: Text(
-          'Followed Users'
+          'Followers'
         ),
       ),
       body: RefreshIndicator(

@@ -158,20 +158,20 @@ class FirebaseCloudMessaging {
         headers: {'Authorization': 'Bearer $bearerToken'},
       ));
 
-      // Fluttertoast.showToast(
-      //   msg: 'comment notification has been sent!',
-      //   toastLength: Toast.LENGTH_LONG,
-      // );
+      Fluttertoast.showToast(
+        msg: 'comment notification has been sent!',
+        toastLength: Toast.LENGTH_LONG,
+      );
 
 
     } on DioError catch (e) {
 
       if (e.response != null) {
 
-        // Fluttertoast.showToast(
-        //   msg: 'Error sending notification!',
-        //   toastLength: Toast.LENGTH_LONG,
-        // );
+        Fluttertoast.showToast(
+          msg: 'Error sending notification!',
+          toastLength: Toast.LENGTH_LONG,
+        );
 
         // throw Error();
         throw(e.response!.data['message']);

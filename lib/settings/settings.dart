@@ -9,6 +9,7 @@ import 'package:anime_fanarts/settings/contact_us.dart';
 import 'package:anime_fanarts/settings/fcm_test.dart';
 import 'package:anime_fanarts/settings/feedback.dart';
 import 'package:anime_fanarts/settings/guidelines.dart';
+import 'package:anime_fanarts/settings/notifications.dart';
 import 'package:anime_fanarts/settings/privacy_policy.dart';
 import 'package:anime_fanarts/settings/terms_of_use.dart';
 import 'package:anime_fanarts/settings/what_is.dart';
@@ -211,6 +212,18 @@ class _SettingsState extends State<Settings> {
                     RouteTransAnim().createRoute(
                       1.0, 0.0, 
                       PrivacyPolicy()
+                    )
+                  );
+                }
+              ),
+              CustomeListTile(
+                Icons.notifications_none_rounded,
+                'Notifications',
+                () {
+                  Navigator.of(context).push(
+                    RouteTransAnim().createRoute(
+                      1.0, 0.0, 
+                      NotificationSettings()
                     )
                   );
                 }
