@@ -10,6 +10,7 @@ import 'package:anime_fanarts/profile/followers_list.dart';
 import 'package:anime_fanarts/profile/profile.dart';
 import 'package:anime_fanarts/profile/profile_test.dart';
 import 'package:anime_fanarts/profile/users_profile.dart';
+import 'package:anime_fanarts/profile/users_profile_test.dart';
 import 'package:anime_fanarts/search/search-2.dart';
 import 'package:anime_fanarts/search/search-3.dart';
 import 'package:anime_fanarts/search/search_start.dart';
@@ -151,6 +152,16 @@ class _MyAppState extends State<MyApp> {
             MaterialPageRoute(builder: (context) => FollowersList()),
           );
 
+        } else if(message.data['screen'] == 'user_profile') {
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => UsersProfileTest(
+              userId: message.data['userId'],
+              name: message.data['artistName'],
+            )),
+          );
+
         }
         
       });
@@ -174,6 +185,16 @@ class _MyAppState extends State<MyApp> {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => FollowersList()),
+          );
+
+        } else if(message?.data['screen'] == 'user_profile') {
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => UsersProfileTest(
+              userId: message?.data['userId'],
+              name: message?.data['artistName'],
+            )),
           );
 
         }

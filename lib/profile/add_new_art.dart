@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'package:anime_fanarts/main.dart';
+import 'package:anime_fanarts/services/fcm.dart';
 import 'package:anime_fanarts/services/firestore_service.dart';
 import 'package:anime_fanarts/services/get_create_posts.dart';
+import 'package:anime_fanarts/services/shared_pref.dart';
 import 'package:anime_fanarts/settings/guidelines.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/loading_animation.dart';
@@ -31,12 +33,15 @@ class _AddNewArtState extends State<AddNewArt> {
   final tagTextController = TextEditingController();
   final descTextController = TextEditingController();
 
+  String? currentUserName = '';
+
   final picker = ImagePicker();
   List? _postImages = [];
 
   final FirestoreService _firestireService = FirestoreService();
 
   GetCreatePosts _getCreatePosts = GetCreatePosts();
+  FirebaseCloudMessaging _fcm = FirebaseCloudMessaging();
 
   bool isLoading = false;
 
@@ -312,6 +317,10 @@ class _AddNewArtState extends State<AddNewArt> {
                           tags: tagList
                         ).whenComplete(() {
 
+                          _fcm.sendPushNotificationToSubs(
+                            artistName: currentUserName
+                          );
+
                           if(isRateAvailable) {
 
                             Future.delayed(const Duration(milliseconds: 5), () {
@@ -346,6 +355,18 @@ class _AddNewArtState extends State<AddNewArt> {
         );
       },
     );
+  }
+
+  void init() async {
+    currentUserName = SharedPref.getUserName();
+  }
+
+  @override
+  void initState() {
+    
+    init();
+
+    super.initState();
   }
   
   @override

@@ -174,7 +174,7 @@ class FirebaseCloudMessaging {
         );
 
         // throw Error();
-        throw(e.response!.data['message']);
+        throw(e.response!);
 
       } else {
 
@@ -189,5 +189,53 @@ class FirebaseCloudMessaging {
   }
 
   // -------------- End send commented push notification -------------
+
+
+  // -------------- send pusn notification to subscribed users -------------
+
+  Future sendPushNotificationToSubs({String? artistName}) async {
+
+    try {
+
+      final bearerToken = await SecureStorage.getToken() ?? '';    
+      
+      
+      Response userNotification = await _dio.post('$URL/fcm/sendMsgToSubsUsers', data: {
+        'artistName': artistName,
+      }, options: Options(
+        headers: {'Authorization': 'Bearer $bearerToken'},
+      ));
+
+      Fluttertoast.showToast(
+        msg: 'all sub users notified!',
+        toastLength: Toast.LENGTH_LONG,
+      );
+
+
+    } on DioError catch (e) {
+
+      if (e.response != null) {
+
+        Fluttertoast.showToast(
+          msg: 'Error sending notification!',
+          toastLength: Toast.LENGTH_LONG,
+        );
+
+        // throw Error();
+        throw(e.response!);
+
+      } else {
+
+        // Fluttertoast.showToast(
+        //   msg: 'Error sending notification!',
+        //   toastLength: Toast.LENGTH_LONG,
+        // );
+
+      }
+
+    }
+  }
+
+  // -------------- End send pusn notification to subscribed users -------------
 
 }

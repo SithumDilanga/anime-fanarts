@@ -450,7 +450,7 @@ class ProfileReq {
 
   // ------------ End update social platforms -------------
 
-  // ------------ update social platforms -------------
+  // ------------ follow user -------------
 
   Future addNewfollowUpUser({String? userId}) async {
 
@@ -478,10 +478,6 @@ class ProfileReq {
 
       print('response $response');
 
-      Fluttertoast.showToast(
-        msg: 'succesfully followed!',
-        toastLength: Toast.LENGTH_LONG,
-      );
 
     } on DioError catch (e) {
 
@@ -507,6 +503,8 @@ class ProfileReq {
     }
 
   }
+
+  // ------------ End follow user -------------
 
   // ------------ get followers list -------------
 
@@ -543,5 +541,51 @@ class ProfileReq {
   }
 
   // ------------ End get followers list -------------
+
+  // ------------ subscribe to a user after followed up -------------
+
+  Future subscribeToUser({String? followedUserId}) async {
+
+    try {
+
+      final bearerToken = await SecureStorage.getToken() ?? '';
+      // final followedUserId = await SecureStorage.getUserId() ?? '';
+      // final deviceId = await SecureStorage.getDeviceId() ?? '';
+
+
+      Response response = await _dio.post('$URL/follow/subscribeToUser', data: {
+        'followedUser': followedUserId,
+      }, options: Options(
+        headers: {'Authorization': 'Bearer $bearerToken'},
+      ));
+
+      print('response $response');
+
+
+    } on DioError catch (e) {
+
+      if (e.response != null) {
+
+        Fluttertoast.showToast(
+          msg: 'Error subscribing!',
+          toastLength: Toast.LENGTH_LONG,
+        );
+
+        // throw Error();
+        throw(e.response!.data['message']);
+
+      } else {
+
+        Fluttertoast.showToast(
+          msg: 'Error subscribing!',
+          toastLength: Toast.LENGTH_LONG,
+        );
+
+      }
+    }
+
+  }
+
+  // ------------ End subscribe to a user after followed up -------------
 
 }

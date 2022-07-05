@@ -12,8 +12,10 @@ import 'package:anime_fanarts/utils/error_loading.dart';
 import 'package:anime_fanarts/utils/loading_animation.dart';
 import 'package:anime_fanarts/utils/route_trans_anim.dart';
 import 'package:anime_fanarts/utils/urls.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:anime_fanarts/utils/custom_icons.dart';
@@ -54,6 +56,8 @@ class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAl
   static const _pageSize = 8;
   List reactedPosts = [];
   bool isFollow = false;
+  bool isSubscribed = false;
+  bool isGetNotified = false;
   bool isFollowDefaultMode = false;
   dynamic userInfo = {
      "profilePic": "default-profile-pic.jpg",
@@ -98,6 +102,7 @@ class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAl
         if(allPostsData['followed'] != null) {
           isFollow = allPostsData['followed'];
           isFollowDefaultMode = allPostsData['followed'];
+          isSubscribed = allPostsData['isSubscribed'];
         }
 
       });
@@ -242,6 +247,59 @@ class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAl
               ),
             ),
             actions: [
+              if(isFollow)
+                IconButton(
+                  icon: Icon(
+                    isSubscribed ? Icons.notifications_active : Icons.notifications
+                  ),
+                  onPressed: () async {
+
+                      setState(() {
+                        isSubscribed = !isSubscribed;
+                      });
+
+                      _profileReq.subscribeToUser(
+                        followedUserId: widget.userId
+                      );
+
+                      if(isSubscribed) {
+
+                        await FirebaseMessaging.instance.subscribeToTopic("${widget.userId}").then((value) {
+
+                          Fluttertoast.showToast(
+                            msg: 'You will be notified when this artist add a new art!',
+                            toastLength: Toast.LENGTH_LONG,
+                          );
+
+                        });
+
+                      } else {
+
+                        await FirebaseMessaging.instance.unsubscribeFromTopic("${widget.userId}").then((value) {
+
+                          Fluttertoast.showToast(
+                            msg: "You won't get notifications from this artist anymore",
+                            toastLength: Toast.LENGTH_LONG,
+                          );
+
+                        });
+
+                      }
+
+                    // }
+                    // );
+                  }, 
+                ),
+                // IconButton(
+                //   icon: Icon(
+                //     isGetNotified ? Icons.notifications_active : Icons.notifications
+                //   ),
+                //   onPressed: () {
+                //     setState(() {
+                //       isGetNotified = !isGetNotified;
+                //     });
+                //   }, 
+                // ),
               PopupMenuButton(
                 color: Colors.grey[200],
                 icon: Icon(
@@ -486,11 +544,24 @@ class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAl
 
                                       if(isFollow) {
 
+                                        Fluttertoast.showToast(
+                                          msg: 'succesfully followed!',
+                                          toastLength: Toast.LENGTH_LONG,
+                                        );
+
                                         FirebaseCloudMessaging().sendCommentPushNotification(
                                           userId: widget.userId,
                                           currentUserName: currentUserName,
                                           commentType: 'user_started_following'
                                         );
+
+                                      } else {
+
+                                        Fluttertoast.showToast(
+                                          msg: 'succesfully unfollowed!',
+                                          toastLength: Toast.LENGTH_LONG,
+                                        );
+
 
                                       }
 
