@@ -204,7 +204,7 @@ class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAl
     init();
 
     // Enable virtual display.
-    if (Platform.isAndroid) WebView.platform = AndroidWebView();
+    // if (Platform.isAndroid) WebView.platform = AndroidWebView();
 
     super.initState();
   }
@@ -247,49 +247,49 @@ class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAl
               ),
             ),
             actions: [
-              if(isFollow)
-                IconButton(
-                  icon: Icon(
-                    isSubscribed ? Icons.notifications_active : Icons.notifications
-                  ),
-                  onPressed: () async {
+              // if(isFollow)
+              //   IconButton(
+              //     icon: Icon(
+              //       isSubscribed ? Icons.notifications_active : Icons.notifications
+              //     ),
+              //     onPressed: () async {
 
-                      setState(() {
-                        isSubscribed = !isSubscribed;
-                      });
+              //         setState(() {
+              //           isSubscribed = !isSubscribed;
+              //         });
 
-                      _profileReq.subscribeToUser(
-                        followedUserId: widget.userId
-                      );
+              //         _profileReq.subscribeToUser(
+              //           followedUserId: widget.userId
+              //         );
 
-                      if(isSubscribed) {
+              //         if(isSubscribed) {
 
-                        await FirebaseMessaging.instance.subscribeToTopic("${widget.userId}").then((value) {
+              //           await FirebaseMessaging.instance.subscribeToTopic("${widget.userId}").then((value) {
 
-                          Fluttertoast.showToast(
-                            msg: 'You will be notified when this artist add a new art!',
-                            toastLength: Toast.LENGTH_LONG,
-                          );
+              //             Fluttertoast.showToast(
+              //               msg: 'You will be notified when this artist add a new art!',
+              //               toastLength: Toast.LENGTH_LONG,
+              //             );
 
-                        });
+              //           });
 
-                      } else {
+              //         } else {
 
-                        await FirebaseMessaging.instance.unsubscribeFromTopic("${widget.userId}").then((value) {
+              //           await FirebaseMessaging.instance.unsubscribeFromTopic("${widget.userId}").then((value) {
 
-                          Fluttertoast.showToast(
-                            msg: "You won't get notifications from this artist anymore",
-                            toastLength: Toast.LENGTH_LONG,
-                          );
+              //             Fluttertoast.showToast(
+              //               msg: "You won't get notifications from this artist anymore",
+              //               toastLength: Toast.LENGTH_LONG,
+              //             );
 
-                        });
+              //           });
 
-                      }
+              //         }
 
-                    // }
-                    // );
-                  }, 
-                ),
+              //       // }
+              //       // );
+              //     }, 
+              //   ),
                 // IconButton(
                 //   icon: Icon(
                 //     isGetNotified ? Icons.notifications_active : Icons.notifications
@@ -504,69 +504,118 @@ class UsersProfileTestState extends State<UsersProfileTest> with AutomaticKeepAl
                               alignment: Alignment.bottomRight,
                               child: Column(
                                 children: [
-                                  ElevatedButton(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-                                      child: Text(
-                                        isFollow ? 'Following' : 'Follow',
-                                        style: TextStyle(
-                                          color: isFollow ? Colors.white : ColorTheme.primary
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      if(isFollow)
+                                        IconButton(
+                                          icon: Icon(
+                                            isSubscribed ? Icons.notifications_active : Icons.notifications_none_rounded,
+                                            color: ColorTheme.primary,
+                                          ),
+                                          onPressed: () async {
+
+                                              setState(() {
+                                                isSubscribed = !isSubscribed;
+                                              });
+
+                                              _profileReq.subscribeToUser(
+                                                followedUserId: widget.userId
+                                              );
+
+                                              if(isSubscribed) {
+
+                                                await FirebaseMessaging.instance.subscribeToTopic("${widget.userId}").then((value) {
+
+                                                  Fluttertoast.showToast(
+                                                    msg: 'You will be notified when this artist add a new art!',
+                                                    toastLength: Toast.LENGTH_LONG,
+                                                  );
+
+                                                });
+
+                                              } else {
+
+                                                await FirebaseMessaging.instance.unsubscribeFromTopic("${widget.userId}").then((value) {
+
+                                                  Fluttertoast.showToast(
+                                                    msg: "You won't get notifications from this artist anymore",
+                                                    toastLength: Toast.LENGTH_LONG,
+                                                  );
+
+                                                });
+
+                                              }
+
+                                            // }
+                                            // );
+                                          }, 
                                         ),
+                                      ElevatedButton(
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+                                          child: Text(
+                                            isFollow ? 'Following' : 'Follow',
+                                            style: TextStyle(
+                                              color: isFollow ? Colors.white : ColorTheme.primary
+                                            ),
+                                          ),
+                                        ),
+                                        style: ElevatedButton.styleFrom(
+                                          side: BorderSide(
+                                            width: 1.5, 
+                                            color: ColorTheme.primary,
+                                          ),
+                                          primary: isFollow ? ColorTheme.primary : Colors.white,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(25),
+                                          ),
+                                          // elevation: 4.0,
+                                        ),
+                                        onPressed: currentUserId != userInfo['_id'] ? () {
+
+                                          setState(() {
+                                            isFollow = !isFollow;
+                                            
+                                            followUserActionState++;
+
+                                            if(followUserActionState == 3) {
+                                              followUserActionState = 1;
+                                            }
+
+                                          });
+
+                                          _profileReq.addNewfollowUpUser(
+                                            userId: widget.userId
+                                          );
+
+                                          if(isFollow) {
+
+                                            Fluttertoast.showToast(
+                                              msg: 'succesfully followed!',
+                                              toastLength: Toast.LENGTH_LONG,
+                                            );
+
+                                            FirebaseCloudMessaging().sendCommentPushNotification(
+                                              userId: widget.userId,
+                                              currentUserName: currentUserName,
+                                              commentType: 'user_started_following'
+                                            );
+
+                                          } else {
+
+                                            Fluttertoast.showToast(
+                                              msg: 'succesfully unfollowed!',
+                                              toastLength: Toast.LENGTH_LONG,
+                                            );
+
+
+                                          }
+
+
+                                        } : null, 
                                       ),
-                                    ),
-                                    style: ElevatedButton.styleFrom(
-                                      side: BorderSide(
-                                        width: 1.5, 
-                                        color: ColorTheme.primary,
-                                      ),
-                                      primary: isFollow ? ColorTheme.primary : Colors.white,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(25),
-                                      ),
-                                      // elevation: 4.0,
-                                    ),
-                                    onPressed: currentUserId != userInfo['_id'] ? () {
-
-                                      setState(() {
-                                        isFollow = !isFollow;
-                                        
-                                        followUserActionState++;
-
-                                        if(followUserActionState == 3) {
-                                          followUserActionState = 1;
-                                        }
-
-                                      });
-
-                                      _profileReq.addNewfollowUpUser(
-                                        userId: widget.userId
-                                      );
-
-                                      if(isFollow) {
-
-                                        Fluttertoast.showToast(
-                                          msg: 'succesfully followed!',
-                                          toastLength: Toast.LENGTH_LONG,
-                                        );
-
-                                        FirebaseCloudMessaging().sendCommentPushNotification(
-                                          userId: widget.userId,
-                                          currentUserName: currentUserName,
-                                          commentType: 'user_started_following'
-                                        );
-
-                                      } else {
-
-                                        Fluttertoast.showToast(
-                                          msg: 'succesfully unfollowed!',
-                                          toastLength: Toast.LENGTH_LONG,
-                                        );
-
-
-                                      }
-
-
-                                    } : null, 
+                                    ],
                                   ),
                                   // Text(
                                   //   '536 Followers'

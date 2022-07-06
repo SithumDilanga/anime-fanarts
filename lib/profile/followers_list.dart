@@ -116,6 +116,10 @@ class _FollowersListState extends State<FollowersList> {
                             'assets/images/profile-img-placeholder.jpg'
                           ),
                         ),
+                        trailing: Icon(
+                          item['subscribed'] ? Icons.notifications_active_rounded : null,
+                          color: ColorTheme.primary,
+                        ),
                         title: Text(
                           '${item['user']['name']}',
                           style: TextStyle(
@@ -133,6 +137,10 @@ class _FollowersListState extends State<FollowersList> {
                             '${item['user']['profilePic']}',
                             // cache: true,
                           ),
+                        ),
+                        trailing: Icon(
+                          item['subscribed'] ? Icons.notifications_active_rounded : null,
+                          color: ColorTheme.primary,
                         ),
                         title: Text(
                           '${item['user']['name']}',
