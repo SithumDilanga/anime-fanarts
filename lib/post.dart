@@ -15,6 +15,7 @@ import 'package:anime_fanarts/services/interactions.dart';
 import 'package:anime_fanarts/services/secure_storage.dart';
 import 'package:anime_fanarts/utils/colors.dart';
 import 'package:anime_fanarts/utils/date_time_formatter.dart';
+import 'package:anime_fanarts/utils/loading_animation.dart';
 import 'package:anime_fanarts/utils/route_trans_anim.dart';
 import 'package:anime_fanarts/utils/urls.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:extended_image/extended_image.dart';
 // import 'package:transparent_image/transparent_image.dart';
+import 'dart:ui' as ui;
 
 
 class Post extends StatefulWidget {
@@ -191,6 +193,19 @@ class _PostState extends State<Post> with AutomaticKeepAliveClientMixin<Post> {
     );
 
     final reactedPosts = Provider.of<ReactedPosts>(context);
+
+     Image _aspectRatioImage = new Image.network('${widget.postImg![0]}');
+     Completer<ui.Image> completer = new Completer<ui.Image>();
+
+     _aspectRatioImage.image
+       .resolve(new ImageConfiguration())
+       .addListener(new ImageStreamListener((ImageInfo image, bool _) {
+       completer.complete(image.image);
+     }));
+
+     double screenHeight = MediaQuery.of(context).size.height;
+
+    //  print('screenHeight $screenHeight');
 
       return Container(
         padding: EdgeInsets.symmetric(
@@ -572,110 +587,172 @@ class _PostState extends State<Post> with AutomaticKeepAliveClientMixin<Post> {
                 ),
               if(widget.postImg!.isNotEmpty)
 
-                CarouselSlider.builder(
-                  itemCount: widget.postImg!.length,
-                  itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
+                FutureBuilder<ui.Image>(
+                  future: completer.future,
+                  builder: (BuildContext context, AsyncSnapshot<ui.Image> snapshot) {
+
+                    if (snapshot.hasData) {
+                      
+                      print('image size : ${snapshot.data?.width} * ${snapshot.data?.height} ratio : ${snapshot.data!.width / snapshot.data!.height}');
+                      
+                      double aspectRatio =  snapshot.data!.width / snapshot.data!.height;
+
+                      if(aspectRatio <= 0.671) {
+                        aspectRatio = 0.8;
+                      }
+
+                      // int width = snapshot.data!.width;
+                      // int height = snapshot.data!.height;
+
+                      return CarouselSlider.builder(
+                      itemCount: widget.postImg!.length,
+                      itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
                 
-                    return GestureDetector(
-                      child: Hero(
-                        tag: '${widget.isUserPost.toString() + widget.postImg![itemIndex].toString()}',
-                        child: Stack(
-                          fit: StackFit.expand,
-                          children: [
-                            ExtendedImage.network(
-                              '${widget.postImg![itemIndex]}',
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                              cache: true,
-                              // cacheHeight: 500,
-                              cacheWidth: 600,
-                              loadStateChanged: (ExtendedImageState state) {
-                                switch (state.extendedImageLoadState) {
-                                  case LoadState.loading:
-                                    return Image.asset(
-                                      "assets/images/image placeholder 2.jpg",
-                                      fit: BoxFit.cover,
-                                    );
-                                    
-                                    case LoadState.completed:
-                                      return null;
+                        // Completer<ui.Image> completer = new Completer<ui.Image>();
+                
+                        // ExtendedImage _image = new ExtendedImage.network(
+                        //   '${widget.postImg![itemIndex]}',
+                        //   // width: double.infinity,
+                        //   // fit: BoxFit.fitHeight,
+                        //   cache: true,
+                        //   // cacheHeight: 500,
+                        //   cacheWidth: 600,
+                        //   loadStateChanged: (ExtendedImageState state) {
+                        //     switch (state.extendedImageLoadState) {
+                        //       case LoadState.loading:
+                        //         return Image.asset(
+                        //           "assets/images/image placeholder 2.jpg",
+                        //           fit: BoxFit.cover,
+                        //         );
+                                
+                        //         case LoadState.completed:
+                        //           return null;
+                        
+                        //         case LoadState.failed:
+                        //          return null;
+                        //     }
+                        //   },
+                        // ); 
+                
+                        // _image.image
+                        //   .resolve(new ImageConfiguration())
+                        //   .addListener(new ImageStreamListener((ImageInfo image, bool _) {
+                        //   completer.complete(image.image);
+                        // }));
                             
-                                    case LoadState.failed:
-                                     return null;
-                                }
-                              },
-                            ),
-                            Positioned.fill(
-                              top: 5,
-                              left: 5,
-                              child: ListView.builder(
-                                itemCount: widget.postImg!.length,
-                                scrollDirection: Axis.horizontal,
-                                itemBuilder: (context, index) {
-                              
-                                  if(index == itemIndex) {
-                              
-                                    return Stack(
-                                      children: [
-                                        Text(
-                                          '${index + 1}/${widget.postImg!.length}',
-                                          style: TextStyle(
-                                            fontSize: 11,
-                                            foreground: Paint()
-                                            ..style = PaintingStyle.stroke
-                                            ..strokeWidth = 0.8
-                                            ..color = Colors.white,
-                                          ),
-                                        ),
-                                        Text(
-                                          '${index + 1}/${widget.postImg!.length}',
-                                          style: TextStyle(
-                                            color: Colors.black.withOpacity(0.5),
-                                            fontSize: 11
-                                          ),
-                                        ),
-                                      ],
-                                    );
-                              
-                                  }
-                                          
-                                  return Text(
-                                    ''
-                                  );
-                              
-                                  // return Icon(
-                                  //   Icons.circle
-                                  // );
-                                }, 
+                            return GestureDetector(
+                              child: Hero(
+                                tag: '${widget.isUserPost.toString() + widget.postImg![itemIndex].toString()}',
+                                child: Stack(
+                                  fit: StackFit.expand,
+                                  children: [
+                                    FittedBox(
+                                      fit: BoxFit.fitWidth,
+                                      clipBehavior: Clip.hardEdge,
+                                      child: //_image
+                                      ExtendedImage.network(
+                                        '${widget.postImg![itemIndex]}',
+                                        // width: double.infinity,
+                                        // fit: BoxFit.fitHeight,
+                                        cache: true,
+                                        // cacheHeight: 500,
+                                        cacheWidth: 600,
+                                        loadStateChanged: (ExtendedImageState state) {
+                                          switch (state.extendedImageLoadState) {
+                                            case LoadState.loading:
+                                              return Image.asset(
+                                                "assets/images/image placeholder 2.jpg",
+                                                fit: BoxFit.cover,
+                                              );
+                                              
+                                              case LoadState.completed:
+                                                return null;
+                                      
+                                              case LoadState.failed:
+                                               return null;
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                    Positioned.fill(
+                                      top: 5,
+                                      left: 5,
+                                      child: ListView.builder(
+                                        itemCount: widget.postImg!.length,
+                                        scrollDirection: Axis.horizontal,
+                                        itemBuilder: (context, index) {
+                                      
+                                          if(index == itemIndex) {
+                                      
+                                            return Stack(
+                                              children: [
+                                                Text(
+                                                  '${index + 1}/${widget.postImg!.length}',
+                                                  style: TextStyle(
+                                                    fontSize: 11,
+                                                    foreground: Paint()
+                                                    ..style = PaintingStyle.stroke
+                                                    ..strokeWidth = 0.8
+                                                    ..color = Colors.white,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  '${index + 1}/${widget.postImg!.length}',
+                                                  style: TextStyle(
+                                                    color: Colors.black.withOpacity(0.5),
+                                                    fontSize: 11
+                                                  ),
+                                                ),
+                                              ],
+                                            );
+                                      
+                                          }
+                                                  
+                                          return Text(
+                                            ''
+                                          );
+                                      
+                                          // return Icon(
+                                          //   Icons.circle
+                                          // );
+                                        }, 
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
-                            )
-                          ],
-                        ),
-                      ),
-                      onTap: () {
-                    
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) { 
-                            return ImgFullScreen(
-                              imageList: widget.postImg, 
-                              selectedimageIndex: itemIndex, 
-                              imgLink: widget.postImg![itemIndex],
-                              isUserPost: widget.isUserPost,
-                              name: widget.name,
+                              onTap: () {
+                            
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) { 
+                                    return ImgFullScreen(
+                                      imageList: widget.postImg, 
+                                      selectedimageIndex: itemIndex, 
+                                      imgLink: widget.postImg![itemIndex],
+                                      isUserPost: widget.isUserPost,
+                                      name: widget.name,
+                                    );
+                                  }),
+                                );
+                            
+                              },
                             );
-                          }),
-                        );
-                    
                       },
+                      options: CarouselOptions(
+                        autoPlay: false,
+                        viewportFraction: 1,
+                        enableInfiniteScroll: false,
+                        // height: screenHeight * 0.5,
+                        aspectRatio: aspectRatio //snapshot.data!.width / snapshot.data!.height,
+                      ),
                     );
-                  },
-                  options: CarouselOptions(
-                    autoPlay: false,
-                    viewportFraction: 1,
-                    enableInfiniteScroll: false, 
-                    aspectRatio: 4/3,
-                  ),
+
+                    }
+
+                    return LoadingAnimation();
+
+                  }
                 ),
 
               Padding(
