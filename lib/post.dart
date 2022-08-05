@@ -587,173 +587,149 @@ class _PostState extends State<Post> with AutomaticKeepAliveClientMixin<Post> {
                 ),
               if(widget.postImg!.isNotEmpty)
 
-                FutureBuilder<ui.Image>(
-                  future: completer.future,
-                  builder: (BuildContext context, AsyncSnapshot<ui.Image> snapshot) {
-
-                    if (snapshot.hasData) {
-                      
-                      print('image size : ${snapshot.data?.width} * ${snapshot.data?.height} ratio : ${snapshot.data!.width / snapshot.data!.height}');
-                      
-                      double aspectRatio =  snapshot.data!.width / snapshot.data!.height;
-
-                      if(aspectRatio <= 0.671) {
-                        aspectRatio = 0.8;
-                      }
-
-                      // int width = snapshot.data!.width;
-                      // int height = snapshot.data!.height;
-
-                      return CarouselSlider.builder(
-                      itemCount: widget.postImg!.length,
-                      itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
+                CarouselSlider.builder(
+                 itemCount: widget.postImg!.length,
+                 itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
                 
-                        // Completer<ui.Image> completer = new Completer<ui.Image>();
+                   // Completer<ui.Image> completer = new Completer<ui.Image>();
                 
-                        // ExtendedImage _image = new ExtendedImage.network(
-                        //   '${widget.postImg![itemIndex]}',
-                        //   // width: double.infinity,
-                        //   // fit: BoxFit.fitHeight,
-                        //   cache: true,
-                        //   // cacheHeight: 500,
-                        //   cacheWidth: 600,
-                        //   loadStateChanged: (ExtendedImageState state) {
-                        //     switch (state.extendedImageLoadState) {
-                        //       case LoadState.loading:
-                        //         return Image.asset(
-                        //           "assets/images/image placeholder 2.jpg",
-                        //           fit: BoxFit.cover,
-                        //         );
-                                
-                        //         case LoadState.completed:
-                        //           return null;
-                        
-                        //         case LoadState.failed:
-                        //          return null;
-                        //     }
-                        //   },
-                        // ); 
+                   // ExtendedImage _image = new ExtendedImage.network(
+                   //   '${widget.postImg![itemIndex]}',
+                   //   // width: double.infinity,
+                   //   // fit: BoxFit.fitHeight,
+                   //   cache: true,
+                   //   // cacheHeight: 500,
+                   //   cacheWidth: 600,
+                   //   loadStateChanged: (ExtendedImageState state) {
+                   //     switch (state.extendedImageLoadState) {
+                   //       case LoadState.loading:
+                   //         return Image.asset(
+                   //           "assets/images/image placeholder 2.jpg",
+                   //           fit: BoxFit.cover,
+                   //         );
+                           
+                   //         case LoadState.completed:
+                   //           return null;
+                   
+                   //         case LoadState.failed:
+                   //          return null;
+                   //     }
+                   //   },
+                   // ); 
                 
-                        // _image.image
-                        //   .resolve(new ImageConfiguration())
-                        //   .addListener(new ImageStreamListener((ImageInfo image, bool _) {
-                        //   completer.complete(image.image);
-                        // }));
-                            
-                            return GestureDetector(
-                              child: Hero(
-                                tag: '${widget.isUserPost.toString() + widget.postImg![itemIndex].toString()}',
-                                child: Stack(
-                                  fit: StackFit.expand,
-                                  children: [
-                                    FittedBox(
-                                      fit: BoxFit.fitWidth,
-                                      clipBehavior: Clip.hardEdge,
-                                      child: //_image
-                                      ExtendedImage.network(
-                                        '${widget.postImg![itemIndex]}',
-                                        // width: double.infinity,
-                                        // fit: BoxFit.fitHeight,
-                                        cache: true,
-                                        // cacheHeight: 500,
-                                        cacheWidth: 600,
-                                        loadStateChanged: (ExtendedImageState state) {
-                                          switch (state.extendedImageLoadState) {
-                                            case LoadState.loading:
-                                              return Image.asset(
-                                                "assets/images/image placeholder 2.jpg",
-                                                fit: BoxFit.cover,
-                                              );
-                                              
-                                              case LoadState.completed:
-                                                return null;
-                                      
-                                              case LoadState.failed:
-                                               return null;
-                                          }
-                                        },
-                                      ),
-                                    ),
-                                    Positioned.fill(
-                                      top: 5,
-                                      left: 5,
-                                      child: ListView.builder(
-                                        itemCount: widget.postImg!.length,
-                                        scrollDirection: Axis.horizontal,
-                                        itemBuilder: (context, index) {
-                                      
-                                          if(index == itemIndex) {
-                                      
-                                            return Stack(
-                                              children: [
-                                                Text(
-                                                  '${index + 1}/${widget.postImg!.length}',
-                                                  style: TextStyle(
-                                                    fontSize: 11,
-                                                    foreground: Paint()
-                                                    ..style = PaintingStyle.stroke
-                                                    ..strokeWidth = 0.8
-                                                    ..color = Colors.white,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  '${index + 1}/${widget.postImg!.length}',
-                                                  style: TextStyle(
-                                                    color: Colors.black.withOpacity(0.5),
-                                                    fontSize: 11
-                                                  ),
-                                                ),
-                                              ],
-                                            );
-                                      
-                                          }
-                                                  
-                                          return Text(
-                                            ''
-                                          );
-                                      
-                                          // return Icon(
-                                          //   Icons.circle
-                                          // );
-                                        }, 
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              onTap: () {
-                            
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) { 
-                                    return ImgFullScreen(
-                                      imageList: widget.postImg, 
-                                      selectedimageIndex: itemIndex, 
-                                      imgLink: widget.postImg![itemIndex],
-                                      isUserPost: widget.isUserPost,
-                                      name: widget.name,
-                                    );
-                                  }),
-                                );
-                            
-                              },
-                            );
-                      },
-                      options: CarouselOptions(
-                        autoPlay: false,
-                        viewportFraction: 1,
-                        enableInfiniteScroll: false,
-                        // height: screenHeight * 0.5,
-                        aspectRatio: aspectRatio //snapshot.data!.width / snapshot.data!.height,
-                      ),
-                    );
-
-                    }
-
-                    return LoadingAnimation();
-
-                  }
-                ),
+                   // _image.image
+                   //   .resolve(new ImageConfiguration())
+                   //   .addListener(new ImageStreamListener((ImageInfo image, bool _) {
+                   //   completer.complete(image.image);
+                   // }));
+                       
+                       return GestureDetector(
+                         child: Hero(
+                           tag: '${widget.isUserPost.toString() + widget.postImg![itemIndex].toString()}',
+                           child: Stack(
+                             fit: StackFit.expand,
+                             children: [
+                               FittedBox(
+                                 fit: BoxFit.fitWidth,
+                                 clipBehavior: Clip.hardEdge,
+                                 child: //_image
+                                 ExtendedImage.network(
+                                   '${widget.postImg![itemIndex]}',
+                                   // width: double.infinity,
+                                   // fit: BoxFit.fitHeight,
+                                   cache: true,
+                                   // cacheHeight: 500,
+                                   cacheWidth: 600,
+                                   loadStateChanged: (ExtendedImageState state) {
+                                     switch (state.extendedImageLoadState) {
+                                       case LoadState.loading:
+                                         return Image.asset(
+                                           "assets/images/image placeholder 2.jpg",
+                                           fit: BoxFit.cover,
+                                         );
+                                         
+                                         case LoadState.completed:
+                                           return null;
+                                 
+                                         case LoadState.failed:
+                                          return null;
+                                     }
+                                   },
+                                 ),
+                               ),
+                               Positioned.fill(
+                                 top: 5,
+                                 left: 5,
+                                 child: ListView.builder(
+                                   itemCount: widget.postImg!.length,
+                                   scrollDirection: Axis.horizontal,
+                                   itemBuilder: (context, index) {
+                                   
+                                     if(index == itemIndex) {
+                                     
+                                       return Stack(
+                                         children: [
+                                           Text(
+                                             '${index + 1}/${widget.postImg!.length}',
+                                             style: TextStyle(
+                                               fontSize: 11,
+                                               foreground: Paint()
+                                               ..style = PaintingStyle.stroke
+                                               ..strokeWidth = 0.8
+                                               ..color = Colors.white,
+                                             ),
+                                           ),
+                                           Text(
+                                             '${index + 1}/${widget.postImg!.length}',
+                                             style: TextStyle(
+                                               color: Colors.black.withOpacity(0.5),
+                                               fontSize: 11
+                                             ),
+                                           ),
+                                         ],
+                                       );
+                                 
+                                     }
+                                             
+                                     return Text(
+                                       ''
+                                     );
+                                 
+                                     // return Icon(
+                                     //   Icons.circle
+                                     // );
+                                   }, 
+                                 ),
+                               )
+                             ],
+                           ),
+                         ),
+                         onTap: () {
+                         
+                           Navigator.push(
+                             context,
+                             MaterialPageRoute(builder: (context) { 
+                               return ImgFullScreen(
+                                 imageList: widget.postImg, 
+                                 selectedimageIndex: itemIndex, 
+                                 imgLink: widget.postImg![itemIndex],
+                                 isUserPost: widget.isUserPost,
+                                 name: widget.name,
+                               );
+                             }),
+                           );
+                       
+                         },
+                       );
+                 },
+                 options: CarouselOptions(
+                   autoPlay: false,
+                   viewportFraction: 1,
+                   enableInfiniteScroll: false,
+                   // height: screenHeight * 0.5,
+                   aspectRatio: 4/3 //aspectRatio //snapshot.data!.width / snapshot.data!.height,
+                 ),
+               ),
 
               Padding(
                 padding: const EdgeInsets.symmetric(

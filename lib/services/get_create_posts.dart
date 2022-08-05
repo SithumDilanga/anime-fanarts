@@ -119,6 +119,11 @@ class GetCreatePosts extends ChangeNotifier {
 
           print('yoyo' + imageList.toString());
 
+          var decodedImage = await decodeImageFromList(postImageFile[i].readAsBytesSync());
+          
+          print('image width ${decodedImage.width}');
+          print('image heigh ${decodedImage.height}');
+
           imageList.add(
             MultipartFile.fromFileSync(postImageFile[i].path, filename: 'img$i.jpg', contentType: MediaType('image', 'jpeg'))
           );
