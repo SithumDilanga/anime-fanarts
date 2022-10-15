@@ -207,6 +207,15 @@ class _PostState extends State<Post> with AutomaticKeepAliveClientMixin<Post> {
 
     //  print('screenHeight $screenHeight');
 
+    // ---------- splite height and width from the img url -----------
+
+    String heightWidth = widget.postImg![0].toString().substring(131).split(".").first;
+
+    double height = double.parse(heightWidth.split("-").first);
+    double width = double.parse(heightWidth.split("-").last);
+
+    // ---------- End splite height and width from the img url -----------
+
       return Container(
         padding: EdgeInsets.symmetric(
           horizontal: 4.0,
@@ -727,7 +736,7 @@ class _PostState extends State<Post> with AutomaticKeepAliveClientMixin<Post> {
                    viewportFraction: 1,
                    enableInfiniteScroll: false,
                    // height: screenHeight * 0.5,
-                   aspectRatio: 4/3 //aspectRatio //snapshot.data!.width / snapshot.data!.height,
+                   aspectRatio: width/height //4/3 //aspectRatio //snapshot.data!.width / snapshot.data!.height,
                  ),
                ),
 

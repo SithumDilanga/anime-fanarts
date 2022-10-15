@@ -94,7 +94,6 @@ class GetCreatePosts extends ChangeNotifier {
       FormData data;
       var formData = FormData();
 
-
       if(postImageFile![0].path == null) {
 
         data = FormData.fromMap({
@@ -102,6 +101,8 @@ class GetCreatePosts extends ChangeNotifier {
         });
 
       } else {
+
+        String imageSize = '';
 
         // String fileName = postImageFile!.path.split('/').last;
 
@@ -119,10 +120,18 @@ class GetCreatePosts extends ChangeNotifier {
 
           print('yoyo' + imageList.toString());
 
-          var decodedImage = await decodeImageFromList(postImageFile[i].readAsBytesSync());
+          if(i == 0) {
+
+            var decodedImage = await decodeImageFromList(postImageFile[i].readAsBytesSync());
           
-          print('image width ${decodedImage.width}');
-          print('image heigh ${decodedImage.height}');
+            print('image width ${decodedImage.width}');
+            print('image heigh ${decodedImage.height}');
+
+            imageSize = 'size' + '${decodedImage.height}' + '-' + '${decodedImage.width}';
+
+            print('imageSize $imageSize');
+
+          }
 
           imageList.add(
             MultipartFile.fromFileSync(postImageFile[i].path, filename: 'img$i.jpg', contentType: MediaType('image', 'jpeg'))
@@ -135,6 +144,7 @@ class GetCreatePosts extends ChangeNotifier {
           //   MultipartFile.fromFileSync(postImageFile[0].path, filename: 'img1.jpg', contentType: MediaType('image', 'jpeg')),
           //   MultipartFile.fromFileSync(postImageFile[1].path, filename: 'img2.jpg', contentType: MediaType('image', 'jpeg')),
           // ],
+          'heightWidth': imageSize,
           'postimg': imageList,
           'description': desc,
           'tags': tags,
