@@ -203,9 +203,11 @@ class _PostState extends State<Post> with AutomaticKeepAliveClientMixin<Post> {
        completer.complete(image.image);
      }));
 
-     double screenHeight = MediaQuery.of(context).size.height;
+     double appbarHeight = AppBar().preferredSize.height;
+     double tabbarHeight = TabBar(tabs: [],).preferredSize.height;
 
-    //  print('screenHeight $screenHeight');
+     double screenHeight = MediaQuery.of(context).size.height - (appbarHeight + tabbarHeight + 50);
+     double screenWidth = MediaQuery.of(context).size.width;
 
     // ---------- splite height and width from the img url -----------
 
@@ -736,9 +738,9 @@ class _PostState extends State<Post> with AutomaticKeepAliveClientMixin<Post> {
                    viewportFraction: 1,
                    enableInfiniteScroll: false,
                    // height: screenHeight * 0.5,
-                   aspectRatio: width/height //4/3 //aspectRatio //snapshot.data!.width / snapshot.data!.height,
+                   aspectRatio: (width/height) < (screenWidth/screenHeight) ? ((screenWidth/screenHeight)) : width/height //4/3 //aspectRatio //snapshot.data!.width / snapshot.data!.height,
                  ),
-               ),
+                             ),
 
               Padding(
                 padding: const EdgeInsets.symmetric(
