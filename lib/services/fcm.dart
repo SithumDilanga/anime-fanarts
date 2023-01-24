@@ -230,7 +230,6 @@ class FirebaseCloudMessaging {
         //   msg: 'Error sending notification!',
         //   toastLength: Toast.LENGTH_LONG,
         // );
-
       }
 
     }
